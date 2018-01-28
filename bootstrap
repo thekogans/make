@@ -1,0 +1,126 @@
+#!/bin/bash
+
+# Copyright 2011 Boris Kogan (boris@thekogans.net)
+#
+# This file is part of thekogans_toolchain.
+#
+# thekogans_toolchain is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# thekogans_toolchain is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with thekogans_toolchain. If not, see <http://www.gnu.org/licenses/>.
+
+# This script will build a Release-Static version of thekogans_make
+# and copy it to "$TOOLCHAIN_DIR"/bin.
+
+organization=thekogans
+project=make
+project_type=program
+branch=trunk
+config=Release
+type=Static
+util_version=
+make_core_version=
+make_version=
+hide_commands=yes
+parallel_build=yes
+
+# Parse command line options.
+for i in "$@"; do
+    case $i in
+        -uv:*|--util_version:*)
+            util_version="${i#*:}"
+            ;;
+        -mcv:*|--make_core_version:*)
+            make_core_version="${i#*:}"
+            ;;
+        -mv:*|--make_version:*)
+            make_version="${i#*:}"
+            ;;
+    esac
+done
+
+project_root="$DEVELOPMENT_ROOT/$organization/$project/$branch-$make_version"
+
+if [ ! -e "$project_root/Makefile" ]; then
+    echo "$project_root/Makefile Not found."
+    exit 1
+fi
+
+makefile_root="$project_root/build/$TOOLCHAIN_BRANCH/make/$config/$type"
+mkdir -p "$makefile_root"
+check_errors $?
+
+cp -v "$project_root/Makefile" "$makefile_root/"
+check_errors $?
+
+gnu_make="$(get_toolchain_program -o:gnu -p:make)"
+make_options=
+if [ "$hide_commands" == "yes" ]; then
+    make_options+="--quiet"
+fi
+if [ "$parallel_build" == "yes" ]; then
+    make_options+=" --output-sync -j"
+fi
+
+util_version_components=(${util_version//./ })
+make_core_version_components=(${make_core_version//./ })
+make_version_components=(${make_version//./ })
+
+"$gnu_make" $make_options -f "$makefile_root/Makefile" \
+    util_major_version="${util_version_components[0]}" \
+    util_minor_version="${util_version_components[1]}" \
+    util_patch_version="${util_version_components[2]}" \
+    make_core_major_version="${make_core_version_components[0]}" \
+    make_core_minor_version="${make_core_version_components[1]}" \
+    make_core_patch_version="${make_core_version_components[2]}" \
+    major_version="${make_version_components[0]}" \
+    minor_version="${make_version_components[1]}" \
+    patch_version="${make_version_components[2]}" \
+    mode=Install \
+    hide_commands="$hide_commands" \
+    clean
+check_errors $?
+
+"$gnu_make" $make_options -f "$makefile_root/Makefile" \
+    util_major_version="${util_version_components[0]}" \
+    util_minor_version="${util_version_components[1]}" \
+    util_patch_version="${util_version_components[2]}" \
+    make_core_major_version="${make_core_version_components[0]}" \
+    make_core_minor_version="${make_core_version_components[1]}" \
+    make_core_patch_version="${make_core_version_components[2]}" \
+    major_version="${make_version_components[0]}" \
+    minor_version="${make_version_components[1]}" \
+    patch_version="${make_version_components[2]}" \
+    mode=Install \
+    hide_commands="$hide_commands" \
+    all
+check_errors $?
+
+if [ "$make_version" != "" ]; then
+echo "$(copy_file -f:$(get_project_program -o:$organization -p:$project -b:$branch -v:$make_version -c:$config -t:$type) \
+    -t:$(get_toolchain_program -o:$organization -p:$project -v:$make_version))"
+
+cat > "$TOOLCHAIN_DIR/config/$organization"_"$project-$make_version.xml" << EOF
+<thekogans_make organization = "$organization"
+                project = "$project"
+                project_type = "$project_type"
+                major_version = "${make_version_components[0]}"
+                minor_version = "${make_version_components[1]}"
+                patch_version = "${make_version_components[2]}"
+                naming_convention = "$TOOLCHAIN_NAMING_CONVENTION"
+                guid = "ba374c4e67d012de421bb96cd87e9b9c"
+                schema_version = "2">
+</thekogans_make>
+EOF
+check_errors $?
+fi
+
+exit 0

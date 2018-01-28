@@ -1,0 +1,161 @@
+<thekogans_make organization = "thekogans"
+                project = "make"
+                project_type = "program"
+                major_version = "0"
+                minor_version = "17"
+                patch_version = "3"
+                build_type = "Shared"
+                guid = "ba374c4e67d012de421bb96cd87e9b9c"
+                schema_version = "2">
+  <features>
+    <if condition = "$(TOOLCHAIN_OS) == 'OSX'">
+      <feature>THEKOGANS_MAKE_CORE_HAVE_XCODE_EDITOR</feature>
+    </if>
+    <feature>THEKOGANS_MAKE_HAVE_CURL</feature>
+  </features>
+  <dependencies>
+    <project organization = "thekogans"
+             name = "util">
+      <features>
+        <feature>THEKOGANS_UTIL_HAVE_PUGIXML</feature>
+      </features>
+    </project>
+    <project organization = "thekogans"
+             name = "make_core"/>
+    <toolchain organization = "thekogans"
+               name = "pugixml"/>
+    <if condition = "$(have_feature -f:THEKOGANS_MAKE_CORE_HAVE_XCODE_EDITOR)">
+      <toolchain organization = "thekogans"
+                 name = "XcodeEditor"/>
+    </if>
+    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
+      <toolchain organization = "thekogans"
+                 name = "curllib"/>
+    </if>
+  </dependencies>
+  <cpp_preprocessor_definitions>
+    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+      <cpp_preprocessor_definition>_CRT_SECURE_NO_WARNINGS</cpp_preprocessor_definition>
+    </if>
+  </cpp_preprocessor_definitions>
+  <cpp_headers prefix = "include">
+    <cpp_header>$(organization)/$(project_directory)/Options.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/Version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/Action.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/generators/make.h</cpp_header>
+    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+      <cpp_header>$(organization)/$(project_directory)/generators/vsBase.h</cpp_header>
+      <cpp_header>$(organization)/$(project_directory)/generators/vs2010.h</cpp_header>
+      <cpp_header>$(organization)/$(project_directory)/generators/vs2013.h</cpp_header>
+      <cpp_header>$(organization)/$(project_directory)/generators/vs2015.h</cpp_header>
+    </if>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_project_root.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_project_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_project_program.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_project_library.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_program.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_library.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_include_dir.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_lib_dir.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/have_feature.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/is_installed.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/to_system_path.h</cpp_header>
+  </cpp_headers>
+  <cpp_sources prefix = "src">
+    <cpp_source>Action.cpp</cpp_source>
+    <cpp_source>Options.cpp</cpp_source>
+    <cpp_source>Version.cpp</cpp_source>
+    <cpp_source>main.cpp</cpp_source>
+    <!-- actions -->
+    <cpp_source>actions/copy_dependencies.cpp</cpp_source>
+    <cpp_source>actions/copy_plugin.cpp</cpp_source>
+    <cpp_source>actions/get_schema_version.cpp</cpp_source>
+    <cpp_source>actions/create_build_system.cpp</cpp_source>
+    <cpp_source>actions/delete_build_system.cpp</cpp_source>
+    <cpp_source>actions/build_project.cpp</cpp_source>
+    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+      <cpp_source>actions/update_cl_dependencies.cpp</cpp_source>
+      <cpp_source>actions/update_windows_dependencies.cpp</cpp_source>
+      <cpp_source>actions/list_cygwin_mount_table.cpp</cpp_source>
+    </if>
+    <cpp_source>actions/install_library.cpp</cpp_source>
+    <cpp_source>actions/install_program.cpp</cpp_source>
+    <cpp_source>actions/install_plugin.cpp</cpp_source>
+    <cpp_source>actions/install_plugin_hosts.cpp</cpp_source>
+    <cpp_source>actions/uninstall_library.cpp</cpp_source>
+    <cpp_source>actions/uninstall_program.cpp</cpp_source>
+    <cpp_source>actions/uninstall_plugin.cpp</cpp_source>
+    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
+      <cpp_source>actions/add_toolchain_source.cpp</cpp_source>
+      <cpp_source>actions/delete_toolchain_source.cpp</cpp_source>
+      <cpp_source>actions/list_toolchain_sources.cpp</cpp_source>
+      <cpp_source>actions/update_toolchain_sources.cpp</cpp_source>
+      <cpp_source>actions/get_toolchain_source_url.cpp</cpp_source>
+      <cpp_source>actions/get_toolchain_source_project_latest_version.cpp</cpp_source>
+      <cpp_source>actions/get_toolchain_source_project_versions.cpp</cpp_source>
+      <cpp_source>actions/get_toolchain_source_project_sha2_256.cpp</cpp_source>
+      <cpp_source>actions/get_toolchain_source_toolchain_latest_version.cpp</cpp_source>
+      <cpp_source>actions/get_toolchain_source_toolchain_versions.cpp</cpp_source>
+      <cpp_source>actions/get_toolchain_source_toolchain_file.cpp</cpp_source>
+      <cpp_source>actions/get_toolchain_source_toolchain_sha2_256.cpp</cpp_source>
+      <cpp_source>actions/create_source.cpp</cpp_source>
+      <cpp_source>actions/cleanup_source.cpp</cpp_source>
+      <cpp_source>actions/add_source_project.cpp</cpp_source>
+      <cpp_source>actions/delete_source_project.cpp</cpp_source>
+      <cpp_source>actions/cleanup_source_project.cpp</cpp_source>
+      <cpp_source>actions/add_source_toolchain.cpp</cpp_source>
+      <cpp_source>actions/delete_source_toolchain.cpp</cpp_source>
+      <cpp_source>actions/cleanup_source_toolchain.cpp</cpp_source>
+      <cpp_source>actions/get_source_url.cpp</cpp_source>
+      <cpp_source>actions/get_source_project_latest_version.cpp</cpp_source>
+      <cpp_source>actions/get_source_project_versions.cpp</cpp_source>
+      <cpp_source>actions/get_source_project_sha2_256.cpp</cpp_source>
+      <cpp_source>actions/get_source_toolchain_latest_version.cpp</cpp_source>
+      <cpp_source>actions/get_source_toolchain_versions.cpp</cpp_source>
+      <cpp_source>actions/get_source_toolchain_file.cpp</cpp_source>
+      <cpp_source>actions/get_source_toolchain_sha2_256.cpp</cpp_source>
+    </if>
+    <cpp_source>actions/check_dependencies.cpp</cpp_source>
+    <cpp_source>actions/list_dependencies.cpp</cpp_source>
+    <cpp_source>actions/get_project_version.cpp</cpp_source>
+    <cpp_source>actions/get_project_type.cpp</cpp_source>
+    <cpp_source>actions/get_naming_convention.cpp</cpp_source>
+    <cpp_source>actions/get_build_config.cpp</cpp_source>
+    <cpp_source>actions/get_build_type.cpp</cpp_source>
+    <cpp_source>actions/get_project_dependency_version.cpp</cpp_source>
+    <cpp_source>actions/get_toolchain_dependency_version.cpp</cpp_source>
+    <cpp_source>actions/get_toolchain_versions.cpp</cpp_source>
+    <cpp_source>actions/cleanup_toolchain.cpp</cpp_source>
+    <!-- generators -->
+    <cpp_source>generators/make.cpp</cpp_source>
+    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+      <cpp_source>generators/vsBase.cpp</cpp_source>
+      <cpp_source>generators/vs2010.cpp</cpp_source>
+      <cpp_source>generators/vs2013.cpp</cpp_source>
+      <cpp_source>generators/vs2015.cpp</cpp_source>
+    </if>
+    <!-- functions -->
+    <cpp_source>functions/get_project_root.cpp</cpp_source>
+    <cpp_source>functions/get_project_version.cpp</cpp_source>
+    <cpp_source>functions/get_project_program.cpp</cpp_source>
+    <cpp_source>functions/get_project_library.cpp</cpp_source>
+    <cpp_source>functions/get_toolchain_program.cpp</cpp_source>
+    <cpp_source>functions/get_toolchain_library.cpp</cpp_source>
+    <cpp_source>functions/get_toolchain_include_dir.cpp</cpp_source>
+    <cpp_source>functions/get_toolchain_lib_dir.cpp</cpp_source>
+    <cpp_source>functions/have_feature.cpp</cpp_source>
+    <cpp_source>functions/is_installed.cpp</cpp_source>
+    <cpp_source>functions/to_system_path.cpp</cpp_source>
+  </cpp_sources>
+  <if condition = "$(have_feature -f:THEKOGANS_MAKE_CORE_HAVE_XCODE_EDITOR)">
+    <objective_cpp_headers prefix = "include">
+      <!-- <objective_cpp_header>generators/Xcode.h</objective_cpp_header> -->
+    </objective_cpp_headers>
+    <objective_cpp_sources prefix = "src">
+      <objective_cpp_source>generators/Xcode.mm</objective_cpp_source>
+    </objective_cpp_sources>
+  </if>
+  <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+    <subsystem>Console</subsystem>
+  </if>
+</thekogans_make>
