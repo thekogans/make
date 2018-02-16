@@ -296,6 +296,9 @@ namespace thekogans {
                                 else if (variable == "generator") {
                                     makefileFile << GetName ();
                                 }
+                                else if (variable == "goal") {
+                                    makefileFile << thekogans_make.GetProjectGoal ();
+                                }
                                 else if (variable == "dependencies_goals") {
                                     for (std::list<core::thekogans_make::Dependency::Ptr>::const_iterator
                                             it = thekogans_make.dependencies.begin (),

@@ -1,0 +1,36 @@
+version 0.4.4:
+
+    added $TOOLCHAIN_TRIPLET branding to build artifacts.
+
+version 0.4.3:
+
+    changed $TOOLCHAIN_COMPILER_DIR to $TOOLCHAIN_VISUAL_STUDIO_DIR.
+
+version 0.4.2:
+
+    added -v and -h command line options.
+    expanded the help message.
+
+version 0.4.1:
+
+    removed a hard coded ‘/cygdrive’ and replaced with a $TOOLCHAIN_CYGDRIVE_PREFIX environment variable.
+
+version 0.4.0:
+
+    added support for nasm/masm.
+    moved created project one level deeper ($TOOLCHAIN_COMPILER).
+    replaced absolute paths with relative paths to workaround a Visual Studio bug.
+    moved dependency projects in to the dependency folder.
+    added support for new actions ([create | update]_native_build, update_cl_dependencies and update_nasm_dependencies.
+    updated the command line options to support the various actions.
+    minor bug fixes.
+
+version 0.3.0:
+
+    added support for Visual Studio 2013.
+    updated solution templates.
+    minor bug fixes.
+
+version 0.2.0:
+
+    initial release

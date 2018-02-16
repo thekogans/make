@@ -24,6 +24,7 @@
 #include "thekogans/util/LoggerMgr.h"
 #include "thekogans/util/ConsoleLogger.h"
 #include "thekogans/util/Exception.h"
+#include "thekogans/util/Path.h"
 #include "thekogans/util/Plugins.h"
 #include "thekogans/make/core/Version.h"
 #include "thekogans/make/Options.h"
@@ -80,8 +81,11 @@ int main (
     }
     else {
         THEKOGANS_UTIL_TRY {
-            util::Plugins plugins (ToSystemPath (std::string (argv[0]) + "." + make::core::PLUGINS_EXT));
-            plugins.Load ();
+            util::Path pluginsPath (ToSystemPath (std::string (argv[0]) + "." + make::core::PLUGINS_EXT));
+            if (pluginsPath.Exists ()) {
+                util::Plugins plugins (pluginsPath.path);
+                plugins.Load ();
+            }
             make::Action::UniquePtr action = make::Action::Get (make::Options::Instance ().action);
             if (action.get () != 0) {
                 action->Execute ();

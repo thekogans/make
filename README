@@ -1,3 +1,10 @@
-This folder contains thekogans make program.
+thekogans_make represents the second half of 'thekogans.net development
+environment and build system'. the build system uses the conventions
+prescribed by thekogans_toolchain to automate many basic build tasks.
 
-Visit http://www.thekogans.net/?page_id=445 to learn how to build and use it.
+thekogans_make is extensively customizable using plugins. to do that,
+your plugin must derive from thekogans::util::Plugins::Plugin::Interface
+and link against thekogans_make_core. to automate that, use the
+$TOOLCHAIN_ROOT/common/bin/makeplugin script. the resulting boilerplate
+project will have appropriate stubs for you to overwrite.
+

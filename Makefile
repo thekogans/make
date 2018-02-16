@@ -118,7 +118,7 @@ cpp_sources :=\
   $(project_root)/src/actions/get_schema_version.cpp\
   $(project_root)/src/actions/create_build_system.cpp\
   $(project_root)/src/actions/delete_build_system.cpp\
-  $(project_root)/src/actions/build_project.cpp\
+  $(project_root)/src/actions/build_project.cpp
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   cpp_sources +=\
     $(project_root)/src/actions/update_cl_dependencies.cpp\
