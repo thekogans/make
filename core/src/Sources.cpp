@@ -370,6 +370,7 @@ namespace thekogans {
                             dataSink (dataSink_) {
                         if (curl != 0) {
                             curl_easy_setopt (curl, CURLOPT_URL, url.c_str ());
+                            curl_easy_setopt (curl, CURLOPT_FOLLOWLOCATION, 1L);
                             curl_easy_setopt (curl, CURLOPT_WRITEFUNCTION, Callback);
                             curl_easy_setopt (curl, CURLOPT_WRITEDATA, (void *)this);
                             curl_easy_setopt (curl, CURLOPT_USERAGENT, "thekogans_make-agent/1.0");
