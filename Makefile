@@ -27,15 +27,15 @@ naming_convention := $(TOOLCHAIN_NAMING_CONVENTION)
 
 include $(TOOLCHAIN_ROOT)/common/resources/make.rules.top
 
-util_branch_version := $(util_major_version).$(util_minor_version).$(util_patch_version)
-make_core_branch_version := $(make_core_major_version).$(make_core_minor_version).$(make_core_patch_version)
+util_version := $(util_major_version).$(util_minor_version).$(util_patch_version)
+make_core_version := $(make_core_major_version).$(make_core_minor_version).$(make_core_patch_version)
 
 include_directories :=\
   $(project_root)/include\
-  $(DEVELOPMENT_ROOT)/thekogans/make/core/trunk-$(make_core_branch_version)/include\
-  $(DEVELOPMENT_ROOT)/thekogans/make/core/trunk-$(make_core_branch_version)/include/thekogans/make/core\
-  $(DEVELOPMENT_ROOT)/thekogans/util/trunk-$(util_branch_version)/include\
-  $(DEVELOPMENT_ROOT)/thekogans/util/trunk-$(util_branch_version)/include/3rdparty
+  $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/include\
+  $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/include/thekogans/make/core\
+  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include\
+  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty
 
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   link_libraries += Ws2_32.lib mpr.lib
@@ -108,9 +108,9 @@ cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/functions/to_system_path.h
 
 cpp_sources :=\
-  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util/trunk-$(util_branch_version)/src/*.cpp)\
-  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util/trunk-$(util_branch_version)/src/3rdparty/boost/atomic/*.cpp)\
-  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/make/core/trunk-$(make_core_branch_version)/src/*.cpp)\
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/*.cpp)\
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/3rdparty/boost/atomic/*.cpp)\
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/src/*.cpp)\
   $(project_root)/src/Action.cpp\
   $(project_root)/src/Options.cpp\
   $(project_root)/src/Version.cpp\

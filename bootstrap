@@ -23,7 +23,6 @@
 organization=thekogans
 project=make
 project_type=program
-branch=trunk
 config=Release
 type=Static
 util_version=
@@ -47,7 +46,7 @@ for i in "$@"; do
     esac
 done
 
-project_root="$DEVELOPMENT_ROOT/$organization/$project/$branch-$make_version"
+project_root="$DEVELOPMENT_ROOT/$organization/$project-$make_version"
 
 if [ ! -e "$project_root/Makefile" ]; then
     echo "$project_root/Makefile Not found."
@@ -105,7 +104,7 @@ check_errors $?
 check_errors $?
 
 if [ "$make_version" != "" ]; then
-echo "$(copy_file -f:$(get_project_program -o:$organization -p:$project -b:$branch -v:$make_version -c:$config -t:$type) \
+echo "$(copy_file -f:$(get_project_program -o:$organization -p:$project -v:$make_version -c:$config -t:$type) \
     -t:$(get_toolchain_program -o:$organization -p:$project -v:$make_version))"
 
 cat > "$TOOLCHAIN_DIR/config/$organization"_"$project-$make_version.xml" << EOF
