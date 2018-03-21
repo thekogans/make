@@ -47,6 +47,7 @@ namespace thekogans {
             std::string dependency;
             std::string url;
             bool dependencies;
+            bool force;
             std::string mode;
             bool hide_commands;
             bool parallel_build;
@@ -57,6 +58,7 @@ namespace thekogans {
                 help (false),
                 showVersion (false),
                 dependencies (false),
+                force (false),
                 mode (MODE_DEVELOPMENT),
                 hide_commands (true),
                 parallel_build (true),

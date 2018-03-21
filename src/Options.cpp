@@ -55,7 +55,12 @@ namespace thekogans {
                     example = value;
                     break;
                 case 'f':
-                    file = value;
+                    if (value.empty ()) {
+                        force = true;
+                    }
+                    else {
+                        file = value;
+                    }
                     break;
                 case 's':
                     SHA2_256 = value;

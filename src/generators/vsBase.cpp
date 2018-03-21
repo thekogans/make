@@ -247,7 +247,8 @@ namespace thekogans {
                 const std::string &project_root,
                 const std::string &config,
                 const std::string &type,
-                bool generateDependencies) {
+                bool generateDependencies,
+                bool force) {
             struct to_build_system_path : public core::Function {
                 static core::Function::UniquePtr Create () {
                     return core::Function::UniquePtr (new to_build_system_path);
@@ -316,7 +317,8 @@ namespace thekogans {
                                     (*it)->GetProjectRoot (),
                                     (*it)->GetConfig (),
                                     (*it)->GetType (),
-                                    generateDependencies) ||
+                                    generateDependencies,
+                                    force) ||
                                 updatedDependency ||
                                 !vcxprojFilePathExists ||
                                 vcxprojFilePathLastModifiedDate <
@@ -350,7 +352,8 @@ namespace thekogans {
                                 (*it)->GetProjectRoot (),
                                 (*it)->GetConfig (),
                                 (*it)->GetType (),
-                                generateDependencies) ||
+                                generateDependencies,
+                                force) ||
                             updatedDependency ||
                             !vcxprojFilePathExists ||
                             vcxprojFilePathLastModifiedDate <
@@ -370,7 +373,8 @@ namespace thekogans {
             }
             std::string thekogans_makeFilePath =
                 ToSystemPath (core::MakePath (project_root, THEKOGANS_MAKE_XML));
-            if (updatedDependency ||
+            if (force ||
+                    updatedDependency ||
                     !vcxprojFilePathExists ||
                 #if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
                     vcxprojFilePathLastModifiedDate <
