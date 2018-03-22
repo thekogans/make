@@ -27,7 +27,8 @@ namespace thekogans {
                 const std::string &project_root,
                 const std::string &config,
                 const std::string &type,
-                bool generateDependencies) {
+                bool generateDependencies,
+                bool force) {
             // FIXME: implement
             assert (0);
             return false;
