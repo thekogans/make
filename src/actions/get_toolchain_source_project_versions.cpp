@@ -35,13 +35,14 @@ namespace thekogans {
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
                         "-a:" << GetName () << " -o:organization -p:project [-b:branch]\n\n"
-                        "a - Return all versions of a specified project.\n"
+                        "a - Return all versions of a specified project from organization "
+                        "in $TOOLCHAIN_ROOT/Sources.xml.\n"
                         "o - Organization name.\n"
                         "p - Project name.\n"
                         "b - Project branch.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute () {
                     if (Options::Instance ().branch.empty ()) {
                         Options::Instance ().branch = core::GetDefaultBranch (
                             Options::Instance ().organization,

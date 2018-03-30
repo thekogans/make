@@ -34,7 +34,8 @@ namespace thekogans {
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
                         "-a:" << GetName () << " -o:organization -p:project [-b:branch]\n\n"
-                        "a - Return all versions of a specified project.\n"
+                        "a - Return all versions of a specified project from source "
+                        "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
                         "o - Organization name.\n"
                         "p - Project name.\n"
                         "b - Project branch.\n";
