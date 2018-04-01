@@ -3,7 +3,7 @@
                 project_type = "program"
                 major_version = "0"
                 minor_version = "17"
-                patch_version = "5"
+                patch_version = "6"
                 build_type = "Shared"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
@@ -14,14 +14,14 @@
     <feature>THEKOGANS_MAKE_HAVE_CURL</feature>
   </features>
   <dependencies>
-    <project organization = "thekogans"
-             name = "util">
+    <dependency organization = "thekogans"
+                name = "util">
       <features>
         <feature>THEKOGANS_UTIL_HAVE_PUGIXML</feature>
       </features>
-    </project>
-    <project organization = "thekogans"
-             name = "make_core"/>
+    </dependency>
+    <dependency organization = "thekogans"
+                name = "make_core"/>
     <toolchain organization = "thekogans"
                name = "pugixml"/>
     <if condition = "$(have_feature -f:THEKOGANS_MAKE_CORE_HAVE_XCODE_EDITOR)">
