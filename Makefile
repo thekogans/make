@@ -54,7 +54,7 @@ else
   endif
 endif
 
-cpp_preprocessor_definitions :=\
+common_preprocessor_definitions :=\
   TOOLCHAIN_OS_$(TOOLCHAIN_OS)\
   TOOLCHAIN_ARCH_$(TOOLCHAIN_ARCH)\
   TOOLCHAIN_COMPILER_$(TOOLCHAIN_COMPILER)\
@@ -73,7 +73,7 @@ cpp_preprocessor_definitions :=\
   THEKOGANS_MAKE_MINOR_VERSION=$(minor_version)\
   THEKOGANS_MAKE_PATCH_VERSION=$(patch_version)
 ifeq "$(TOOLCHAIN_OS)" "Windows"
-  cpp_preprocessor_definitions +=\
+  common_preprocessor_definitions +=\
     _CRT_SECURE_NO_WARNINGS
 endif
 
@@ -165,9 +165,10 @@ cpp_sources +=\
   $(project_root)/src/functions/is_installed.cpp\
   $(project_root)/src/functions/to_system_path.cpp
 
-#ifeq "$(TOOLCHAIN_OS)" "OSX"
-#  objective_cpp_sources :=\
-#    $(project_root)/src/generators/Xcode.mm
-#endif
+ifeq "$(TOOLCHAIN_OS)" "OSX"
+  objective_cpp_sources :=\
+	$(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/OSXUtils.mm\
+    $(project_root)/src/generators/Xcode.mm
+endif
 
 include $(TOOLCHAIN_ROOT)/common/resources/make.rules.bottom
