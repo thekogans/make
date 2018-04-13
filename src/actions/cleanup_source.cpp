@@ -34,7 +34,8 @@ namespace thekogans {
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
                         "-a:" << GetName () << " [-o:organization]\n\n"
-                        "a - Remove old project and toolchain versions form a given $DEVELOPMENT_ROOT/$organization/Source.xml.\n"
+                        "a - Remove old project and toolchain versions form a given "
+                        "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
                         "o - Optional organization name.\n";
                 }
 
