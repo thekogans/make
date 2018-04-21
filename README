@@ -8,3 +8,5 @@ and link against thekogans_make_core. to automate that, use the
 $TOOLCHAIN_ROOT/common/bin/makeplugin script. the resulting boilerplate
 project will have appropriate stubs for you to overwrite.
 
+please note that make has a sub-module (make_core). when cloning make,
+use --recursive.
