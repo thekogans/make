@@ -1498,9 +1498,7 @@ namespace thekogans {
         std::string vsBase::GetQualifiedName (
                 const std::string &organization,
                 const std::string &project) const {
-            return organization == defaultOrganization ?
-                project :
-                core::GetFileName (organization, project, std::string (), std::string (), std::string ());
+            return core::GetFileName (organization, project, std::string (), std::string (), std::string ());
         }
 
     } // namespace make
