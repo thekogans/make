@@ -264,7 +264,7 @@ namespace thekogans {
                     std::fstream::out | std::fstream::trunc);
                 if (makefileFile.is_open ()) {
                     std::list<core::thekogans_make::FileList::File::CustomBuild::Ptr> customBuildList;
-                    while (buffer.GetDataAvailableForReading () != 0) {
+                    while (!buffer.IsEmpty ()) {
                         util::i8 ch;
                         buffer >> ch;
                         switch (ch) {

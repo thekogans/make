@@ -632,7 +632,7 @@ namespace thekogans {
             if (slnFile.is_open ()) {
                 std::list<ProjectRootAndGUID> projectDependencies;
                 GetProjectDependencies (thekogans_make, projectDependencies);
-                while (buffer.GetDataAvailableForReading () != 0) {
+                while (!buffer.IsEmpty ()) {
                     util::i8 ch;
                     buffer >> ch;
                     switch (ch) {
@@ -813,7 +813,7 @@ namespace thekogans {
                 ToSystemPath (vcxprojFilePath).c_str (),
                 std::fstream::out | std::fstream::trunc);
             if (vcxprojFile.is_open ()) {
-                while (buffer.GetDataAvailableForReading () != 0) {
+                while (!buffer.IsEmpty ()) {
                     util::i8 ch;
                     buffer >> ch;
                     switch (ch) {
@@ -1123,7 +1123,7 @@ namespace thekogans {
                 ToSystemPath (vcxprojfiltersFilePath).c_str (),
                 std::fstream::out | std::fstream::trunc);
             if (vcxprojfiltersFile.is_open ()) {
-                while (buffer.GetDataAvailableForReading () != 0) {
+                while (!buffer.IsEmpty ()) {
                     util::i8 ch;
                     buffer >> ch;
                     switch (ch) {
