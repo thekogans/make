@@ -70,8 +70,8 @@ namespace thekogans {
             const char * const VCXPROJ_HEADER_TEMPLATE =
                 "    <ClInclude Include=\"%s\"/>\n";
             const char * const VCXPROJ_SOURCE_TEMPLATE =
-                "    <ClCompile Include=\"%s\"/>\n";
-                "      <ObjectFileName>$(IntDir)%s</ObjectFileName>\n";
+                "    <ClCompile Include=\"%s\">\n"
+                "      <ObjectFileName>$(IntDir)%s</ObjectFileName>\n"
                 "    </ClCompile>\n";
             const char * const VCXPROJ_RC_SOURCE_TEMPLATE =
                 "    <ResourceCompile Include=\"%s\">\n"
@@ -1005,7 +1005,7 @@ namespace thekogans {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_SOURCE_TEMPLATE,
                                         CreateRelativePath ((*it).first).c_str (),
-                                        util::Path ((*it).first).GetDirectory (true));
+                                        util::Path ((*it).first).GetDirectory (true).c_str ());
                                 }
                             }
                             else if (variable == "cpp_headers") {
@@ -1024,7 +1024,7 @@ namespace thekogans {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_SOURCE_TEMPLATE,
                                         CreateRelativePath ((*it).first).c_str (),
-                                        util::Path ((*it).first).GetDirectory (true));
+                                        util::Path ((*it).first).GetDirectory (true).c_str ());
                                 }
                             }
                             else if (variable == "rc_sources") {
