@@ -42,8 +42,8 @@ int main (
     THEKOGANS_UTIL_LOG_INIT (
         util::LoggerMgr::Info,
         util::LoggerMgr::NoDecorations);
-    THEKOGANS_UTIL_LOG_ADD_LOGGER (
-        util::Logger::Ptr (new util::ConsoleLogger ()));
+    THEKOGANS_UTIL_LOG_ADD_LOGGER (util::Logger::Ptr (new util::ConsoleLogger ()));
+    THEKOGANS_UTIL_IMPLEMENT_LOG_FLUSHER;
     make::Options::Instance ().Parse (argc, argv, "hvagopbefsctdyumwxz");
     int result = 0;
     if (make::Options::Instance ().help) {
@@ -105,6 +105,5 @@ int main (
             result = 1;
         }
     }
-    THEKOGANS_UTIL_LOG_FLUSH
     return result;
 }
