@@ -47,6 +47,7 @@ else
       link_libraries +=\
         -lpthread\
         -framework Foundation\
+        -framework Cocoa\
         -framework CoreFoundation\
         -framework CoreServices\
         -framework SystemConfiguration
