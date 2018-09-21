@@ -38,7 +38,7 @@ include_directories :=\
   $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty
 
 ifeq "$(TOOLCHAIN_OS)" "Windows"
-  link_libraries += Ws2_32.lib mpr.lib
+  link_libraries += Ws2_32.lib Iphlpapi.lib mpr.lib
 else
   ifeq "$(TOOLCHAIN_OS)" "Linux"
     link_libraries += -lpthread -lrt -ldl
@@ -88,7 +88,8 @@ ifeq "$(TOOLCHAIN_OS)" "Windows"
     $(project_root)/include/$(organization)/$(project)/generators/vsBase.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2010.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2013.h\
-    $(project_root)/include/$(organization)/$(project)/generators/vs2015.h
+    $(project_root)/include/$(organization)/$(project)/generators/vs2015.h\
+    $(project_root)/include/$(organization)/$(project)/generators/vs2017.h
 else
   ifeq "$(TOOLCHAIN_OS)" "OSX"
     cpp_headers +=\
@@ -96,6 +97,11 @@ else
   endif
 endif
 cpp_headers +=\
+  $(project_root)/include/$(organization)/$(project)/functions/get_directory.h\
+  $(project_root)/include/$(organization)/$(project)/functions/get_directory_name.h\
+  $(project_root)/include/$(organization)/$(project)/functions/get_extension.h\
+  $(project_root)/include/$(organization)/$(project)/functions/get_file_name.h\
+  $(project_root)/include/$(organization)/$(project)/functions/get_full_file_name.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_project_root.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_project_version.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_project_program.h\
@@ -106,6 +112,7 @@ cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/functions/get_toolchain_lib_dir.h\
   $(project_root)/include/$(organization)/$(project)/functions/have_feature.h\
   $(project_root)/include/$(organization)/$(project)/functions/is_installed.h\
+  $(project_root)/include/$(organization)/$(project)/functions/make_path.h\
   $(project_root)/include/$(organization)/$(project)/functions/to_system_path.h
 
 cpp_sources :=\
@@ -151,9 +158,15 @@ ifeq "$(TOOLCHAIN_OS)" "Windows"
     $(project_root)/src/generators/vsBase.cpp\
     $(project_root)/src/generators/vs2010.cpp\
     $(project_root)/src/generators/vs2013.cpp\
-    $(project_root)/src/generators/vs2015.cpp
+    $(project_root)/src/generators/vs2015.cpp\
+    $(project_root)/src/generators/vs2017.cpp
 endif
 cpp_sources +=\
+  $(project_root)/src/functions/get_directory.cpp\
+  $(project_root)/src/functions/get_directory_name.cpp\
+  $(project_root)/src/functions/get_extension.cpp\
+  $(project_root)/src/functions/get_file_name.cpp\
+  $(project_root)/src/functions/get_full_file_name.cpp\
   $(project_root)/src/functions/get_project_root.cpp\
   $(project_root)/src/functions/get_project_version.cpp\
   $(project_root)/src/functions/get_project_program.cpp\
@@ -164,6 +177,7 @@ cpp_sources +=\
   $(project_root)/src/functions/get_toolchain_lib_dir.cpp\
   $(project_root)/src/functions/have_feature.cpp\
   $(project_root)/src/functions/is_installed.cpp\
+  $(project_root)/src/functions/make_path.cpp\
   $(project_root)/src/functions/to_system_path.cpp
 
 ifeq "$(TOOLCHAIN_OS)" "OSX"
