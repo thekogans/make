@@ -103,6 +103,38 @@ namespace thekogans {
                     (const char *)&buffer.data[readOffset],
                     (const char *)&buffer.data[buffer.readOffset++]);
             }
+
+            void GetLines (
+                    const std::string &str,
+                    std::vector<std::string> &lines) {
+                std::string::size_type newLine;
+                std::string::size_type start = 0;
+                const char *NEW_LINE_CHARS = "\r\n";
+                while ((newLine = str.find_first_of (NEW_LINE_CHARS, start)) != std::string::npos) {
+                    // Line ending conventions.
+                    // POSIX - '\n'
+                    // OS X - '\r'
+                    // Windows - '\r\n'
+                    // If we're processing an '\r\n' file, remove both endings.
+                    if (str[start] == '\r' && start < str.size () - 1 && str[start + 1] == '\n') {
+                        ++start;
+                    }
+                    std::string line =
+                        util::TrimRightSpaces (str.substr (start, newLine - start).c_str ());
+                    if (!line.empty ()) {
+                        lines.push_back (line);
+                    }
+                    start = newLine + 1;
+                }
+                std::string line = util::TrimRightSpaces (str.substr (start).c_str ());
+                if (!line.empty ()) {
+                    lines.push_back (line);
+                }
+            }
+
+            bool IsContinuation (const std::string &str) {
+                return !str.empty () && str.back () == '\\';
+            }
         }
 
         bool make::Generate (
@@ -647,12 +679,21 @@ namespace thekogans {
                                         for (std::size_t j = 0, count = (*it)->dependencies.size (); j < count; ++j) {
                                             makefileFile << " " << (*it)->dependencies[j];
                                         }
-                                        if (!(*it)->recipe.empty ()) {
+                                        std::vector<std::string> recipeLines;
+                                        GetLines ((*it)->recipe, recipeLines);
+                                        if (!recipeLines.empty ()) {
                                             makefileFile << "\n";
                                             makefileFile <<
                                                 "\t$(hide)$(call maybe-mkdir,$(dir $@))\n" <<
-                                                "\t$(hide)echo " << (!(*it)->message.empty () ? (*it)->message : "Generating $@") << "\n" <<
-                                                "\t$(hide)" << (*it)->recipe << "\n";
+                                                "\t$(hide)echo " << (!(*it)->message.empty () ? (*it)->message : "Generating $@") << "\n";
+                                            makefileFile << "\t$(hide)" << recipeLines[0] << "\n";
+                                            for (std::size_t i = 1, count = recipeLines.size (); i < count; ++i) {
+                                                makefileFile << "\t";
+                                                if (!IsContinuation (recipeLines[i - 1])) {
+                                                    makefileFile << "$(hide)";
+                                                }
+                                                makefileFile << recipeLines[i] << "\n";
+                                            }
                                             for (std::size_t j = 0, count = (*it)->outputs.size (); j < count; ++j) {
                                                 extra_clean.push_back ((*it)->outputs[j]);
                                             }

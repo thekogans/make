@@ -1303,6 +1303,22 @@ namespace thekogans {
             }
         }
 
+        namespace {
+            std::string SaveRecipe (
+                    const std::string &path,
+                    const std::string &recipe) {
+                util::Directory::Create (util::Path (ToSystemPath (path)).GetDirectory ());
+                std::fstream recipeFile (
+                    ToSystemPath (path).c_str (),
+                    std::fstream::out | std::fstream::trunc);
+                recipeFile << recipe << std::endl;
+                return util::FormatString (
+                    "\"%s\" \"%s\"",
+                    ToSystemPath (_TOOLCHAIN_SHELL).c_str (),
+                    path.c_str ());
+            }
+        }
+
         void vsBase::AddCustomBuildRule (
                 const core::thekogans_make &thekogans_make,
                 const core::thekogans_make::FileList::File &file,
@@ -1350,7 +1366,18 @@ namespace thekogans {
                             CreateRelativePath (
                                 ToSystemPath (
                                     core::MakePath (prefix, file.name))).c_str (),
-                            file.customBuild->recipe.c_str (),
+                            SaveRecipe (
+                                core::MakePath (
+                                    core::MakePath (
+                                        core::MakePath (
+                                            thekogans_make.project_root,
+                                            core::GetBuildDirectory (
+                                                thekogans_make.generator,
+                                                thekogans_make.config,
+                                                thekogans_make.type)),
+                                        prefix),
+                                    file.name + ".recipe");
+                                file.customBuild->recipe).c_str (),
                             !file.customBuild->message.empty () ?
                                 file.customBuild->message.c_str () :
                                 "Performing Custom Build Step on \"%(Identity)\"",
