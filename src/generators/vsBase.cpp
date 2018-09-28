@@ -393,12 +393,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        masm_headers.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_MASM_HEADERS_FILTER_PREFIX,
-                                    (*jt)->name, header_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            masm_headers.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_MASM_HEADERS_FILTER_PREFIX,
+                                        (*jt)->name, header_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -407,12 +411,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        masm_sources.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_MASM_SOURCES_FILTER_PREFIX,
-                                    (*jt)->name, source_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            masm_sources.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_MASM_SOURCES_FILTER_PREFIX,
+                                        (*jt)->name, source_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -421,12 +429,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        nasm_headers.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_NASM_HEADERS_FILTER_PREFIX,
-                                    (*jt)->name, header_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            nasm_headers.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_NASM_HEADERS_FILTER_PREFIX,
+                                        (*jt)->name, header_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -435,12 +447,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        nasm_sources.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_NASM_SOURCES_FILTER_PREFIX,
-                                    (*jt)->name, source_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            nasm_sources.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_NASM_SOURCES_FILTER_PREFIX,
+                                        (*jt)->name, source_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -449,12 +465,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        c_headers.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_C_HEADERS_FILTER_PREFIX,
-                                    (*jt)->name, header_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            c_headers.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_C_HEADERS_FILTER_PREFIX,
+                                        (*jt)->name, header_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -463,12 +483,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        c_sources.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_C_SOURCES_FILTER_PREFIX,
-                                    (*jt)->name, source_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            c_sources.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_C_SOURCES_FILTER_PREFIX,
+                                        (*jt)->name, source_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -477,12 +501,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        cpp_headers.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_CPP_HEADERS_FILTER_PREFIX,
-                                    (*jt)->name, header_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            cpp_headers.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_CPP_HEADERS_FILTER_PREFIX,
+                                        (*jt)->name, header_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -491,12 +519,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        cpp_sources.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_CPP_SOURCES_FILTER_PREFIX,
-                                    (*jt)->name, source_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            cpp_sources.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_CPP_SOURCES_FILTER_PREFIX,
+                                        (*jt)->name, source_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -505,12 +537,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        rc_sources.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_RC_SOURCES_FILTER_PREFIX,
-                                    (*jt)->name, rc_source_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            rc_sources.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_RC_SOURCES_FILTER_PREFIX,
+                                        (*jt)->name, rc_source_filters)));
+                        }
                     }
                 }
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
@@ -519,12 +555,16 @@ namespace thekogans {
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
                             end = (*it)->files.end (); jt != end; ++jt) {
-                        resources.push_back (
-                            FileAndFilter (
-                                ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
-                                GetFilter (VCXPROJ_FILTERS_RESOURCES_FILTER_PREFIX,
-                                    (*jt)->name, resource_filters)));
-                        AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        if ((*jt)->customBuild.get () != 0) {
+                            AddCustomBuildRule (thekogans_make, **jt, (*it)->prefix);
+                        }
+                        else {
+                            resources.push_back (
+                                FileAndFilter (
+                                    ToSystemPath (core::MakePath ((*it)->prefix, (*jt)->name)),
+                                    GetFilter (VCXPROJ_FILTERS_RESOURCES_FILTER_PREFIX,
+                                        (*jt)->name, resource_filters)));
+                        }
                     }
                 }
                 core::CreateBuildRoot (
@@ -1314,7 +1354,7 @@ namespace thekogans {
                 recipeFile << recipe << std::endl;
                 return util::FormatString (
                     "\"%s\" \"%s\"",
-                    ToSystemPath (_TOOLCHAIN_SHELL).c_str (),
+                    ToSystemPath (core::_TOOLCHAIN_SHELL).c_str (),
                     path.c_str ());
             }
         }
@@ -1376,7 +1416,7 @@ namespace thekogans {
                                                 thekogans_make.config,
                                                 thekogans_make.type)),
                                         prefix),
-                                    file.name + ".recipe");
+                                    file.name + ".recipe"),
                                 file.customBuild->recipe).c_str (),
                             !file.customBuild->message.empty () ?
                                 file.customBuild->message.c_str () :
