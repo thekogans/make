@@ -1344,18 +1344,53 @@ namespace thekogans {
         }
 
         namespace {
+            void GetLines (
+                    const std::string &str,
+                    std::vector<std::string> &lines) {
+                std::string::size_type newLine;
+                std::string::size_type start = 0;
+                const char *NEW_LINE_CHARS = "\r\n";
+                while ((newLine = str.find_first_of (NEW_LINE_CHARS, start)) != std::string::npos) {
+                    // Line ending conventions.
+                    // POSIX - '\n'
+                    // OS X - '\r'
+                    // Windows - '\r\n'
+                    // If we're processing an '\r\n' file, remove both endings.
+                    if (str[start] == '\r' && start < str.size () - 1 && str[start + 1] == '\n') {
+                        ++start;
+                    }
+                    std::string line =
+                        util::TrimRightSpaces (str.substr (start, newLine - start).c_str ());
+                    if (!line.empty ()) {
+                        lines.push_back (line);
+                    }
+                    start = newLine + 1;
+                }
+                std::string line = util::TrimRightSpaces (str.substr (start).c_str ());
+                if (!line.empty ()) {
+                    lines.push_back (line);
+                }
+            }
+
             std::string SaveRecipe (
                     const std::string &path,
                     const std::string &recipe) {
-                util::Directory::Create (util::Path (ToSystemPath (path)).GetDirectory ());
-                std::fstream recipeFile (
-                    ToSystemPath (path).c_str (),
-                    std::fstream::out | std::fstream::trunc);
-                recipeFile << recipe << std::endl;
-                return util::FormatString (
-                    "\"%s\" \"%s\"",
-                    ToSystemPath (core::_TOOLCHAIN_SHELL).c_str (),
-                    path.c_str ());
+                if (!recipe.empty ()) {
+                    util::Directory::Create (util::Path (ToSystemPath (path)).GetDirectory ());
+                    std::fstream recipeFile (
+                        ToSystemPath (path).c_str (),
+                        std::fstream::out | std::fstream::trunc);
+                    std::vector<std::string> recipeLines;
+                    GetLines (recipe, recipeLines);
+                    for (std::size_t i = 0, count = recipeLines.size (); i < count; ++i) {
+                        recipeFile << recipeLines[i] << "\n";
+                    }
+                    return util::FormatString (
+                        "\"%s\" \"%s\"",
+                        ToSystemPath (core::_TOOLCHAIN_SHELL).c_str (),
+                        path.c_str ());
+                }
+                return std::string ();
             }
         }
 
