@@ -1379,7 +1379,7 @@ namespace thekogans {
                     util::Directory::Create (util::Path (ToSystemPath (path)).GetDirectory ());
                     std::fstream recipeFile (
                         ToSystemPath (path).c_str (),
-                        std::fstream::out | std::fstream::trunc);
+                        std::fstream::out | std::fstream::binary | std::fstream::trunc);
                     std::vector<std::string> recipeLines;
                     GetLines (recipe, recipeLines);
                     for (std::size_t i = 0, count = recipeLines.size (); i < count; ++i) {
