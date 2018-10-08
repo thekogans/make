@@ -5,9 +5,9 @@
 - add definitions for common compiler options
 - fix windows solution thekogans_make.xml tracking
 - update toolchain dependencies to new versions
-- add mingw to Windows toolchain
-- add gcc to OSX toolchain
-- add clang to Linux toolchain
+- add mingw, clang, intel... to Windows toolchain
+- add gcc, intel... to OSX toolchain
+- add clang, intel... to Linux toolchain
 - allow deffinition of custom compilers
 - i18n
 - qt
