@@ -33,12 +33,13 @@ namespace thekogans {
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << "\n\n"
-                        "a - Update the $TOOLCHAIN_ROOT/Sources.xml file.\n";
+                        "-a:" << GetName () << " [-o:organization]\n\n"
+                        "a - Update the $TOOLCHAIN_ROOT/Sources.xml file.\n"
+                        "o - Organization name.\n";
                 }
 
                 virtual void Execute  () {
-                    core::ToolchainSources::Instance ().UpdateSources ();
+                    core::ToolchainSources::Instance ().UpdateSources (Options::Instance ().organization);
                 }
             };
 
