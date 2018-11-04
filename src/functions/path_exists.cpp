@@ -15,31 +15,29 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
+#include "thekogans/util/Path.h"
 #include "thekogans/util/Exception.h"
-#include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/core/Value.h"
-#include "thekogans/make/functions/have_feature.h"
+#include "thekogans/make/functions/path_exists.h"
 
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (have_feature)
+        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (path_exists)
 
-        core::Value have_feature::Exec (
-                const core::thekogans_make &thekogans_make,
+        core::Value path_exists::Exec (
+                const core::thekogans_make & /*thekogans_make*/,
                 const Parameters &parameters) const {
             for (Parameters::const_iterator
                     it = parameters.begin (),
                     end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "f" || (*it).first == "feature") {
-                    return core::Value (
-                        thekogans_make.features.find ((*it).second) !=
-                        thekogans_make.features.end ());
+                if ((*it).first == "p" || (*it).first == "path") {
+                    return core::Value (util::Path ((*it).second).Exists ());
                 }
             }
             THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "have_feature: missing parameter [%s]",
-                "-f | --feature");
+                "path_exists: missing parameter [%s]",
+                "-p | --path");
         }
 
     } // namespace make

@@ -15,23 +15,23 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#if !defined (__thekogans_make_functions_have_feature_h)
-#define __thekogans_make_functions_have_feature_h
+#if !defined (__thekogans_make_functions_path_exists_h)
+#define __thekogans_make_functions_path_exists_h
 
 #include "thekogans/make/core/Function.h"
 
 namespace thekogans {
     namespace make {
 
-        struct have_feature : public core::Function {
-            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (have_feature)
+        struct path_exists : public core::Function {
+            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (path_exists)
 
             virtual core::Value Exec (
-                const core::thekogans_make &thekogans_make,
+                const core::thekogans_make & /*thekogans_make*/,
                 const Parameters &parameters) const;
         };
 
     } // namespace make
 } // namespace thekogans
 
-#endif // __thekogans_make_functions_have_feature_h
+#endif // __thekogans_make_functions_path_exists_h
