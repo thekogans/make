@@ -2,8 +2,8 @@
                 project = "make"
                 project_type = "program"
                 major_version = "0"
-                minor_version = "22"
-                patch_version = "2"
+                minor_version = "23"
+                patch_version = "0"
                 build_type = "Shared"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
@@ -66,6 +66,7 @@
     <cpp_header>$(organization)/$(project_directory)/functions/have_feature.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/is_installed.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/make_path.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/path_exists.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/to_project_build_path.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/to_project_path.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/to_system_path.h</cpp_header>
@@ -161,6 +162,7 @@
     <cpp_source>functions/have_feature.cpp</cpp_source>
     <cpp_source>functions/is_installed.cpp</cpp_source>
     <cpp_source>functions/make_path.cpp</cpp_source>
+    <cpp_source>functions/path_exists.cpp</cpp_source>
     <cpp_source>functions/to_project_build_path.cpp</cpp_source>
     <cpp_source>functions/to_project_path.cpp</cpp_source>
     <cpp_source>functions/to_system_path.cpp</cpp_source>
