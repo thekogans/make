@@ -64,6 +64,7 @@
     <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_include_dir.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_lib_dir.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/have_feature.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/is_defined.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/is_installed.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/make_path.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/path_exists.h</cpp_header>
@@ -160,6 +161,7 @@
     <cpp_source>functions/get_toolchain_include_dir.cpp</cpp_source>
     <cpp_source>functions/get_toolchain_lib_dir.cpp</cpp_source>
     <cpp_source>functions/have_feature.cpp</cpp_source>
+    <cpp_source>functions/is_defined.cpp</cpp_source>
     <cpp_source>functions/is_installed.cpp</cpp_source>
     <cpp_source>functions/make_path.cpp</cpp_source>
     <cpp_source>functions/path_exists.cpp</cpp_source>
