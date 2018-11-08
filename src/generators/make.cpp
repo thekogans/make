@@ -667,6 +667,9 @@ namespace thekogans {
                                 else if (variable == "def_file") {
                                     makefileFile << thekogans_make.def_file;
                                 }
+                                else if (variable == "runtime_library") {
+                                    makefileFile << thekogans_make.runtime_library;
+                                }
                                 else if (variable == "custom_build_rules") {
                                     std::list<std::string> extra_clean;
                                     for (std::list<core::thekogans_make::FileList::File::CustomBuild::Ptr>::const_iterator

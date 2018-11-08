@@ -125,14 +125,16 @@ namespace thekogans {
                 "      <Filter>%s</Filter>\n"
                 "    </CustomBuild>\n";
 
-            inline std::string GetRuntimeLibrary (
-                    const std::string &config,
-                    const std::string &type) {
+            inline std::string GetRuntimeLibrary (const core::thekogans_make &thekogans_make) {
                 return
-                    config == CONFIG_DEBUG && type == TYPE_SHARED ? "MultiThreadedDebugDLL" :
-                    config == CONFIG_DEBUG && type == TYPE_STATIC ? "MultiThreadedDebug" :
-                    config == CONFIG_RELEASE && type == TYPE_SHARED ? "MultiThreadedDLL" :
-                    config == CONFIG_RELEASE && type == TYPE_STATIC ? "MultiThreaded" : std::string ();
+                    thekogans_make.runtime_library == TYPE_SHARED ?
+                        thekogans_make.config == CONFIG_DEBUG ? "MultiThreadedDebugDLL" : "MultiThreadedDLL" :
+                    thekogans_make.runtime_library == TYPE_STATIC ?
+                        thekogans_make.config == CONFIG_DEBUG ? "MultiThreadedDebug" : "MultiThreaded" :
+                    thekogans_make.config == CONFIG_DEBUG && thekogans_make.type == TYPE_SHARED ? "MultiThreadedDebugDLL" :
+                    thekogans_make.config == CONFIG_DEBUG && thekogans_make.type == TYPE_STATIC ? "MultiThreadedDebug" :
+                    thekogans_make.config == CONFIG_RELEASE && thekogans_make.type == TYPE_SHARED ? "MultiThreadedDLL" :
+                    thekogans_make.config == CONFIG_RELEASE && thekogans_make.type == TYPE_STATIC ? "MultiThreaded" : std::string ();
             }
 
             inline const char *GetSLN_DEPENDENCY_TARGET_TEMPLATE () {
@@ -960,7 +962,7 @@ namespace thekogans {
                                 }
                             }
                             else if (variable == "runtime_library") {
-                                vcxprojFile << GetRuntimeLibrary (thekogans_make.config, thekogans_make.type);
+                                vcxprojFile << GetRuntimeLibrary (thekogans_make);
                             }
                             else if (variable == "link_libraries") {
                                 std::list<std::string> link_libraries;
