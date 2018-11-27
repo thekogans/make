@@ -72,7 +72,13 @@ common_preprocessor_definitions :=\
   THEKOGANS_MAKE_CORE_PATCH_VERSION=$(make_core_patch_version)\
   THEKOGANS_MAKE_MAJOR_VERSION=$(major_version)\
   THEKOGANS_MAKE_MINOR_VERSION=$(minor_version)\
-  THEKOGANS_MAKE_PATCH_VERSION=$(patch_version)
+  THEKOGANS_MAKE_PATCH_VERSION=$(patch_version)\
+  THEKOGANS_UTIL_CONFIG_$(config)\
+  THEKOGANS_UTIL_TYPE_$(type)\
+  THEKOGANS_MAKE_CORE_CONFIG_$(config)\
+  THEKOGANS_MAKE_CORE_TYPE_$(type)\
+  THEKOGANS_PUGIXML_CONFIG_$(config)\
+  THEKOGANS_PUGIXML_TYPE_$(type)
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   common_preprocessor_definitions +=\
     _CRT_SECURE_NO_WARNINGS
