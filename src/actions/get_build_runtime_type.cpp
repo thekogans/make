@@ -24,8 +24,8 @@ namespace thekogans {
     namespace make {
 
         namespace {
-            struct list_dependencies : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (list_dependencies)
+            struct get_build_runtime_type : public Action {
+                THEKOGANS_MAKE_CORE_DECLARE_ACTION (get_build_runtime_type)
 
                 virtual const char *GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
@@ -33,29 +33,20 @@ namespace thekogans {
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] -r:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
-                        "a - List project/toolchain dependencies hierarchically.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "r - Runtime library link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "path - Path to configuration file.\n";
+                        "-a:" << GetName () << " path\n\n"
+                        "a - Get the build runtime type (" TYPE_STATIC " | " TYPE_SHARED ") from a project or toolchain config file.\n"
+                        "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
                 }
 
                 virtual void Execute  () {
-                    const core::thekogans_make &thekogans_make =
-                        core::thekogans_make::GetConfig (
-                            std::string (),
-                            Options::Instance ().path,
-                            Options::Instance ().generator,
-                            Options::Instance ().config,
-                            Options::Instance ().type,
-                            Options::Instance ().runtime_type);
-                    thekogans_make.ListDependencies (0);
+                    std::cout << core::thekogans_make::GetBuildRuntimeType (
+                        std::string (),
+                        Options::Instance ().path);
+                    std::cout.flush ();
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (list_dependencies)
+            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (get_build_runtime_type)
         }
 
     } // namespace make

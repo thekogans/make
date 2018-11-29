@@ -2,14 +2,14 @@
                 project = "make"
                 project_type = "program"
                 major_version = "0"
-                minor_version = "24"
-                patch_version = "1"
+                minor_version = "26"
+                patch_version = "0"
                 build_type = "Shared"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
   <features>
     <if condition = "$(TOOLCHAIN_OS) == 'OSX'">
-      <feature>THEKOGANS_MAKE_CORE_HAVE_XCODE_EDITOR</feature>
+      <feature>THEKOGANS_MAKE_HAVE_XCODE_EDITOR</feature>
     </if>
     <feature>THEKOGANS_MAKE_HAVE_CURL</feature>
   </features>
@@ -24,7 +24,7 @@
                 name = "make_core"/>
     <toolchain organization = "thekogans"
                name = "pugixml"/>
-    <if condition = "$(have_feature -f:THEKOGANS_MAKE_CORE_HAVE_XCODE_EDITOR)">
+    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_XCODE_EDITOR)">
       <toolchain organization = "thekogans"
                  name = "XcodeEditor"/>
     </if>
@@ -133,6 +133,7 @@
     <cpp_source>actions/get_naming_convention.cpp</cpp_source>
     <cpp_source>actions/get_build_config.cpp</cpp_source>
     <cpp_source>actions/get_build_type.cpp</cpp_source>
+    <cpp_source>actions/get_build_runtime_type.cpp</cpp_source>
     <cpp_source>actions/get_project_dependency_version.cpp</cpp_source>
     <cpp_source>actions/get_toolchain_dependency_version.cpp</cpp_source>
     <cpp_source>actions/get_toolchain_versions.cpp</cpp_source>
@@ -169,9 +170,9 @@
     <cpp_source>functions/to_project_path.cpp</cpp_source>
     <cpp_source>functions/to_system_path.cpp</cpp_source>
   </cpp_sources>
-  <if condition = "$(have_feature -f:THEKOGANS_MAKE_CORE_HAVE_XCODE_EDITOR)">
+  <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_XCODE_EDITOR)">
     <objective_cpp_headers prefix = "include">
-      <!-- <objective_cpp_header>generators/Xcode.h</objective_cpp_header> -->
+      <objective_cpp_header>$(organization)/$(project_directory)/generators/Xcode.h</objective_cpp_header>
     </objective_cpp_headers>
     <objective_cpp_sources prefix = "src">
       <objective_cpp_source>generators/Xcode.mm</objective_cpp_source>

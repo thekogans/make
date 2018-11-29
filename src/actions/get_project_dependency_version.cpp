@@ -34,7 +34,8 @@ namespace thekogans {
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
                         "-a:" << GetName () << " -o:organization -p:project [-b:branch] [-e:example] "
-                        "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                        "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] "
+                        "-r:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
                         "a - Get the project dependency version.\n"
                         "o - Dependency organization name.\n"
                         "p - Dependency project name.\n"
@@ -42,6 +43,7 @@ namespace thekogans {
                         "e - Dependency project example.\n"
                         "c - Project build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
                         "t - Project link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                        "r - Runtime library link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
                         "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
                 }
 
@@ -52,7 +54,8 @@ namespace thekogans {
                             Options::Instance ().path,
                             Options::Instance ().generator,
                             Options::Instance ().config,
-                            Options::Instance ().type);
+                            Options::Instance ().type,
+                            Options::Instance ().runtime_type);
                     std::cout << thekogans_make.GetProjectDependencyVersion (
                         Options::Instance ().organization,
                         Options::Instance ().project,

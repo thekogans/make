@@ -34,10 +34,11 @@ namespace thekogans {
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
                         "-a:" << GetName () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] -r:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
                         "a - Copy shared libraries to program's bin directory.\n"
                         "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
                         "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                        "r - Runtime library link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
                         "path - Path to " THEKOGANS_MAKE_XML " file.\n";
                 }
 
@@ -45,7 +46,8 @@ namespace thekogans {
                     core::CopyDependencies (
                         Options::Instance ().path,
                         Options::Instance ().config,
-                        Options::Instance ().type);
+                        Options::Instance ().type,
+                        Options::Instance ().runtime_type);
                 }
             };
 

@@ -34,9 +34,10 @@ namespace thekogans {
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
                         "-a:" << GetName () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
-                        "[-w:[yes | no]] [-x:[yes | no]] path\n\n"
+                        "[-r:[" TYPE_STATIC " | " TYPE_SHARED "]] [-w:[yes | no]] [-x:[yes | no]] path\n\n"
                         "a - Install the given plugin in to it's toolchain hosts.\n"
                         "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                        "r - Runtime library link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
                         "w - Hide commands [yes | no].\n"
                         "x - Parallel build [yes | no].\n"
                         "path - Path to " THEKOGANS_MAKE_XML " file.\n";
@@ -46,6 +47,7 @@ namespace thekogans {
                     core::Installer installer (
                         Options::Instance ().config,
                         Options::Instance ().type,
+                        Options::Instance ().runtime_type,
                         Options::Instance ().hide_commands,
                         Options::Instance ().parallel_build);
                     installer.InstallPlugin (Options::Instance ().path);

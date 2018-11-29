@@ -56,7 +56,8 @@ namespace thekogans {
                                 core::GetBuildDirectory (
                                     thekogans_make.generator,
                                     thekogans_make.config,
-                                    thekogans_make.type)),
+                                    thekogans_make.type,
+                                    thekogans_make.runtime_type)),
                             (*it)->prefix);
                     for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
                             jt = (*it)->files.begin (),
@@ -141,6 +142,7 @@ namespace thekogans {
                 const std::string &project_root,
                 const std::string &config,
                 const std::string &type,
+                const std::string &runtime_type,
                 bool generateDependencies,
                 bool force) {
             struct to_build_system_path : public core::Function {
@@ -171,13 +173,14 @@ namespace thekogans {
                     THEKOGANS_MAKE_XML,
                     GetName (),
                     config,
-                    type);
+                    type,
+                    runtime_type);
             if (rootProject) {
                 thekogans_make.CheckDependencies ();
             }
             std::string makefileFilePath = ToSystemPath (
                 core::MakePath (
-                    core::GetBuildRoot (project_root, GetName (), config, type),
+                    core::GetBuildRoot (project_root, GetName (), config, type, runtime_type),
                     MAKEFILE));
             bool makefileFilePathExists = util::Path (makefileFilePath).Exists ();
             time_t makefileFilePathLastModifiedDate = 0;
@@ -198,6 +201,7 @@ namespace thekogans {
                                     (*it)->GetProjectRoot (),
                                     (*it)->GetConfig (),
                                     (*it)->GetType (),
+                                    (*it)->GetRuntimeType (),
                                     generateDependencies,
                                     force) ||
                                 updatedDependency ||
@@ -210,7 +214,8 @@ namespace thekogans {
                                                 (*it)->GetProjectRoot (),
                                                 GetName (),
                                                 (*it)->GetConfig (),
-                                                (*it)->GetType ()),
+                                                (*it)->GetType (),
+                                                (*it)->GetRuntimeType ()),
                                             MAKEFILE))).lastModifiedDate;
                         }
                     }
@@ -225,6 +230,7 @@ namespace thekogans {
                                 (*it)->GetProjectRoot (),
                                 (*it)->GetConfig (),
                                 (*it)->GetType (),
+                                (*it)->GetRuntimeType (),
                                 generateDependencies,
                                 force) ||
                             updatedDependency ||
@@ -237,7 +243,8 @@ namespace thekogans {
                                             (*it)->GetProjectRoot (),
                                             GetName (),
                                             (*it)->GetConfig (),
-                                            (*it)->GetType ()), MAKEFILE))).lastModifiedDate;
+                                            (*it)->GetType (),
+                                            (*it)->GetRuntimeType ()), MAKEFILE))).lastModifiedDate;
                     }
                 }
             }
@@ -256,11 +263,11 @@ namespace thekogans {
                     util::Directory::Entry (thekogans_makeFilePath).lastModifiedDate) {
                 std::cout << "Generating " <<
                     core::MakePath (
-                        core::GetBuildRoot (project_root, GetName (), config, type),
+                        core::GetBuildRoot (project_root, GetName (), config, type, runtime_type),
                         MAKEFILE) <<
                     std::endl;
                 std::cout.flush ();
-                core::CreateBuildRoot (project_root, GetName (), config, type);
+                core::CreateBuildRoot (project_root, GetName (), config, type, runtime_type);
                 std::string makefileTemplatePath =
                     ToSystemPath (
                         core::MakePath (
@@ -329,6 +336,9 @@ namespace thekogans {
                                 else if (variable == "type") {
                                     makefileFile << thekogans_make.type;
                                 }
+                                else if (variable == "runtime_type") {
+                                    makefileFile << thekogans_make.runtime_type;
+                                }
                                 else if (variable == "generator") {
                                     makefileFile << GetName ();
                                 }
@@ -346,7 +356,8 @@ namespace thekogans {
                                                     (*it)->GetConfigFile (),
                                                     (*it)->GetGenerator (),
                                                     (*it)->GetConfig (),
-                                                    (*it)->GetType ()).GetProjectGoal ();
+                                                    (*it)->GetType (),
+                                                    (*it)->GetRuntimeType ()).GetProjectGoal ();
                                         }
                                     }
                                 }
@@ -667,9 +678,6 @@ namespace thekogans {
                                 else if (variable == "def_file") {
                                     makefileFile << thekogans_make.def_file;
                                 }
-                                else if (variable == "runtime_library") {
-                                    makefileFile << thekogans_make.runtime_library;
-                                }
                                 else if (variable == "custom_build_rules") {
                                     std::list<std::string> extra_clean;
                                     for (std::list<core::thekogans_make::FileList::File::CustomBuild::Ptr>::const_iterator
@@ -739,6 +747,7 @@ namespace thekogans {
                 const std::string &project_root,
                 const std::string &config,
                 const std::string &type,
+                const std::string &runtime_type,
                 bool deleteDependencies) {
             const core::thekogans_make &thekogans_make =
                 core::thekogans_make::GetConfig (
@@ -746,7 +755,8 @@ namespace thekogans {
                     THEKOGANS_MAKE_XML,
                     GetName (),
                     config,
-                    type);
+                    type,
+                    runtime_type);
             if (deleteDependencies) {
                 for (std::list<core::thekogans_make::Dependency::Ptr>::const_iterator
                         it = thekogans_make.dependencies.begin (),
@@ -757,11 +767,12 @@ namespace thekogans {
                             (*it)->GetProjectRoot (),
                             (*it)->GetConfig (),
                             (*it)->GetType (),
+                            (*it)->GetRuntimeType (),
                             deleteDependencies);
                     }
                 }
             }
-            std::string build_root = core::GetBuildRoot (project_root, GetName (), config, type);
+            std::string build_root = core::GetBuildRoot (project_root, GetName (), config, type, runtime_type);
             util::Path (ToSystemPath (build_root)).Delete ();
             while (build_root != project_root) {
                 build_root = util::Path (build_root).GetDirectory ();

@@ -32,6 +32,7 @@ namespace thekogans {
             std::string version;
             std::string config;
             std::string type;
+            std::string runtime_type;
             for (Parameters::const_iterator
                     it = parameters.begin (),
                     end = parameters.end (); it != end; ++it) {
@@ -50,9 +51,19 @@ namespace thekogans {
                 else if ((*it).first == "t" || (*it).first == "type") {
                     type = (*it).second;
                 }
+                else if ((*it).first == "r" || (*it).first == "runtime_type") {
+                    runtime_type = (*it).second;
+                }
             }
             if (core::Toolchain::Find (organization, project, version)) {
-                return core::Value (core::Toolchain::GetLibrary (organization, project, version, config, type));
+                return core::Value (
+                    core::Toolchain::GetLibrary (
+                        organization,
+                        project,
+                        version,
+                        config,
+                        type,
+                        runtime_type));
             }
             else {
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION (

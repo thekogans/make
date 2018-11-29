@@ -36,6 +36,7 @@ namespace thekogans {
             std::string example;
             std::string config = CONFIG_RELEASE;
             std::string type = TYPE_STATIC;
+            std::string runtime_type = TYPE_STATIC;
             for (Parameters::const_iterator
                     it = parameters.begin (),
                     end = parameters.end (); it != end; ++it) {
@@ -60,6 +61,9 @@ namespace thekogans {
                 else if ((*it).first == "t" || (*it).first == "type") {
                     type = (*it).second;
                 }
+                else if ((*it).first == "r" || (*it).first == "runtime_type") {
+                    runtime_type = (*it).second;
+                }
             }
             if (core::Project::Find (organization, project, branch, version, example)) {
                 return core::Value (
@@ -70,7 +74,8 @@ namespace thekogans {
                         version,
                         example,
                         config,
-                        type));
+                        type,
+                        runtime_type));
             }
             else {
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
