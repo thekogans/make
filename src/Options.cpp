@@ -71,9 +71,6 @@ namespace thekogans {
                 case 't':
                     type = value;
                     break;
-                case 'r':
-                    runtime_type = value;
-                    break;
                 case 'd':
                     if (!value.empty ()) {
                         dependent = value;

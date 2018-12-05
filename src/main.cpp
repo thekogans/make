@@ -44,7 +44,7 @@ int main (
         util::LoggerMgr::NoDecorations);
     THEKOGANS_UTIL_LOG_ADD_LOGGER (util::Logger::Ptr (new util::ConsoleLogger ()));
     THEKOGANS_UTIL_IMPLEMENT_LOG_FLUSHER;
-    make::Options::Instance ().Parse (argc, argv, "hvagopbefsctrdyumwxz");
+    make::Options::Instance ().Parse (argc, argv, "hvagopbefsctdyumwxz");
     int result = 0;
     if (make::Options::Instance ().help) {
         if (!make::Options::Instance ().action.empty ()) {

@@ -133,7 +133,6 @@
     <cpp_source>actions/get_naming_convention.cpp</cpp_source>
     <cpp_source>actions/get_build_config.cpp</cpp_source>
     <cpp_source>actions/get_build_type.cpp</cpp_source>
-    <cpp_source>actions/get_build_runtime_type.cpp</cpp_source>
     <cpp_source>actions/get_project_dependency_version.cpp</cpp_source>
     <cpp_source>actions/get_toolchain_dependency_version.cpp</cpp_source>
     <cpp_source>actions/get_toolchain_versions.cpp</cpp_source>

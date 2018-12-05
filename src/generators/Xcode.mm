@@ -27,7 +27,6 @@ namespace thekogans {
                 const std::string &project_root,
                 const std::string &config,
                 const std::string &type,
-                const std::string &runtime_type,
                 bool generateDependencies,
                 bool force) {
             // FIXME: implement
@@ -39,7 +38,6 @@ namespace thekogans {
                 const std::string &project_root,
                 const std::string &config,
                 const std::string &type,
-                const std::string &runtime_type,
                 bool deleteDependencies) {
             // FIXME: implement
             assert (0);

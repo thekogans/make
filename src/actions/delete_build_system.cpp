@@ -34,13 +34,11 @@ namespace thekogans {
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
                         "-a:" << GetName () << " -g:[" << core::GetGeneratorList (" | ") << "] "
-                        "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] "
-                        "-r:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] path\n\n"
+                        "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] path\n\n"
                         "a - Delete a build system.\n"
                         "g - Build system generator.\n"
                         "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
                         "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "r - Runtime library link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
                         "d - Follow dependencies.\n"
                         "path - Path to " THEKOGANS_MAKE_XML " file.\n";
                 }
@@ -51,7 +49,6 @@ namespace thekogans {
                         Options::Instance ().generator,
                         Options::Instance ().config,
                         Options::Instance ().type,
-                        Options::Instance ().runtime_type,
                         Options::Instance ().dependencies);
                 }
             };

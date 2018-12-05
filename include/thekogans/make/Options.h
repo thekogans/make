@@ -43,7 +43,6 @@ namespace thekogans {
             std::string SHA2_256;
             std::string config;
             std::string type;
-            std::string runtime_type;
             std::string dependent;
             std::string dependency;
             std::string url;

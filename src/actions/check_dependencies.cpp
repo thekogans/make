@@ -34,11 +34,10 @@ namespace thekogans {
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
                         "-a:" << GetName () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] -r:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
                         "a - Check project/toolchain dependency hierarchy for multiple versions.\n"
                         "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
                         "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "r - Runtime library link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
                         "path - Path to configuration file.\n";
                 }
 
@@ -49,8 +48,7 @@ namespace thekogans {
                             Options::Instance ().path,
                             Options::Instance ().generator,
                             Options::Instance ().config,
-                            Options::Instance ().type,
-                            Options::Instance ().runtime_type);
+                            Options::Instance ().type);
                     thekogans_make.CheckDependencies ();
                 }
             };
