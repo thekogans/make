@@ -25,7 +25,7 @@ namespace thekogans {
     namespace make {
 
         struct make : public core::Generator {
-            THEKOGANS_MAKE_DECLARE_GENERATOR (make)
+            THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (make)
 
         protected:
             bool rootProject;

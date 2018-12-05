@@ -24,7 +24,7 @@ namespace thekogans {
     namespace make {
 
         struct make_path : public core::Function {
-            THEKOGANS_MAKE_DECLARE_FUNCTION (make_path)
+            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (make_path)
 
             virtual core::Value Exec (
                 const core::thekogans_make & /*thekogans_make*/,

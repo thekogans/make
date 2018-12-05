@@ -37,7 +37,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_IMPLEMENT_GENERATOR (make)
+        THEKOGANS_MAKE_CORE_IMPLEMENT_GENERATOR (make)
 
         namespace {
             void DumpFileLists (

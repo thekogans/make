@@ -24,7 +24,7 @@ namespace thekogans {
     namespace make {
 
         struct have_feature : public core::Function {
-            THEKOGANS_MAKE_DECLARE_FUNCTION (have_feature)
+            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (have_feature)
 
             virtual core::Value Exec (
                 const core::thekogans_make &thekogans_make,
