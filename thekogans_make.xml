@@ -140,7 +140,6 @@
     <cpp_source>generators/make.cpp</cpp_source>
     <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
       <cpp_source>generators/vsBase.cpp</cpp_source>
-      <cpp_source>generators/vs2010.cpp</cpp_source>
       <cpp_source>generators/vs2013.cpp</cpp_source>
       <cpp_source>generators/vs2015.cpp</cpp_source>
       <cpp_source>generators/vs2017.cpp</cpp_source>
