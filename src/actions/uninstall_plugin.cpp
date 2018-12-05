@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct uninstall_plugin : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (uninstall_plugin)
+                THEKOGANS_MAKE_DECLARE_ACTION (uninstall_plugin)
 
                 virtual const char *GetGroup () const {
                     return GROUP_INSTALL;
@@ -50,7 +50,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (uninstall_plugin)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (uninstall_plugin)
         }
 
     } // namespace make

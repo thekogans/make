@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct copy_plugin : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (copy_plugin)
+                THEKOGANS_MAKE_DECLARE_ACTION (copy_plugin)
 
                 virtual const char *GetGroup () const {
                     return GROUP_INSTALL;
@@ -46,7 +46,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (copy_plugin)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (copy_plugin)
         }
 
     } // namespace make

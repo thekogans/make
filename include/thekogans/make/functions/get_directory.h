@@ -24,7 +24,7 @@ namespace thekogans {
     namespace make {
 
         struct get_directory : public core::Function {
-            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (get_directory)
+            THEKOGANS_MAKE_DECLARE_FUNCTION (get_directory)
 
             virtual core::Value Exec (
                 const core::thekogans_make & /*thekogans_make*/,

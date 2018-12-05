@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct get_naming_convention : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (get_naming_convention)
+                THEKOGANS_MAKE_DECLARE_ACTION (get_naming_convention)
 
                 virtual const char *GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
@@ -46,7 +46,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (get_naming_convention)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_naming_convention)
         }
 
     } // namespace make

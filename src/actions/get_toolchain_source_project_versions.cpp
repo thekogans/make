@@ -26,7 +26,7 @@ namespace thekogans {
 
         namespace {
             struct get_toolchain_source_project_versions : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (get_toolchain_source_project_versions)
+                THEKOGANS_MAKE_DECLARE_ACTION (get_toolchain_source_project_versions)
 
                 virtual const char *GetGroup () const {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
@@ -63,7 +63,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (get_toolchain_source_project_versions)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_toolchain_source_project_versions)
         }
 
     } // namespace make

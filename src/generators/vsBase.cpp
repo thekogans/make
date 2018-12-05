@@ -32,9 +32,9 @@
 #include "thekogans/util/StringUtils.h"
 #include "thekogans/make/core/Function.h"
 #include "thekogans/make/core/Utils.h"
-#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+#if defined (THEKOGANS_MAKE_HAVE_CURL)
     #include "thekogans/make/core/Sources.h"
-#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+#endif // defined (THEKOGANS_MAKE_HAVE_CURL)
 #include "thekogans/make/generators/vsBase.h"
 
 namespace thekogans {
@@ -376,13 +376,13 @@ namespace thekogans {
             if (force ||
                     updatedDependency ||
                     !vcxprojFilePathExists ||
-                #if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+                #if defined (THEKOGANS_MAKE_HAVE_CURL)
                     vcxprojFilePathLastModifiedDate <
                         util::Directory::Entry (
                             ToSystemPath (
                                 core::MakePath (
                                     core::_TOOLCHAIN_ROOT, SOURCES_XML))).lastModifiedDate ||
-                #endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+                #endif // defined (THEKOGANS_MAKE_HAVE_CURL)
                     vcxprojFilePathLastModifiedDate <
                         util::Directory::Entry (thekogans_makeFilePath).lastModifiedDate) {
                 for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator

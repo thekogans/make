@@ -30,7 +30,7 @@ namespace thekogans {
 
         namespace {
             struct cleanup_toolchain : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (cleanup_toolchain)
+                THEKOGANS_MAKE_DECLARE_ACTION (cleanup_toolchain)
 
                 virtual const char *GetGroup () const {
                     return GROUP_TOOLCHAIN;
@@ -101,7 +101,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (cleanup_toolchain)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (cleanup_toolchain)
         }
 
     } // namespace make

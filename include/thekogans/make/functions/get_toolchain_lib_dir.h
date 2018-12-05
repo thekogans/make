@@ -24,7 +24,7 @@ namespace thekogans {
     namespace make {
 
         struct get_toolchain_lib_dir : public core::Function {
-            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (get_toolchain_lib_dir)
+            THEKOGANS_MAKE_DECLARE_FUNCTION (get_toolchain_lib_dir)
 
             virtual core::Value Exec (
                 const core::thekogans_make & /*thekogans_make*/,

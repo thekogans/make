@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct list_cygwin_mount_table : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (list_cygwin_mount_table)
+                THEKOGANS_MAKE_DECLARE_ACTION (list_cygwin_mount_table)
 
                 virtual const char *GetGroup () const {
                     return GROUP_WINDOWS;
@@ -42,7 +42,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (list_cygwin_mount_table)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (list_cygwin_mount_table)
         }
 
     } // namespace make

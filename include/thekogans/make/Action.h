@@ -119,11 +119,11 @@ namespace thekogans {
             /// \brief
             /// MapInitializer is used to initialize the Action::map.
             /// It should not be used directly, and instead is included
-            /// in THEKOGANS_MAKE_CORE_DECLARE_ACTION/THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION.
+            /// in THEKOGANS_MAKE_DECLARE_ACTION/THEKOGANS_MAKE_IMPLEMENT_ACTION.
             /// If you are deriving a action from Action, and you want
             /// it to be dynamically discoverable/creatable, add
-            /// THEKOGANS_MAKE_CORE_DECLARE_ACTION to it's declaration,
-            /// and THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION to it's definition.
+            /// THEKOGANS_MAKE_DECLARE_ACTION to it's declaration,
+            /// and THEKOGANS_MAKE_IMPLEMENT_ACTION to it's definition.
             struct MapInitializer {
                 /// \brief
                 /// ctor. Add action of type, and factory for creating it
@@ -180,11 +180,11 @@ namespace thekogans {
         /// Example:
         /// \code{.cpp}
         /// struct create_build_system : public Action {
-        ///     THEKOGANS_MAKE_CORE_DECLARE_ACTION (create_build_system)
+        ///     THEKOGANS_MAKE_DECLARE_ACTION (create_build_system)
         ///     ...
         /// };
         /// \endcode
-        #define THEKOGANS_MAKE_CORE_DECLARE_ACTION(type)\
+        #define THEKOGANS_MAKE_DECLARE_ACTION(type)\
         public:\
             static thekogans::make::Action::MapInitializer mapInitializer;\
             static thekogans::make::Action::UniquePtr Create () {\
@@ -198,9 +198,9 @@ namespace thekogans {
         /// Dynamic discovery macro. Instantiate one of these in the class cpp file.
         /// Example:
         /// \code{.cpp}
-        /// THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (create_build_system)
+        /// THEKOGANS_MAKE_IMPLEMENT_ACTION (create_build_system)
         /// \endcode
-        #define THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION(type)\
+        #define THEKOGANS_MAKE_IMPLEMENT_ACTION(type)\
             thekogans::make::Action::MapInitializer type::mapInitializer (\
                 #type, type::Create);
 

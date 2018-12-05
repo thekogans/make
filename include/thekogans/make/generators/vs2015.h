@@ -25,7 +25,7 @@ namespace thekogans {
     namespace make {
 
         struct vs2015 : public vsBase {
-            THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (vs2015)
+            THEKOGANS_MAKE_DECLARE_GENERATOR (vs2015)
         };
 
     } // namespace make

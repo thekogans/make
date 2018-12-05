@@ -45,7 +45,6 @@
     <cpp_header>$(organization)/$(project_directory)/generators/make.h</cpp_header>
     <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
       <cpp_header>$(organization)/$(project_directory)/generators/vsBase.h</cpp_header>
-      <cpp_header>$(organization)/$(project_directory)/generators/vs2010.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2013.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2015.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2017.h</cpp_header>

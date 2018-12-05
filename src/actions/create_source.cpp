@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct create_source : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (create_source)
+                THEKOGANS_MAKE_DECLARE_ACTION (create_source)
 
                 virtual const char *GetGroup () const {
                     return GROUP_SOURCES;
@@ -46,7 +46,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (create_source)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (create_source)
         }
 
     } // namespace make

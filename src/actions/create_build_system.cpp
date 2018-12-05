@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct create_build_system : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (create_build_system)
+                THEKOGANS_MAKE_DECLARE_ACTION (create_build_system)
 
                 virtual const char *GetGroup () const {
                     return GROUP_BUILD;
@@ -55,7 +55,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (create_build_system)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (create_build_system)
         }
 
     } // namespace make

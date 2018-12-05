@@ -29,15 +29,15 @@
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/core/Project.h"
 #include "thekogans/make/core/Utils.h"
-#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+#if defined (THEKOGANS_MAKE_HAVE_CURL)
     #include "thekogans/make/core/Sources.h"
-#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+#endif // defined (THEKOGANS_MAKE_HAVE_CURL)
 #include "thekogans/make/generators/make.h"
 
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_GENERATOR (make)
+        THEKOGANS_MAKE_IMPLEMENT_GENERATOR (make)
 
         namespace {
             void DumpFileLists (
@@ -246,12 +246,12 @@ namespace thekogans {
             if (force ||
                     updatedDependency ||
                     !makefileFilePathExists ||
-                #if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+                #if defined (THEKOGANS_MAKE_HAVE_CURL)
                     makefileFilePathLastModifiedDate <
                     util::Directory::Entry (
                         ToSystemPath (
                             core::MakePath (core::_TOOLCHAIN_ROOT, SOURCES_XML))).lastModifiedDate ||
-                #endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+                #endif // defined (THEKOGANS_MAKE_HAVE_CURL)
                     makefileFilePathLastModifiedDate <
                     util::Directory::Entry (thekogans_makeFilePath).lastModifiedDate) {
                 std::cout << "Generating " <<

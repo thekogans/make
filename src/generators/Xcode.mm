@@ -21,7 +21,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_GENERATOR (Xcode)
+        THEKOGANS_MAKE_IMPLEMENT_GENERATOR (Xcode)
 
         bool Xcode::Generate (
                 const std::string &project_root,

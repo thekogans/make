@@ -24,7 +24,7 @@ namespace thekogans {
 
         namespace {
             struct get_schema_version : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (get_schema_version)
+                THEKOGANS_MAKE_DECLARE_ACTION (get_schema_version)
 
                 virtual const char *GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
@@ -42,7 +42,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (get_schema_version)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_schema_version)
         }
 
     } // namespace make

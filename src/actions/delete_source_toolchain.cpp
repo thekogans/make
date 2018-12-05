@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct delete_source_toolchain : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (delete_source_toolchain)
+                THEKOGANS_MAKE_DECLARE_ACTION (delete_source_toolchain)
 
                 virtual const char *GetGroup () const {
                     return GROUP_SOURCES;
@@ -58,7 +58,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (delete_source_toolchain)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (delete_source_toolchain)
         }
 
     } // namespace make

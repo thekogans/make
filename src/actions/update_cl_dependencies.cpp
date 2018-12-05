@@ -27,7 +27,7 @@ namespace thekogans {
 
         namespace {
             struct update_cl_dependencies : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (update_cl_dependencies)
+                THEKOGANS_MAKE_DECLARE_ACTION (update_cl_dependencies)
 
                 virtual const char *GetGroup () const {
                     return GROUP_WINDOWS;
@@ -115,7 +115,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (update_cl_dependencies)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (update_cl_dependencies)
         }
 
     } // namespace make

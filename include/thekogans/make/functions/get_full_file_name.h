@@ -24,7 +24,7 @@ namespace thekogans {
     namespace make {
 
         struct get_full_file_name : public core::Function {
-            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (get_full_file_name)
+            THEKOGANS_MAKE_DECLARE_FUNCTION (get_full_file_name)
 
             virtual core::Value Exec (
                 const core::thekogans_make & /*thekogans_make*/,

@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct update_toolchain_sources : public Action {
-                THEKOGANS_MAKE_CORE_DECLARE_ACTION (update_toolchain_sources)
+                THEKOGANS_MAKE_DECLARE_ACTION (update_toolchain_sources)
 
                 virtual const char *GetGroup () const {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
@@ -43,7 +43,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_CORE_IMPLEMENT_ACTION (update_toolchain_sources)
+            THEKOGANS_MAKE_IMPLEMENT_ACTION (update_toolchain_sources)
         }
 
     } // namespace make

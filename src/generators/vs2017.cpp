@@ -20,7 +20,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_GENERATOR (vs2017)
+        THEKOGANS_MAKE_IMPLEMENT_GENERATOR (vs2017)
 
     } // namespace make
 } // namespace thekogans
