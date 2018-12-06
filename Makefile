@@ -92,7 +92,6 @@ cpp_headers :=\
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   cpp_headers +=\
     $(project_root)/include/$(organization)/$(project)/generators/vsBase.h\
-    $(project_root)/include/$(organization)/$(project)/generators/vs2010.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2013.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2015.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2017.h
@@ -162,7 +161,6 @@ cpp_sources +=\
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   cpp_sources +=\
     $(project_root)/src/generators/vsBase.cpp\
-    $(project_root)/src/generators/vs2010.cpp\
     $(project_root)/src/generators/vs2013.cpp\
     $(project_root)/src/generators/vs2015.cpp\
     $(project_root)/src/generators/vs2017.cpp
