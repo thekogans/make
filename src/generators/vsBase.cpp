@@ -127,10 +127,12 @@ namespace thekogans {
 
             inline std::string GetRuntimeLibrary (
                     const std::string &config,
-                    const std::string & /*type*/) {
+                    const std::string &type) {
                 return
-                    config == CONFIG_DEBUG ? "MultiThreadedDebugDLL" :
-                    config == CONFIG_RELEASE ? "MultiThreadedDLL" : std::string ();
+                    config == CONFIG_DEBUG && type == TYPE_SHARED ? "MultiThreadedDebugDLL" :
+                    config == CONFIG_DEBUG && type == TYPE_STATIC ? "MultiThreadedDebug" :
+                    config == CONFIG_RELEASE && type == TYPE_SHARED ? "MultiThreadedDLL" :
+                    config == CONFIG_RELEASE && type == TYPE_STATIC ? "MultiThreaded" : std::string ();
             }
 
             inline const char *GetSLN_DEPENDENCY_TARGET_TEMPLATE () {
