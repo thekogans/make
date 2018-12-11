@@ -125,6 +125,12 @@ namespace thekogans {
                 "      <Filter>%s</Filter>\n"
                 "    </CustomBuild>\n";
 
+            inline std::string GetPlatform () {
+                return
+                    core::_TOOLCHAIN_ARCH == ARCH_i386 ? "Win32" :
+                    core::_TOOLCHAIN_ARCH == ARCH_x86_64 ? "x64" : "";
+            }
+
             inline std::string GetRuntimeLibrary (
                     const std::string &config,
                     const std::string &type) {
@@ -133,6 +139,12 @@ namespace thekogans {
                     config == CONFIG_DEBUG && type == TYPE_STATIC ? "MultiThreadedDebug" :
                     config == CONFIG_RELEASE && type == TYPE_SHARED ? "MultiThreadedDLL" :
                     config == CONFIG_RELEASE && type == TYPE_STATIC ? "MultiThreaded" : std::string ();
+            }
+
+            inline std::string GetTargetMachine () {
+                return
+                    core::_TOOLCHAIN_ARCH == ARCH_i386 ? "MachineX86" :
+                    core::_TOOLCHAIN_ARCH == ARCH_x86_64 ? "MachineX64" : "";
             }
 
             inline const char *GetSLN_DEPENDENCY_TARGET_TEMPLATE () {
@@ -686,6 +698,9 @@ namespace thekogans {
                             else if (variable == "type") {
                                 slnFile << thekogans_make.type;
                             }
+                            else if (variable == "platform") {
+                                slnFile << GetPlatform ();
+                            }
                             else if (variable == "dependency_dependencies") {
                                 for (std::list<ProjectRootAndGUID>::const_iterator
                                         it = projectDependencies.begin (),
@@ -892,6 +907,9 @@ namespace thekogans {
                             else if (variable == "generator") {
                                 vcxprojFile << GetName ();
                             }
+                            else if (variable == "target_machine") {
+                                vcxprojFile << GetTargetMachine ();
+                            }
                             else if (variable == "TOOLCHAIN_SHELL") {
                                 vcxprojFile << ToSystemPath (core::_TOOLCHAIN_SHELL);
                             }
@@ -912,6 +930,9 @@ namespace thekogans {
                             }
                             else if (variable == "type") {
                                 vcxprojFile << thekogans_make.type;
+                            }
+                            else if (variable == "platform") {
+                                slnFile << GetPlatform ();
                             }
                             else if (variable == "include_directories") {
                                 std::set<std::string> include_directories;
