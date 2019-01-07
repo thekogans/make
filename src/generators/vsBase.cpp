@@ -932,7 +932,7 @@ namespace thekogans {
                                 vcxprojFile << thekogans_make.type;
                             }
                             else if (variable == "platform") {
-                                slnFile << GetPlatform ();
+                                vcxprojFile << GetPlatform ();
                             }
                             else if (variable == "include_directories") {
                                 std::set<std::string> include_directories;
