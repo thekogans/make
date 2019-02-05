@@ -329,6 +329,13 @@ namespace thekogans {
                                 else if (variable == "type") {
                                     makefileFile << thekogans_make.type;
                                 }
+                                else if (variable == "runtime_type") {
+                                #if defined (THEKOGANS_MAKE_USE_SHARED_RUNTIME)
+                                    makefileFile << TYPE_SHARED;
+                                #else // defined (THEKOGANS_MAKE_USE_SHARED_RUNTIME)
+                                    makefileFile << thekogans_make.type;
+                                #endif // defined (THEKOGANS_MAKE_USE_SHARED_RUNTIME)
+                                }
                                 else if (variable == "generator") {
                                     makefileFile << GetName ();
                                 }

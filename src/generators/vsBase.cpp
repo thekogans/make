@@ -131,6 +131,15 @@ namespace thekogans {
                     core::_TOOLCHAIN_ARCH == ARCH_x86_64 ? "x64" : "";
             }
 
+        #if defined (THEKOGANS_MAKE_USE_SHARED_RUNTIME)
+            inline std::string GetRuntimeLibrary (
+                    const std::string &config,
+                    const std::string & /*type*/) {
+                return
+                    config == CONFIG_DEBUG ? "MultiThreadedDebugDLL" :
+                    config == CONFIG_RELEASE ? "MultiThreadedDLL" : std::string ();
+            }
+        #else // defined (THEKOGANS_MAKE_USE_SHARED_RUNTIME)
             inline std::string GetRuntimeLibrary (
                     const std::string &config,
                     const std::string &type) {
@@ -140,6 +149,7 @@ namespace thekogans {
                     config == CONFIG_RELEASE && type == TYPE_SHARED ? "MultiThreadedDLL" :
                     config == CONFIG_RELEASE && type == TYPE_STATIC ? "MultiThreaded" : std::string ();
             }
+        #endif // defined (THEKOGANS_MAKE_USE_SHARED_RUNTIME)
 
             inline std::string GetTargetMachine () {
                 return
