@@ -26,7 +26,6 @@
 #include "thekogans/util/Path.h"
 #include "thekogans/util/File.h"
 #include "thekogans/util/Directory.h"
-#include "thekogans/util/Buffer.h"
 #include "thekogans/util/LoggerMgr.h"
 #include "thekogans/util/Exception.h"
 #include "thekogans/util/StringUtils.h"
@@ -63,10 +62,27 @@ namespace thekogans {
                 "\t\t{%s}.$(config) $(type)|x64.Build.0 = $(config) $(type)|x64\n";
             // .vcxproj
             const char * const VCXPROJ_EXT = ".vcxproj";
+            const char * const VCXPROJ_PRE_BUILD_EVENT =
+                "    <PreBuildEvent>\n"
+                "      <Message>Update build system.</Message>\n"
+                "      <Command>\"$(TOOLCHAIN_SHELL)\" \"$(TOOLCHAIN_ROOT)/common/bin/makebuild\" -g:$(generator) -pr:\"$(project_root)\" -c:$(config) -t:$(type)</Command>\n"
+                "    </PreBuildEvent>\n";
+            const char * const VCXPROJ_POST_BUILD_EVENT_PLUGIN =
+                "    <PostBuildEvent>\n"
+                "      <Message>Copy plugin.</Message>\n"
+                "      <Command>\"$(TOOLCHAIN_SHELL)\" \"$(TOOLCHAIN_ROOT)/common/bin/copyplugin\" -pr:\"$(project_root)\" -c:$(config)</Command>\n"
+                "    </PostBuildEvent>\n";
+            const char * const VCXPROJ_POST_BUILD_EVENT_PROGRAM =
+                "    <PostBuildEvent>\n"
+                "      <Message>Copy dependencies.</Message>\n"
+                "      <Command>\"$(TOOLCHAIN_SHELL)\" \"$(TOOLCHAIN_ROOT)/common/bin/copydependencies\" -pr:\"$(project_root)\" -c:$(config) -t:$(type)</Command>\n"
+                "    </PostBuildEvent>\n";
             const char * const VCXPROJ_IMPORT_LIBRARY =
                 "      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>\n";
             const char * const VCXPROJ_MODULE_DEFINITION_FILE =
                 "      <ModuleDefinitionFile>%s</ModuleDefinitionFile>\n";
+            const char * const VCXPROJ_SUB_SYSTEM =
+                "      <SubSystem>%s</SubSystem>\n";
             const char * const VCXPROJ_HEADER_TEMPLATE =
                 "    <ClInclude Include=\"%s\"/>\n";
             const char * const VCXPROJ_SOURCE_TEMPLATE =
@@ -229,24 +245,24 @@ namespace thekogans {
             }
 
             std::string GetVariable (
-                    util::Buffer &buffer,
+                    const char **buffer,
                     const char delimiters[] = "()") {
-                if (buffer.data[buffer.readOffset] != delimiters[0]) {
+                const char *ptr = *buffer;
+                if (*ptr != delimiters[0]) {
                     THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                        "Invalid variable declaration in: %s", buffer.data);
+                        "Invalid variable declaration in: %s", ptr);
                 }
-                std::size_t readOffset = ++buffer.readOffset;
-                while (buffer.readOffset < buffer.writeOffset &&
-                    buffer.data[buffer.readOffset] != delimiters[1]) {
-                    ++buffer.readOffset;
+                ++ptr;
+                std::string variable;
+                while (*ptr != '\0' && *ptr != delimiters[1]) {
+                    variable += *ptr++;
                 }
-                if (buffer.readOffset == buffer.writeOffset) {
+                if (*ptr == delimiters[1]) {
                     THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                        "Invalid variable declaration in: %s", buffer.data);
+                        "Invalid variable declaration in: %s", ptr);
                 }
-                return std::string (
-                    (const char *)&buffer.data[readOffset],
-                    (const char *)&buffer.data[buffer.readOffset++]);
+                *buffer = ++ptr;
+                return variable;
             }
 
             inline std::string GetMasmPath () {
@@ -643,6 +659,27 @@ namespace thekogans {
             }
         }
 
+        namespace {
+            const char *slnTemplate =
+                "﻿\n"
+                "Microsoft Visual Studio Solution File, Format Version $(format_version)\n"
+                "# Visual Studio $(visual_studio)\n"
+                "$(dependency_dependencies)\n"
+                "$(project_dependencies)\n"
+                "Global\n"
+                "	GlobalSection(SolutionConfigurationPlatforms) = preSolution\n"
+                "		$(config) $(type)|$(platform) = $(config) $(type)|$(platform)\n"
+                "	EndGlobalSection\n"
+                "	GlobalSection(ProjectConfigurationPlatforms) = postSolution\n"
+                "$(dependency_targets)\n"
+                "$(project_targets)\n"
+                "	EndGlobalSection\n"
+                "	GlobalSection(SolutionProperties) = preSolution\n"
+                "		HideSolutionNode = FALSE\n"
+                "	EndGlobalSection\n"
+                "EndGlobal\n";
+        }
+
         void vsBase::sln (const core::thekogans_make &thekogans_make) {
             std::cout << "Generating " <<
                 core::MakePath (
@@ -656,30 +693,6 @@ namespace thekogans {
                         thekogans_make.project)) <<
                 SLN_EXT << std::endl;
             std::cout.flush ();
-            std::string slnTemplatePath =
-                core::MakePath (core::_TOOLCHAIN_DIR,
-                    std::string (RESOURCES_FOLDER) + '/' + GetName () + SLN_EXT);
-            util::ReadOnlyFile slnTemplate (
-                util::HostEndian,
-                ToSystemPath (slnTemplatePath));
-            // Protect yourself.
-            const util::ui32 MAX_SLN_TEMPLATE_SIZE = 128 * 1024;
-            util::ui32 slnTemplateSize = (util::ui32)slnTemplate.GetSize ();
-            if (slnTemplateSize > MAX_SLN_TEMPLATE_SIZE) {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "'%s' is bigger (%u) than expected. (%u)",
-                    slnTemplatePath.c_str (),
-                    slnTemplateSize,
-                    MAX_SLN_TEMPLATE_SIZE);
-            }
-            util::Buffer buffer (util::HostEndian, slnTemplateSize);
-            if (buffer.AdvanceWriteOffset (
-                    slnTemplate.Read (buffer.GetWritePtr (), slnTemplateSize)) != slnTemplateSize) {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "Unable to read %u bytes from '%s'.",
-                    slnTemplateSize,
-                    slnTemplatePath.c_str ());
-            }
             std::string slnFilePath =
                 core::MakePath (
                     core::GetBuildRoot (
@@ -696,13 +709,18 @@ namespace thekogans {
             if (slnFile.is_open ()) {
                 std::list<ProjectRootAndGUID> projectDependencies;
                 GetProjectDependencies (thekogans_make, projectDependencies);
-                while (!buffer.IsEmpty ()) {
-                    util::i8 ch;
-                    buffer >> ch;
+                while (*slnTemplate != '\0') {
+                    util::i8 ch = *slnTemplate++;
                     switch (ch) {
                         case '$': {
-                            std::string variable = GetVariable (buffer);
-                            if (variable == "config") {
+                            std::string variable = GetVariable (&slnTemplate);
+                            if (variable == "format_version") {
+                                slnFile << slnGetFormatVersion ();
+                            }
+                            else if (variable == "visual_studio") {
+                                slnFile << slnGetVisualStudio ();
+                            }
+                            else if (variable == "config") {
                                 slnFile << thekogans_make.config;
                             }
                             else if (variable == "type") {
@@ -826,6 +844,105 @@ namespace thekogans {
             }
         }
 
+        namespace {
+            const char *vcxprojTemplate =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+                "<Project DefaultTargets=\"Build\" ToolsVersion=\"$(tools_version)\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\n"
+                "  <ItemGroup Label=\"ProjectConfigurations\">\n"
+                "    <ProjectConfiguration Include=\"$(config) $(type)|$(platform)\">\n"
+                "      <Configuration>$(config) $(type)</Configuration>\n"
+                "      <Platform>$(platform)</Platform>\n"
+                "    </ProjectConfiguration>\n"
+                "  </ItemGroup>\n"
+                "  <PropertyGroup Label=\"Globals\">\n"
+                "    <ProjectGuid>{$(project_guid)}</ProjectGuid>\n"
+                "    <RootNamespace>$(project)</RootNamespace>\n"
+                "  </PropertyGroup>\n"
+                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.Default.props\" />\n"
+                "  <PropertyGroup Label=\"Configuration\">\n"
+                "    <ConfigurationType>$(configuration_type)</ConfigurationType>\n"
+                "    <UseDebugLibraries>$(use_debug_libraries)</UseDebugLibraries>\n"
+                "    <WholeProgramOptimization>$(whole_program_optimization)</WholeProgramOptimization>\n"
+                "    <CharacterSet>MultiByte</CharacterSet>\n"
+                "    <PlatformToolset>$(platform_toolset)</PlatformToolset>\n"
+                "  </PropertyGroup>\n"
+                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.props\" />\n"
+                "  <ImportGroup Label=\"ExtensionSettings\">\n"
+                "  </ImportGroup>\n"
+                "  <ImportGroup Label=\"PropertySheets\">\n"
+                "    <Import Project=\"$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\" />\n"
+                "  </ImportGroup>\n"
+                "  <PropertyGroup Label=\"UserMacros\" />\n"
+                "  <PropertyGroup>\n"
+                "    <TargetName>$(target_prefix)$(target_name)</TargetName>\n"
+                "    <TargetExt>$(target_ext)</TargetExt>\n"
+                "    <OutDir>$(project_root)\$(out_dir)\$(naming_convention_prefix)</OutDir>\n"
+                "    <IntDir>obj\</IntDir>\n"
+                "    <IgnoreImportLibrary>true</IgnoreImportLibrary>\n"
+                "    <LinkIncremental>false</LinkIncremental>\n"
+                "  </PropertyGroup>\n"
+                "  <ItemDefinitionGroup>\n"
+                "    <ClCompile>\n"
+                "      <WarningLevel>Level3</WarningLevel>\n"
+                "      <Optimization>$(optimization)</Optimization>\n"
+                "      <FunctionLevelLinking>$(function_level_linking)</FunctionLevelLinking>\n"
+                "      <IntrinsicFunctions>$(intrinsic_functions)</IntrinsicFunctions>\n"
+                "      <AdditionalIncludeDirectories>$(include_directories)</AdditionalIncludeDirectories>\n"
+                "      <PreprocessorDefinitions>$(preprocessor_definitions);$(features);%(PreprocessorDefinitions)</PreprocessorDefinitions>\n"
+                "      <RuntimeLibrary>$(runtime_library)</RuntimeLibrary>\n"
+                "      <DebugInformationFormat>$(debug_information_format)</DebugInformationFormat>\n"
+                "      <MultiProcessorCompilation>true</MultiProcessorCompilation>\n"
+                "    </ClCompile>\n"
+                "    <Link>\n"
+                "      <TargetMachine>$(target_machine)</TargetMachine>\n"
+                "      <GenerateDebugInformation>$(generate_debug_information)</GenerateDebugInformation>\n"
+                "      <AdditionalDependencies>$(link_libraries)%(AdditionalDependencies)</AdditionalDependencies>\n"
+                "$(import_library)\n"
+                "$(module_definition_file)\n"
+                "$(sub_system)\n"
+                "    </Link>\n"
+                "$(pre_build_event)\n"
+                "$(post_build_event)\n"
+                "  </ItemDefinitionGroup>\n"
+                "  <ItemGroup>\n"
+                "$(masm_headers)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(masm_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(nasm_headers)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(nasm_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(c_headers)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(c_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(cpp_headers)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(cpp_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(rc_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(resources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(custom_build_sources)\n"
+                "  </ItemGroup>\n"
+                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.targets\" />\n"
+                "  <ImportGroup Label=\"ExtensionTargets\">\n"
+                "  </ImportGroup>\n"
+                "</Project>\n";
+        }
+
         void vsBase::vcxproj (const core::thekogans_make &thekogans_make) {
             std::cout << "Generating " <<
                 core::MakePath (
@@ -838,34 +955,6 @@ namespace thekogans {
                         thekogans_make.organization,
                         thekogans_make.project) + VCXPROJ_EXT) << std::endl;
             std::cout.flush ();
-            std::string vcxprojTemplatePath =
-                core::MakePath (core::_TOOLCHAIN_DIR,
-                    std::string (RESOURCES_FOLDER) + '/' + GetName () + '-' +
-                    thekogans_make.config + '-' + thekogans_make.type +
-                    VCXPROJ_EXT + '.' + thekogans_make.project_type);
-            util::ReadOnlyFile vcxprojTemplate (
-                util::HostEndian,
-                ToSystemPath (vcxprojTemplatePath));
-            // Protect yourself.
-            const util::ui32 MAX_VCXPROJ_TEMPLATE_SIZE = 128 * 1024;
-            util::ui32 vcxprojTemplateSize = (util::ui32)vcxprojTemplate.GetSize ();
-            if (vcxprojTemplateSize > MAX_VCXPROJ_TEMPLATE_SIZE) {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "'%s' is bigger (%u) than expected. (%u)",
-                    vcxprojTemplatePath.c_str (),
-                    vcxprojTemplateSize,
-                    MAX_VCXPROJ_TEMPLATE_SIZE);
-            }
-            util::Buffer buffer (util::HostEndian, vcxprojTemplateSize);
-            if (buffer.AdvanceWriteOffset (
-                    vcxprojTemplate.Read (
-                        buffer.GetWritePtr (),
-                        vcxprojTemplateSize)) != vcxprojTemplateSize) {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "Unable to read %u bytes from '%s'.",
-                    vcxprojTemplateSize,
-                    vcxprojTemplatePath.c_str ());
-            }
             std::string vcxprojFilePath =
                 core::MakePath (
                     core::GetBuildRoot (
@@ -880,13 +969,18 @@ namespace thekogans {
                 ToSystemPath (vcxprojFilePath).c_str (),
                 std::fstream::out | std::fstream::trunc);
             if (vcxprojFile.is_open ()) {
-                while (!buffer.IsEmpty ()) {
-                    util::i8 ch;
-                    buffer >> ch;
+                while (*vcxprojTemplate != '\0') {
+                    util::i8 ch = *vcxprojTemplate++;
                     switch (ch) {
                         case '$': {
-                            std::string variable = GetVariable (buffer);
-                            if (variable == "project_guid") {
+                            std::string variable = GetVariable (&vcxprojTemplate);
+                            if (variable == "tools_version") {
+                                vcxprojFile << vcxprojGetToolsVersion ();
+                            }
+                            else if (variable == "platform_toolset") {
+                                vcxprojFile << vcxprojGetPlatformToolset ();
+                            }
+                            else if (variable == "project_guid") {
                                 vcxprojFile << thekogans_make.guid.ToWindowsGUIDString (true);
                             }
                             else if (variable == "project_root") {
@@ -898,11 +992,41 @@ namespace thekogans {
                             else if (variable == "project") {
                                 vcxprojFile << GetQualifiedName (thekogans_make.organization, thekogans_make.project);
                             }
+                            else if (variable == "target_prefix") {
+                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
+                                    vcxprojFile << core::LIB_PREFIX;
+                                }
+                            }
                             else if (variable == "target_name") {
                                 vcxprojFile << thekogans_make.Expand (
                                     thekogans_make.naming_convention == NAMING_CONVENTION_FLAT ?
                                     "$(organization)_$(project)-$(TOOLCHAIN_TRIPLET)-$(config)-$(type).$(version)" :
                                     "$(organization)_$(project).$(version)");
+                            }
+                            else if (variable == "target_ext") {
+                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
+                                    if (thekogans_make.type == TYPE_STATIC) {
+                                        vcxprojFile << ".lib";
+                                    }
+                                    else if (thekogans_make.type == TYPE_SHARED) {
+                                        vcxprojFile << ".dll";
+                                    }
+                                }
+                                else if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                                    vcxprojFile << ".dll";
+                                }
+                                else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                    vcxprojFile << ".exe";
+                                }
+                            }
+                            else if (variable == "out_dir") {
+                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY ||
+                                    thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                                    vcxprojFile << core::LIB_DIR;
+                                }
+                                else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                    vcxprojFile << core::BIN_DIR;
+                                }
                             }
                             else if (variable == "naming_convention_prefix") {
                                 if (thekogans_make.naming_convention == NAMING_CONVENTION_HIERARCHICAL) {
@@ -944,6 +1068,89 @@ namespace thekogans {
                             else if (variable == "platform") {
                                 vcxprojFile << GetPlatform ();
                             }
+                            else if (variable == "configuration_type") {
+                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
+                                    if (thekogans_make.type == TYPE_SHARED) {
+                                        vcxprojFile << "DynamicLibrary";
+                                    }
+                                    else if (thekogans_make.type == TYPE_STATIC) {
+                                        vcxprojFile << "StaticLibrary";
+                                    }
+                                }
+                                else if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                                    vcxprojFile << "DynamicLibrary";
+                                }
+                                else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                    vcxprojFile << "Application";
+                                }
+                            }
+                            else if (variable == "use_debug_libraries") {
+                                if (thekogans_make.config == CONFIG_DEBUG) {
+                                    vcxprojFile << util::XML_TRUE;
+                                }
+                                else if (thekogans_make.config == CONFIG_RELEASE) {
+                                    vcxprojFile << util::XML_FALSE;
+                                }
+                            }
+                            else if (variable == "whole_program_optimization") {
+                                if (thekogans_make.config == CONFIG_DEBUG) {
+                                    vcxprojFile << util::XML_FALSE;
+                                }
+                                else if (thekogans_make.config == CONFIG_RELEASE) {
+                                    vcxprojFile << util::XML_TRUE;
+                                }
+                            }
+                            else if (variable == "optimization") {
+                                if (thekogans_make.config == CONFIG_DEBUG) {
+                                    vcxprojFile << "Disabled";
+                                }
+                                else if (thekogans_make.config == CONFIG_RELEASE) {
+                                    vcxprojFile << "MaxSpeed";
+                                }
+                            }
+                            else if (variable == "function_level_linking") {
+                                if (thekogans_make.config == CONFIG_DEBUG) {
+                                    vcxprojFile << util::XML_FALSE;
+                                }
+                                else if (thekogans_make.config == CONFIG_RELEASE) {
+                                    vcxprojFile << util::XML_TRUE;
+                                }
+                            }
+                            else if (variable == "intrinsic_functions") {
+                                if (thekogans_make.config == CONFIG_DEBUG) {
+                                    vcxprojFile << util::XML_FALSE;
+                                }
+                                else if (thekogans_make.config == CONFIG_RELEASE) {
+                                    vcxprojFile << util::XML_TRUE;
+                                }
+                            }
+                            else if (variable == "generate_debug_information") {
+                                if (thekogans_make.config == CONFIG_DEBUG) {
+                                    vcxprojFile << util::XML_TRUE;
+                                }
+                                else if (thekogans_make.config == CONFIG_RELEASE) {
+                                    vcxprojFile << util::XML_FALSE;
+                                }
+                            }
+                            else if (variable == "debug_information_format") {
+                                if (thekogans_make.config == CONFIG_DEBUG) {
+                                    vcxprojFile << "OldStyle";
+                                }
+                                else if (thekogans_make.config == CONFIG_RELEASE) {
+                                    vcxprojFile << "None";
+                                }
+                            }
+                            else if (variable == "pre_build_event") {
+                                vcxprojFile << thekogans_make.Expand (VCXPROJ_PRE_BUILD_EVENT);
+                            }
+                            else if (variable == "post_build_event") {
+                                if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                                    vcxprojFile << thekogans_make.Expand (VCXPROJ_POST_BUILD_EVENT_PLUGIN);
+                                }
+                                else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                    vcxprojFile << thekogans_make.Expand (VCXPROJ_POST_BUILD_EVENT_PROGRAM);
+                                }
+                            }
                             else if (variable == "include_directories") {
                                 std::set<std::string> include_directories;
                                 thekogans_make.GetIncludeDirectories (include_directories);
@@ -953,12 +1160,25 @@ namespace thekogans {
                                     vcxprojFile << ToSystemPath (*it) << ';';
                                 }
                             }
-                            else if (variable == "subsystem") {
-                                vcxprojFile << (thekogans_make.subsystem == std::string ("Console") ?
-                                    "_CONSOLE" : "_WINDOWS");
-                            }
                             else if (variable == "preprocessor_definitions") {
                                 std::list<std::string> preprocessor_definitions;
+                                if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                    preprocessor_definitions.push_back (
+                                        thekogans_make.subsystem == "Console" ? "_CONSOLE" : "_WINDOWS");
+                                }
+                                if (core::_TOOLCHAIN_ARCH == ARCH_i386) {
+                                    preprocessor_definitions.push_back ("WIN32");
+                                }
+                                else if (core::_TOOLCHAIN_ARCH == ARCH_x86_64) {
+                                    preprocessor_definitions.push_back ("WIN64");
+                                }
+                                if (thekogans_make.config == CONFIG_DEBUG) {
+                                    preprocessor_definitions.push_back ("_DEBUG");
+                                }
+                                else if (thekogans_make.config == CONFIG_RELEASE) {
+                                    preprocessor_definitions.push_back ("NDEBUG");
+                                }
+                                preprocessor_definitions.push_back ("BOOST_ALL_NO_LIB");
                                 thekogans_make.GetCommonPreprocessorDefinitions (preprocessor_definitions);
                                 for (std::list<std::string>::const_iterator
                                         it = preprocessor_definitions.begin (),
@@ -1002,17 +1222,22 @@ namespace thekogans {
                                     vcxprojFile << ToSystemPath (*it) << ';';
                                 }
                             }
-                            else if (variable == "link_subsystem") {
-                                vcxprojFile << (thekogans_make.subsystem == std::string ("Console") ?
-                                    "Console" : "Windows");
+                            else if (variable == "sub_system") {
+                                if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                    vcxprojFile << util::FormatString (
+                                        VCXPROJ_SUB_SYSTEM,
+                                        thekogans_make.subsystem == "Console" ? "Console" : "Windows");
+                                }
                             }
                             else if (variable == "import_library") {
                                 if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
                                     vcxprojFile << VCXPROJ_IMPORT_LIBRARY;
                                 }
                             }
-                            else if (variable == "def_file") {
-                                if (!thekogans_make.def_file.empty ()) {
+                            else if (variable == "module_definition_file") {
+                                if ((thekogans_make.project_type == PROJECT_TYPE_LIBRARY ||
+                                        thekogans_make.project_type == PROJECT_TYPE_PLUGIN) &&
+                                        !thekogans_make.def_file.empty ()) {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_MODULE_DEFINITION_FILE,
                                         ToSystemPath (thekogans_make.def_file).c_str ());
@@ -1146,6 +1371,49 @@ namespace thekogans {
             }
         }
 
+        namespace {
+            const char *vcxprojfiltersTemplate =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+                "<Project ToolsVersion=\"$(tools_version)\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\n"
+                "  <ItemGroup>\n"
+                "$(filters)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(masm_headers)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(masm_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(nasm_headers)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(nasm_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(c_headers)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(c_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(cpp_headers)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(cpp_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(rc_sources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(resources)\n"
+                "  </ItemGroup>\n"
+                "  <ItemGroup>\n"
+                "$(custom_build_sources)\n"
+                "  </ItemGroup>\n"
+                "</Project>\n";
+        }
+
         void vsBase::vcxprojfilters (const core::thekogans_make &thekogans_make) {
             std::cout << "Generating " <<
                 core::MakePath (
@@ -1158,32 +1426,6 @@ namespace thekogans {
                         thekogans_make.organization,
                         thekogans_make.project) + VCXPROJ_FILTERS_EXT) << std::endl;
             std::cout.flush ();
-            std::string vcxprojfiltersTemplatePath =
-                core::MakePath (core::_TOOLCHAIN_DIR,
-                    std::string (RESOURCES_FOLDER) + '/' + GetName () + VCXPROJ_FILTERS_EXT);
-            util::ReadOnlyFile vcxprojfiltersTemplate (
-                util::HostEndian,
-                ToSystemPath (vcxprojfiltersTemplatePath));
-            // Protect yourself.
-            const util::ui32 MAX_VCXPROJFILTERS_TEMPLATE_SIZE = 128 * 1024;
-            util::ui32 vcxprojfiltersTemplateSize = (util::ui32)vcxprojfiltersTemplate.GetSize ();
-            if (vcxprojfiltersTemplateSize > MAX_VCXPROJFILTERS_TEMPLATE_SIZE) {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "'%s' is bigger (%u) than expected. (%u)",
-                    vcxprojfiltersTemplatePath.c_str (),
-                    vcxprojfiltersTemplateSize,
-                    MAX_VCXPROJFILTERS_TEMPLATE_SIZE);
-            }
-            util::Buffer buffer (util::HostEndian, vcxprojfiltersTemplateSize);
-            if (buffer.AdvanceWriteOffset (
-                    vcxprojfiltersTemplate.Read (
-                        buffer.GetWritePtr (),
-                        vcxprojfiltersTemplateSize)) != vcxprojfiltersTemplateSize) {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "Unable to read %u bytes from '%s'.",
-                    vcxprojfiltersTemplateSize,
-                    vcxprojfiltersTemplatePath.c_str ());
-            }
             std::string vcxprojfiltersFilePath =
                 core::MakePath (
                     core::GetBuildRoot (
@@ -1198,13 +1440,15 @@ namespace thekogans {
                 ToSystemPath (vcxprojfiltersFilePath).c_str (),
                 std::fstream::out | std::fstream::trunc);
             if (vcxprojfiltersFile.is_open ()) {
-                while (!buffer.IsEmpty ()) {
-                    util::i8 ch;
-                    buffer >> ch;
+                while (*vcxprojfiltersTemplate != '\'0') {
+                    util::i8 ch = *vcxprojfiltersTemplate++;
                     switch (ch) {
                         case '$': {
-                            std::string variable = GetVariable (buffer);
-                            if (variable == "filters") {
+                            std::string variable = GetVariable (&vcxprojfiltersTemplate);
+                            if (variable == "tools_version") {
+                                vcxprojFile << vcxprojfiltersGetToolsVersion ();
+                            }
+                            else if (variable == "filters") {
                                 for (std::set<std::string>::const_iterator
                                         it = header_filters.begin (),
                                         end = header_filters.end (); it != end; ++it) {

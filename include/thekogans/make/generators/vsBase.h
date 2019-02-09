@@ -65,6 +65,14 @@ namespace thekogans {
                 return name;
             }
 
+            virtual std::string slnGetFormatVersion () const = 0;
+            virtual std::string slnGetVisualStudio () const = 0;
+
+            virtual std::string vcxprojGetToolsVersion () const = 0;
+            virtual std::string vcxprojGetPlatformToolset () const = 0;
+
+            virtual std::string vcxprojfiltersGetToolsVersion () const = 0;
+
             // Generator
             /// \brief
             /// Generate a build system.

@@ -26,6 +26,24 @@ namespace thekogans {
 
         struct vs2013 : public vsBase {
             THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (vs2013)
+
+            virtual std::string slnGetFormatVersion () const {
+                return "11.00";
+            }
+            virtual std::string slnGetVisualStudio () const {
+                return "2013";
+            }
+
+            virtual std::string vcxprojGetToolsVersion () const {
+                return "12.0";
+            }
+            virtual std::string vcxprojGetPlatformToolset () const {
+                return "v120";
+            }
+
+            virtual std::string vcxprojfiltersGetToolsVersion () const {
+                return "12.0";
+            }
         };
 
     } // namespace make
