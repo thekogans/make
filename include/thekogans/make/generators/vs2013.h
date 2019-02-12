@@ -27,6 +27,9 @@ namespace thekogans {
         struct vs2013 : public vsBase {
             THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (vs2013)
 
+            vs2013 (bool rootProject) :
+                vsBase (rootProject) {}
+
             virtual std::string slnGetFormatVersion () const {
                 return "11.00";
             }

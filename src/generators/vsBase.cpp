@@ -257,7 +257,7 @@ namespace thekogans {
                 while (*ptr != '\0' && *ptr != delimiters[1]) {
                     variable += *ptr++;
                 }
-                if (*ptr == delimiters[1]) {
+                if (*ptr != delimiters[1]) {
                     THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
                         "Invalid variable declaration in: %s", ptr);
                 }
@@ -332,12 +332,6 @@ namespace thekogans {
                 vcxprojFilePathLastModifiedDate =
                     util::Directory::Entry (vcxprojFilePath).lastModifiedDate;
             }
-            if (rootProject) {
-                defaultOrganization = core::_TOOLCHAIN_DEFAULT_ORGANIZATION;
-                if (defaultOrganization.empty ()) {
-                    defaultOrganization = thekogans_make.organization;
-                }
-            }
             bool updatedDependency = false;
             if (generateDependencies) {
                 if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
@@ -351,9 +345,9 @@ namespace thekogans {
                                 (*it)->GetGenerator (),
                                 (*it)->GetConfig (),
                                 (*it)->GetType ());
-                            vsBase dependency (GetName (), false, defaultOrganization);
+                            vsBase::Ptr dependency = core::Generator::Get (GetName (), false);
                             updatedDependency =
-                                dependency.Generate (
+                                dependency->Generate (
                                     (*it)->GetProjectRoot (),
                                     (*it)->GetConfig (),
                                     (*it)->GetType (),
@@ -386,9 +380,9 @@ namespace thekogans {
                             (*it)->GetGenerator (),
                             (*it)->GetConfig (),
                             (*it)->GetType ());
-                        vsBase dependency (GetName (), false, defaultOrganization);
+                        vsBase::Ptr dependency = core::Generator::Get (GetName (), false);
                         updatedDependency =
-                            dependency.Generate (
+                            dependency->Generate (
                                 (*it)->GetProjectRoot (),
                                 (*it)->GetConfig (),
                                 (*it)->GetType (),
@@ -637,8 +631,8 @@ namespace thekogans {
                         it = thekogans_make.dependencies.begin (),
                         end = thekogans_make.dependencies.end (); it != end; ++it) {
                     if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
-                        vsBase dependency (GetName (), false, std::string ());
-                        dependency.Delete (
+                        vsBase::Ptr dependency = core::Generator::Get (GetName (), false);
+                        dependency->Delete (
                             (*it)->GetProjectRoot (),
                             (*it)->GetConfig (),
                             (*it)->GetType (),
@@ -705,14 +699,15 @@ namespace thekogans {
                         thekogans_make.project) + SLN_EXT);
             std::fstream slnFile (
                 ToSystemPath (slnFilePath).c_str (),
-                std::fstream::out | std::fstream::trunc);
+                std::fstream::out | std::fstream::binary | std::fstream::trunc);
             if (slnFile.is_open ()) {
                 std::list<ProjectRootAndGUID> projectDependencies;
                 GetProjectDependencies (thekogans_make, projectDependencies);
-                while (*slnTemplate != '\0') {
-                    util::i8 ch = *slnTemplate++;
+                const char *fileTemplate = slnTemplate;
+                while (*fileTemplate != '\0') {
+                    util::i8 ch = *fileTemplate++;
                     if (ch == '$') {
-                        std::string variable = GetVariable (&slnTemplate);
+                        std::string variable = GetVariable (&fileTemplate);
                         if (variable == "format_version") {
                             slnFile << slnGetFormatVersion ();
                         }
@@ -851,7 +846,7 @@ namespace thekogans {
                 "    <ProjectGuid>{$(project_guid)}</ProjectGuid>\n"
                 "    <RootNamespace>$(project)</RootNamespace>\n"
                 "  </PropertyGroup>\n"
-                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.Default.props\"/>\n"
+                "  <Import Project=\"$(VCTargetsPath)\\Microsoft.Cpp.Default.props\"/>\n"
                 "  <PropertyGroup Label=\"Configuration\">\n"
                 "    <ConfigurationType>$(configuration_type)</ConfigurationType>\n"
                 "    <UseDebugLibraries>$(use_debug_libraries)</UseDebugLibraries>\n"
@@ -859,18 +854,18 @@ namespace thekogans {
                 "    <CharacterSet>MultiByte</CharacterSet>\n"
                 "    <PlatformToolset>$(platform_toolset)</PlatformToolset>\n"
                 "  </PropertyGroup>\n"
-                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.props\"/>\n"
+                "  <Import Project=\"$(VCTargetsPath)\\Microsoft.Cpp.props\"/>\n"
                 "  <ImportGroup Label=\"ExtensionSettings\">\n"
                 "  </ImportGroup>\n"
                 "  <ImportGroup Label=\"PropertySheets\">\n"
-                "    <Import Project=\"$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\"/>\n"
+                "    <Import Project=\"$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\"/>\n"
                 "  </ImportGroup>\n"
                 "  <PropertyGroup Label=\"UserMacros\"/>\n"
                 "  <PropertyGroup>\n"
                 "    <TargetName>$(target_prefix)$(target_name)</TargetName>\n"
                 "    <TargetExt>$(target_ext)</TargetExt>\n"
-                "    <OutDir>$(project_root)\$(out_dir)\$(naming_convention_prefix)</OutDir>\n"
-                "    <IntDir>obj\</IntDir>\n"
+                "    <OutDir>$(project_root)\\$(out_dir)\\$(naming_convention_prefix)</OutDir>\n"
+                "    <IntDir>obj\\</IntDir>\n"
                 "    <IgnoreImportLibrary>true</IgnoreImportLibrary>\n"
                 "    <LinkIncremental>false</LinkIncremental>\n"
                 "  </PropertyGroup>\n"
@@ -930,7 +925,7 @@ namespace thekogans {
                 "  <ItemGroup>\n"
                 "$(custom_build_sources)\n"
                 "  </ItemGroup>\n"
-                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.targets\"/>\n"
+                "  <Import Project=\"$(VCTargetsPath)\\Microsoft.Cpp.targets\"/>\n"
                 "  <ImportGroup Label=\"ExtensionTargets\">\n"
                 "  </ImportGroup>\n"
                 "</Project>\n";
@@ -960,12 +955,13 @@ namespace thekogans {
                         thekogans_make.project) + VCXPROJ_EXT);
             std::fstream vcxprojFile (
                 ToSystemPath (vcxprojFilePath).c_str (),
-                std::fstream::out | std::fstream::trunc);
+                std::fstream::out | std::fstream::binary | std::fstream::trunc);
             if (vcxprojFile.is_open ()) {
-                while (*vcxprojTemplate != '\0') {
-                    util::i8 ch = *vcxprojTemplate++;
+                const char *fileTemplate = vcxprojTemplate;
+                while (*fileTemplate != '\0') {
+                    util::i8 ch = *fileTemplate++;
                     if (ch == '$') {
-                        std::string variable = GetVariable (&vcxprojTemplate);
+                        std::string variable = GetVariable (&fileTemplate);
                         if (variable == "tools_version") {
                             vcxprojFile << vcxprojGetToolsVersion ();
                         }
@@ -1424,14 +1420,15 @@ namespace thekogans {
                         thekogans_make.project) + VCXPROJ_FILTERS_EXT);
             std::fstream vcxprojfiltersFile (
                 ToSystemPath (vcxprojfiltersFilePath).c_str (),
-                std::fstream::out | std::fstream::trunc);
+                std::fstream::out | std::fstream::binary | std::fstream::trunc);
             if (vcxprojfiltersFile.is_open ()) {
-                while (*vcxprojfiltersTemplate != '\'0') {
-                    util::i8 ch = *vcxprojfiltersTemplate++;
+                const char *fileTemplate = vcxprojfiltersTemplate;
+                while (*fileTemplate != '\0') {
+                    util::i8 ch = *fileTemplate++;
                     if (ch == '$') {
-                        std::string variable = GetVariable (&vcxprojfiltersTemplate);
+                        std::string variable = GetVariable (&fileTemplate);
                         if (variable == "tools_version") {
-                            vcxprojFile << vcxprojfiltersGetToolsVersion ();
+                            vcxprojfiltersFile << vcxprojfiltersGetToolsVersion ();
                         }
                         else if (variable == "filters") {
                             for (std::set<std::string>::const_iterator

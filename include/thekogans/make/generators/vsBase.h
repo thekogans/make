@@ -31,9 +31,6 @@ namespace thekogans {
 
         struct vsBase : public core::Generator {
         protected:
-            const char *name;
-            bool rootProject;
-            std::string defaultOrganization;
             typedef std::pair<std::string, std::string> FileAndFilter;
             std::list<FileAndFilter> masm_headers;
             std::list<FileAndFilter> masm_sources;
@@ -53,17 +50,8 @@ namespace thekogans {
             std::set<std::string> custom_build_filters;
 
         public:
-            vsBase (
-                const char *name_ = "vsBase",
-                bool rootProject_ = true,
-                const std::string &defaultOrganization_ = std::string ()) :
-                name (name_),
-                rootProject (rootProject_),
-                defaultOrganization (defaultOrganization_) {}
-
-            virtual const char *GetName () const {
-                return name;
-            }
+            vsBase (bool rootProject) :
+                core::Generator (rootProject) {}
 
             virtual std::string slnGetFormatVersion () const = 0;
             virtual std::string slnGetVisualStudio () const = 0;
