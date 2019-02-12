@@ -65,17 +65,17 @@ namespace thekogans {
             const char * const VCXPROJ_PRE_BUILD_EVENT =
                 "    <PreBuildEvent>\n"
                 "      <Message>Update build system.</Message>\n"
-                "      <Command>\"$(TOOLCHAIN_SHELL)\" \"$(TOOLCHAIN_ROOT)/common/bin/makebuild\" -g:$(generator) -pr:\"$(project_root)\" -c:$(config) -t:$(type)</Command>\n"
+                "      <Command>\"$(to_system_path -p:$(TOOLCHAIN_SHELL))\" \"$(TOOLCHAIN_ROOT)/common/bin/makebuild\" -g:$(generator) -pr:\"$(project_root)\" -c:$(config) -t:$(type)</Command>\n"
                 "    </PreBuildEvent>\n";
             const char * const VCXPROJ_POST_BUILD_EVENT_PLUGIN =
                 "    <PostBuildEvent>\n"
                 "      <Message>Copy plugin.</Message>\n"
-                "      <Command>\"$(TOOLCHAIN_SHELL)\" \"$(TOOLCHAIN_ROOT)/common/bin/copyplugin\" -pr:\"$(project_root)\" -c:$(config)</Command>\n"
+                "      <Command>\"$(to_system_path -p:$(TOOLCHAIN_SHELL))\" \"$(TOOLCHAIN_ROOT)/common/bin/copyplugin\" -pr:\"$(project_root)\" -c:$(config)</Command>\n"
                 "    </PostBuildEvent>\n";
             const char * const VCXPROJ_POST_BUILD_EVENT_PROGRAM =
                 "    <PostBuildEvent>\n"
                 "      <Message>Copy dependencies.</Message>\n"
-                "      <Command>\"$(TOOLCHAIN_SHELL)\" \"$(TOOLCHAIN_ROOT)/common/bin/copydependencies\" -pr:\"$(project_root)\" -c:$(config) -t:$(type)</Command>\n"
+                "      <Command>\"$(to_system_path -p:$(TOOLCHAIN_SHELL))\" \"$(TOOLCHAIN_ROOT)/common/bin/copydependencies\" -pr:\"$(project_root)\" -c:$(config) -t:$(type)</Command>\n"
                 "    </PostBuildEvent>\n";
             const char * const VCXPROJ_IMPORT_LIBRARY =
                 "      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>\n";
@@ -879,6 +879,7 @@ namespace thekogans {
                 "      <PreprocessorDefinitions>$(preprocessor_definitions);$(features);%(PreprocessorDefinitions)</PreprocessorDefinitions>\n"
                 "      <RuntimeLibrary>$(runtime_library)</RuntimeLibrary>\n"
                 "      <DebugInformationFormat>$(debug_information_format)</DebugInformationFormat>\n"
+                "      <MinimalRebuild>false</MinimalRebuild>\n"
                 "      <MultiProcessorCompilation>true</MultiProcessorCompilation>\n"
                 "    </ClCompile>\n"
                 "    <Link>\n"
@@ -889,6 +890,9 @@ namespace thekogans {
                 "$(module_definition_file)\n"
                 "$(sub_system)\n"
                 "    </Link>\n"
+                "    <Lib>\n"
+                "      <TargetMachine>$(target_machine)</TargetMachine>\n"
+                "    </Lib>\n"
                 "$(pre_build_event)\n"
                 "$(post_build_event)\n"
                 "  </ItemDefinitionGroup>\n"
@@ -1159,6 +1163,10 @@ namespace thekogans {
                             }
                             else if (core::_TOOLCHAIN_ARCH == ARCH_x86_64) {
                                 preprocessor_definitions.push_back ("WIN64");
+                            }
+                            if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY &&
+                                    thekogans_make.type == TYPE_STATIC) {
+                                preprocessor_definitions.push_back ("_LIB");
                             }
                             if (thekogans_make.config == CONFIG_DEBUG) {
                                 preprocessor_definitions.push_back ("_DEBUG");
