@@ -711,89 +711,55 @@ namespace thekogans {
                 GetProjectDependencies (thekogans_make, projectDependencies);
                 while (*slnTemplate != '\0') {
                     util::i8 ch = *slnTemplate++;
-                    switch (ch) {
-                        case '$': {
-                            std::string variable = GetVariable (&slnTemplate);
-                            if (variable == "format_version") {
-                                slnFile << slnGetFormatVersion ();
-                            }
-                            else if (variable == "visual_studio") {
-                                slnFile << slnGetVisualStudio ();
-                            }
-                            else if (variable == "config") {
-                                slnFile << thekogans_make.config;
-                            }
-                            else if (variable == "type") {
-                                slnFile << thekogans_make.type;
-                            }
-                            else if (variable == "platform") {
-                                slnFile << GetPlatform ();
-                            }
-                            else if (variable == "dependency_dependencies") {
-                                for (std::list<ProjectRootAndGUID>::const_iterator
-                                        it = projectDependencies.begin (),
-                                        end = projectDependencies.end (); it != end; ++it) {
-                                    const core::thekogans_make &dependency = core::thekogans_make::GetConfig (
-                                        (*it).project_root,
-                                        THEKOGANS_MAKE_XML,
-                                        GetName (),
-                                        (*it).config,
-                                        (*it).type);
-                                    slnFile << util::FormatString (
-                                        SLN_PROJECT_TEMPLATE,
-                                        GetQualifiedName (dependency.organization, dependency.project).c_str (),
-                                        ToSystemPath (
-                                            core::MakePath (
-                                                core::GetBuildRoot (
-                                                    dependency.project_root,
-                                                    GetName (),
-                                                    dependency.config,
-                                                    dependency.type),
-                                                GetQualifiedName (
-                                                    dependency.organization,
-                                                    dependency.project) + VCXPROJ_EXT)).c_str (),
-                                        dependency.guid.ToWindowsGUIDString (true).c_str ());
-                                    std::list<ProjectRootAndGUID> dependencyDependencies;
-                                    GetProjectDependencies (dependency, dependencyDependencies, false);
-                                    if (!dependencyDependencies.empty ()) {
-                                        slnFile << SLN_PROJECT_SECTION;
-                                        for (std::list<ProjectRootAndGUID>::const_iterator
-                                                jt = dependencyDependencies.begin (),
-                                                end = dependencyDependencies.end (); jt != end; ++jt) {
-                                            std::string guidString = (*jt).guid.ToWindowsGUIDString (true);
-                                            slnFile << util::FormatString (
-                                                SLN_DEPENDENCY_TEMPLATE,
-                                                guidString.c_str (),
-                                                guidString.c_str ());
-                                        }
-                                        slnFile << SLN_END_PROJECT_SECTION;
-                                    }
-                                    slnFile << SLN_END_PROJECT;
-                                }
-                            }
-                            else if (variable == "project_dependencies") {
+                    if (ch == '$') {
+                        std::string variable = GetVariable (&slnTemplate);
+                        if (variable == "format_version") {
+                            slnFile << slnGetFormatVersion ();
+                        }
+                        else if (variable == "visual_studio") {
+                            slnFile << slnGetVisualStudio ();
+                        }
+                        else if (variable == "config") {
+                            slnFile << thekogans_make.config;
+                        }
+                        else if (variable == "type") {
+                            slnFile << thekogans_make.type;
+                        }
+                        else if (variable == "platform") {
+                            slnFile << GetPlatform ();
+                        }
+                        else if (variable == "dependency_dependencies") {
+                            for (std::list<ProjectRootAndGUID>::const_iterator
+                                    it = projectDependencies.begin (),
+                                    end = projectDependencies.end (); it != end; ++it) {
+                                const core::thekogans_make &dependency = core::thekogans_make::GetConfig (
+                                    (*it).project_root,
+                                    THEKOGANS_MAKE_XML,
+                                    GetName (),
+                                    (*it).config,
+                                    (*it).type);
                                 slnFile << util::FormatString (
                                     SLN_PROJECT_TEMPLATE,
-                                    GetQualifiedName (thekogans_make.organization, thekogans_make.project).c_str (),
+                                    GetQualifiedName (dependency.organization, dependency.project).c_str (),
                                     ToSystemPath (
                                         core::MakePath (
                                             core::GetBuildRoot (
-                                                thekogans_make.project_root,
+                                                dependency.project_root,
                                                 GetName (),
-                                                thekogans_make.config,
-                                                thekogans_make.type),
+                                                dependency.config,
+                                                dependency.type),
                                             GetQualifiedName (
-                                                thekogans_make.organization,
-                                                thekogans_make.project) + VCXPROJ_EXT)).c_str (),
-                                    thekogans_make.guid.ToWindowsGUIDString (true).c_str ());
-                                std::list<ProjectRootAndGUID> projectDependencies;
-                                GetProjectDependencies (thekogans_make, projectDependencies, false);
-                                if (!projectDependencies.empty ()) {
+                                                dependency.organization,
+                                                dependency.project) + VCXPROJ_EXT)).c_str (),
+                                    dependency.guid.ToWindowsGUIDString (true).c_str ());
+                                std::list<ProjectRootAndGUID> dependencyDependencies;
+                                GetProjectDependencies (dependency, dependencyDependencies, false);
+                                if (!dependencyDependencies.empty ()) {
                                     slnFile << SLN_PROJECT_SECTION;
                                     for (std::list<ProjectRootAndGUID>::const_iterator
-                                            it = projectDependencies.begin (),
-                                            end = projectDependencies.end (); it != end; ++it) {
-                                        std::string guidString = (*it).guid.ToWindowsGUIDString (true);
+                                            jt = dependencyDependencies.begin (),
+                                            end = dependencyDependencies.end (); jt != end; ++jt) {
+                                        std::string guidString = (*jt).guid.ToWindowsGUIDString (true);
                                         slnFile << util::FormatString (
                                             SLN_DEPENDENCY_TEMPLATE,
                                             guidString.c_str (),
@@ -803,38 +769,65 @@ namespace thekogans {
                                 }
                                 slnFile << SLN_END_PROJECT;
                             }
-                            else if (variable == "dependency_targets") {
+                        }
+                        else if (variable == "project_dependencies") {
+                            slnFile << util::FormatString (
+                                SLN_PROJECT_TEMPLATE,
+                                GetQualifiedName (thekogans_make.organization, thekogans_make.project).c_str (),
+                                ToSystemPath (
+                                    core::MakePath (
+                                        core::GetBuildRoot (
+                                            thekogans_make.project_root,
+                                            GetName (),
+                                            thekogans_make.config,
+                                            thekogans_make.type),
+                                        GetQualifiedName (
+                                            thekogans_make.organization,
+                                            thekogans_make.project) + VCXPROJ_EXT)).c_str (),
+                                thekogans_make.guid.ToWindowsGUIDString (true).c_str ());
+                            std::list<ProjectRootAndGUID> projectDependencies;
+                            GetProjectDependencies (thekogans_make, projectDependencies, false);
+                            if (!projectDependencies.empty ()) {
+                                slnFile << SLN_PROJECT_SECTION;
                                 for (std::list<ProjectRootAndGUID>::const_iterator
                                         it = projectDependencies.begin (),
                                         end = projectDependencies.end (); it != end; ++it) {
                                     std::string guidString = (*it).guid.ToWindowsGUIDString (true);
-                                    slnFile << thekogans_make.Expand (
-                                        util::FormatString (
-                                            GetSLN_DEPENDENCY_TARGET_TEMPLATE (),
-                                            guidString.c_str (),
-                                            guidString.c_str ()).c_str ());
+                                    slnFile << util::FormatString (
+                                        SLN_DEPENDENCY_TEMPLATE,
+                                        guidString.c_str (),
+                                        guidString.c_str ());
                                 }
+                                slnFile << SLN_END_PROJECT_SECTION;
                             }
-                            else if (variable == "project_targets") {
-                                std::string guidString = thekogans_make.guid.ToWindowsGUIDString (true);
+                            slnFile << SLN_END_PROJECT;
+                        }
+                        else if (variable == "dependency_targets") {
+                            for (std::list<ProjectRootAndGUID>::const_iterator
+                                    it = projectDependencies.begin (),
+                                    end = projectDependencies.end (); it != end; ++it) {
+                                std::string guidString = (*it).guid.ToWindowsGUIDString (true);
                                 slnFile << thekogans_make.Expand (
                                     util::FormatString (
                                         GetSLN_DEPENDENCY_TARGET_TEMPLATE (),
                                         guidString.c_str (),
                                         guidString.c_str ()).c_str ());
                             }
-                            else {
-                                slnFile << ch << '(' << variable << ')';
-                            }
-                            break;
                         }
-                        case '\r': {
-                            break;
+                        else if (variable == "project_targets") {
+                            std::string guidString = thekogans_make.guid.ToWindowsGUIDString (true);
+                            slnFile << thekogans_make.Expand (
+                                util::FormatString (
+                                    GetSLN_DEPENDENCY_TARGET_TEMPLATE (),
+                                    guidString.c_str (),
+                                    guidString.c_str ()).c_str ());
                         }
-                        default: {
-                            slnFile << ch;
-                            break;
+                        else {
+                            slnFile << ch << '(' << variable << ')';
                         }
+                    }
+                    else {
+                        slnFile << ch;
                     }
                 }
             }
@@ -858,7 +851,7 @@ namespace thekogans {
                 "    <ProjectGuid>{$(project_guid)}</ProjectGuid>\n"
                 "    <RootNamespace>$(project)</RootNamespace>\n"
                 "  </PropertyGroup>\n"
-                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.Default.props\" />\n"
+                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.Default.props\"/>\n"
                 "  <PropertyGroup Label=\"Configuration\">\n"
                 "    <ConfigurationType>$(configuration_type)</ConfigurationType>\n"
                 "    <UseDebugLibraries>$(use_debug_libraries)</UseDebugLibraries>\n"
@@ -866,13 +859,13 @@ namespace thekogans {
                 "    <CharacterSet>MultiByte</CharacterSet>\n"
                 "    <PlatformToolset>$(platform_toolset)</PlatformToolset>\n"
                 "  </PropertyGroup>\n"
-                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.props\" />\n"
+                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.props\"/>\n"
                 "  <ImportGroup Label=\"ExtensionSettings\">\n"
                 "  </ImportGroup>\n"
                 "  <ImportGroup Label=\"PropertySheets\">\n"
-                "    <Import Project=\"$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\" />\n"
+                "    <Import Project=\"$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\"/>\n"
                 "  </ImportGroup>\n"
-                "  <PropertyGroup Label=\"UserMacros\" />\n"
+                "  <PropertyGroup Label=\"UserMacros\"/>\n"
                 "  <PropertyGroup>\n"
                 "    <TargetName>$(target_prefix)$(target_name)</TargetName>\n"
                 "    <TargetExt>$(target_ext)</TargetExt>\n"
@@ -937,7 +930,7 @@ namespace thekogans {
                 "  <ItemGroup>\n"
                 "$(custom_build_sources)\n"
                 "  </ItemGroup>\n"
-                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.targets\" />\n"
+                "  <Import Project=\"$(VCTargetsPath)\Microsoft.Cpp.targets\"/>\n"
                 "  <ImportGroup Label=\"ExtensionTargets\">\n"
                 "  </ImportGroup>\n"
                 "</Project>\n";
@@ -971,397 +964,390 @@ namespace thekogans {
             if (vcxprojFile.is_open ()) {
                 while (*vcxprojTemplate != '\0') {
                     util::i8 ch = *vcxprojTemplate++;
-                    switch (ch) {
-                        case '$': {
-                            std::string variable = GetVariable (&vcxprojTemplate);
-                            if (variable == "tools_version") {
-                                vcxprojFile << vcxprojGetToolsVersion ();
+                    if (ch == '$') {
+                        std::string variable = GetVariable (&vcxprojTemplate);
+                        if (variable == "tools_version") {
+                            vcxprojFile << vcxprojGetToolsVersion ();
+                        }
+                        else if (variable == "platform_toolset") {
+                            vcxprojFile << vcxprojGetPlatformToolset ();
+                        }
+                        else if (variable == "project_guid") {
+                            vcxprojFile << thekogans_make.guid.ToWindowsGUIDString (true);
+                        }
+                        else if (variable == "project_root") {
+                            vcxprojFile << ToSystemPath (thekogans_make.project_root);
+                        }
+                        else if (variable == "organization") {
+                            vcxprojFile << thekogans_make.organization;
+                        }
+                        else if (variable == "project") {
+                            vcxprojFile << GetQualifiedName (thekogans_make.organization, thekogans_make.project);
+                        }
+                        else if (variable == "target_prefix") {
+                            if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
+                                vcxprojFile << core::LIB_PREFIX;
                             }
-                            else if (variable == "platform_toolset") {
-                                vcxprojFile << vcxprojGetPlatformToolset ();
-                            }
-                            else if (variable == "project_guid") {
-                                vcxprojFile << thekogans_make.guid.ToWindowsGUIDString (true);
-                            }
-                            else if (variable == "project_root") {
-                                vcxprojFile << ToSystemPath (thekogans_make.project_root);
-                            }
-                            else if (variable == "organization") {
-                                vcxprojFile << thekogans_make.organization;
-                            }
-                            else if (variable == "project") {
-                                vcxprojFile << GetQualifiedName (thekogans_make.organization, thekogans_make.project);
-                            }
-                            else if (variable == "target_prefix") {
-                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
-                                    vcxprojFile << core::LIB_PREFIX;
+                        }
+                        else if (variable == "target_name") {
+                            vcxprojFile << thekogans_make.Expand (
+                                thekogans_make.naming_convention == NAMING_CONVENTION_FLAT ?
+                                "$(organization)_$(project)-$(TOOLCHAIN_TRIPLET)-$(config)-$(type).$(version)" :
+                                "$(organization)_$(project).$(version)");
+                        }
+                        else if (variable == "target_ext") {
+                            if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
+                                if (thekogans_make.type == TYPE_STATIC) {
+                                    vcxprojFile << ".lib";
                                 }
-                            }
-                            else if (variable == "target_name") {
-                                vcxprojFile << thekogans_make.Expand (
-                                    thekogans_make.naming_convention == NAMING_CONVENTION_FLAT ?
-                                    "$(organization)_$(project)-$(TOOLCHAIN_TRIPLET)-$(config)-$(type).$(version)" :
-                                    "$(organization)_$(project).$(version)");
-                            }
-                            else if (variable == "target_ext") {
-                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
-                                    if (thekogans_make.type == TYPE_STATIC) {
-                                        vcxprojFile << ".lib";
-                                    }
-                                    else if (thekogans_make.type == TYPE_SHARED) {
-                                        vcxprojFile << ".dll";
-                                    }
-                                }
-                                else if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                                else if (thekogans_make.type == TYPE_SHARED) {
                                     vcxprojFile << ".dll";
                                 }
-                                else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
-                                    vcxprojFile << ".exe";
-                                }
                             }
-                            else if (variable == "out_dir") {
-                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY ||
+                            else if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                                vcxprojFile << ".dll";
+                            }
+                            else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                vcxprojFile << ".exe";
+                            }
+                        }
+                        else if (variable == "out_dir") {
+                            if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY ||
                                     thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
-                                    vcxprojFile << core::LIB_DIR;
-                                }
-                                else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
-                                    vcxprojFile << core::BIN_DIR;
-                                }
+                                vcxprojFile << core::LIB_DIR;
                             }
-                            else if (variable == "naming_convention_prefix") {
-                                if (thekogans_make.naming_convention == NAMING_CONVENTION_HIERARCHICAL) {
-                                    std::string naming_convention_prefix =
-                                        thekogans_make.Expand ("$(TOOLCHAIN_BRANCH)/$(config)/$(type)/");
-                                    std::replace (
-                                        naming_convention_prefix.begin (),
-                                        naming_convention_prefix.end (), '/', '\\');
-                                    vcxprojFile << naming_convention_prefix;
-                                }
+                            else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                vcxprojFile << core::BIN_DIR;
                             }
-                            else if (variable == "generator") {
-                                vcxprojFile << GetName ();
+                        }
+                        else if (variable == "naming_convention_prefix") {
+                            if (thekogans_make.naming_convention == NAMING_CONVENTION_HIERARCHICAL) {
+                                std::string naming_convention_prefix =
+                                    thekogans_make.Expand ("$(TOOLCHAIN_BRANCH)/$(config)/$(type)/");
+                                std::replace (
+                                    naming_convention_prefix.begin (),
+                                    naming_convention_prefix.end (), '/', '\\');
+                                vcxprojFile << naming_convention_prefix;
                             }
-                            else if (variable == "target_machine") {
-                                vcxprojFile << GetTargetMachine ();
-                            }
-                            else if (variable == "TOOLCHAIN_SHELL") {
-                                vcxprojFile << ToSystemPath (core::_TOOLCHAIN_SHELL);
-                            }
-                            else if (variable == "TOOLCHAIN_ROOT") {
-                                vcxprojFile << core::_TOOLCHAIN_ROOT;
-                            }
-                            else if (variable == "TOOLCHAIN_NAMING_CONVENTION") {
-                                vcxprojFile << core::_TOOLCHAIN_NAMING_CONVENTION;
-                            }
-                            else if (variable == "TOOLCHAIN_TRIPLET") {
-                                vcxprojFile << core::_TOOLCHAIN_TRIPLET;
-                            }
-                            else if (variable == "version") {
-                                vcxprojFile << thekogans_make.GetVersion ();
-                            }
-                            else if (variable == "config") {
-                                vcxprojFile << thekogans_make.config;
-                            }
-                            else if (variable == "type") {
-                                vcxprojFile << thekogans_make.type;
-                            }
-                            else if (variable == "platform") {
-                                vcxprojFile << GetPlatform ();
-                            }
-                            else if (variable == "configuration_type") {
-                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
-                                    if (thekogans_make.type == TYPE_SHARED) {
-                                        vcxprojFile << "DynamicLibrary";
-                                    }
-                                    else if (thekogans_make.type == TYPE_STATIC) {
-                                        vcxprojFile << "StaticLibrary";
-                                    }
-                                }
-                                else if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                        }
+                        else if (variable == "generator") {
+                            vcxprojFile << GetName ();
+                        }
+                        else if (variable == "target_machine") {
+                            vcxprojFile << GetTargetMachine ();
+                        }
+                        else if (variable == "TOOLCHAIN_SHELL") {
+                            vcxprojFile << ToSystemPath (core::_TOOLCHAIN_SHELL);
+                        }
+                        else if (variable == "TOOLCHAIN_ROOT") {
+                            vcxprojFile << core::_TOOLCHAIN_ROOT;
+                        }
+                        else if (variable == "TOOLCHAIN_NAMING_CONVENTION") {
+                            vcxprojFile << core::_TOOLCHAIN_NAMING_CONVENTION;
+                        }
+                        else if (variable == "TOOLCHAIN_TRIPLET") {
+                            vcxprojFile << core::_TOOLCHAIN_TRIPLET;
+                        }
+                        else if (variable == "version") {
+                            vcxprojFile << thekogans_make.GetVersion ();
+                        }
+                        else if (variable == "config") {
+                            vcxprojFile << thekogans_make.config;
+                        }
+                        else if (variable == "type") {
+                            vcxprojFile << thekogans_make.type;
+                        }
+                        else if (variable == "platform") {
+                            vcxprojFile << GetPlatform ();
+                        }
+                        else if (variable == "configuration_type") {
+                            if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
+                                if (thekogans_make.type == TYPE_SHARED) {
                                     vcxprojFile << "DynamicLibrary";
                                 }
-                                else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
-                                    vcxprojFile << "Application";
+                                else if (thekogans_make.type == TYPE_STATIC) {
+                                    vcxprojFile << "StaticLibrary";
                                 }
                             }
-                            else if (variable == "use_debug_libraries") {
-                                if (thekogans_make.config == CONFIG_DEBUG) {
-                                    vcxprojFile << util::XML_TRUE;
-                                }
-                                else if (thekogans_make.config == CONFIG_RELEASE) {
-                                    vcxprojFile << util::XML_FALSE;
-                                }
+                            else if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                                vcxprojFile << "DynamicLibrary";
                             }
-                            else if (variable == "whole_program_optimization") {
-                                if (thekogans_make.config == CONFIG_DEBUG) {
-                                    vcxprojFile << util::XML_FALSE;
-                                }
-                                else if (thekogans_make.config == CONFIG_RELEASE) {
-                                    vcxprojFile << util::XML_TRUE;
-                                }
+                            else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                vcxprojFile << "Application";
                             }
-                            else if (variable == "optimization") {
-                                if (thekogans_make.config == CONFIG_DEBUG) {
-                                    vcxprojFile << "Disabled";
-                                }
-                                else if (thekogans_make.config == CONFIG_RELEASE) {
-                                    vcxprojFile << "MaxSpeed";
-                                }
-                            }
-                            else if (variable == "function_level_linking") {
-                                if (thekogans_make.config == CONFIG_DEBUG) {
-                                    vcxprojFile << util::XML_FALSE;
-                                }
-                                else if (thekogans_make.config == CONFIG_RELEASE) {
-                                    vcxprojFile << util::XML_TRUE;
-                                }
-                            }
-                            else if (variable == "intrinsic_functions") {
-                                if (thekogans_make.config == CONFIG_DEBUG) {
-                                    vcxprojFile << util::XML_FALSE;
-                                }
-                                else if (thekogans_make.config == CONFIG_RELEASE) {
-                                    vcxprojFile << util::XML_TRUE;
-                                }
-                            }
-                            else if (variable == "generate_debug_information") {
-                                if (thekogans_make.config == CONFIG_DEBUG) {
-                                    vcxprojFile << util::XML_TRUE;
-                                }
-                                else if (thekogans_make.config == CONFIG_RELEASE) {
-                                    vcxprojFile << util::XML_FALSE;
-                                }
-                            }
-                            else if (variable == "debug_information_format") {
-                                if (thekogans_make.config == CONFIG_DEBUG) {
-                                    vcxprojFile << "OldStyle";
-                                }
-                                else if (thekogans_make.config == CONFIG_RELEASE) {
-                                    vcxprojFile << "None";
-                                }
-                            }
-                            else if (variable == "pre_build_event") {
-                                vcxprojFile << thekogans_make.Expand (VCXPROJ_PRE_BUILD_EVENT);
-                            }
-                            else if (variable == "post_build_event") {
-                                if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
-                                    vcxprojFile << thekogans_make.Expand (VCXPROJ_POST_BUILD_EVENT_PLUGIN);
-                                }
-                                else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
-                                    vcxprojFile << thekogans_make.Expand (VCXPROJ_POST_BUILD_EVENT_PROGRAM);
-                                }
-                            }
-                            else if (variable == "include_directories") {
-                                std::set<std::string> include_directories;
-                                thekogans_make.GetIncludeDirectories (include_directories);
-                                for (std::set<std::string>::const_iterator
-                                        it = include_directories.begin (),
-                                        end = include_directories.end (); it != end; ++it) {
-                                    vcxprojFile << ToSystemPath (*it) << ';';
-                                }
-                            }
-                            else if (variable == "preprocessor_definitions") {
-                                std::list<std::string> preprocessor_definitions;
-                                if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
-                                    preprocessor_definitions.push_back (
-                                        thekogans_make.subsystem == "Console" ? "_CONSOLE" : "_WINDOWS");
-                                }
-                                if (core::_TOOLCHAIN_ARCH == ARCH_i386) {
-                                    preprocessor_definitions.push_back ("WIN32");
-                                }
-                                else if (core::_TOOLCHAIN_ARCH == ARCH_x86_64) {
-                                    preprocessor_definitions.push_back ("WIN64");
-                                }
-                                if (thekogans_make.config == CONFIG_DEBUG) {
-                                    preprocessor_definitions.push_back ("_DEBUG");
-                                }
-                                else if (thekogans_make.config == CONFIG_RELEASE) {
-                                    preprocessor_definitions.push_back ("NDEBUG");
-                                }
-                                preprocessor_definitions.push_back ("BOOST_ALL_NO_LIB");
-                                thekogans_make.GetCommonPreprocessorDefinitions (preprocessor_definitions);
-                                for (std::list<std::string>::const_iterator
-                                        it = preprocessor_definitions.begin (),
-                                        end = preprocessor_definitions.end (); it != end; ++it) {
-                                    vcxprojFile << *it << ';';
-                                }
-                                for (std::list<std::string>::const_iterator
-                                        it = thekogans_make.preprocessor_definitions.begin (),
-                                        end = thekogans_make.preprocessor_definitions.end (); it != end; ++it) {
-                                    vcxprojFile << *it << ';';
-                                }
-                                for (std::list<std::string>::const_iterator
-                                        it = thekogans_make.c_preprocessor_definitions.begin (),
-                                        end = thekogans_make.c_preprocessor_definitions.end (); it != end; ++it) {
-                                    vcxprojFile << *it << ';';
-                                }
-                                for (std::list<std::string>::const_iterator
-                                        it = thekogans_make.cpp_preprocessor_definitions.begin (),
-                                        end = thekogans_make.cpp_preprocessor_definitions.end (); it != end; ++it) {
-                                    vcxprojFile << *it << ';';
-                                }
-                            }
-                            else if (variable == "features") {
-                                std::set<std::string> features;
-                                thekogans_make.GetFeatures (features);
-                                for (std::set<std::string>::const_iterator
-                                        it = features.begin (),
-                                        end = features.end (); it != end; ++it) {
-                                    vcxprojFile << *it << ';';
-                                }
-                            }
-                            else if (variable == "runtime_library") {
-                                vcxprojFile << GetRuntimeLibrary (thekogans_make.config, thekogans_make.type);
-                            }
-                            else if (variable == "link_libraries") {
-                                std::list<std::string> link_libraries;
-                                thekogans_make.GetLinkLibraries (link_libraries);
-                                for (std::list<std::string>::const_iterator
-                                        it = link_libraries.begin (),
-                                        end = link_libraries.end (); it != end; ++it) {
-                                    vcxprojFile << ToSystemPath (*it) << ';';
-                                }
-                            }
-                            else if (variable == "sub_system") {
-                                if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_SUB_SYSTEM,
-                                        thekogans_make.subsystem == "Console" ? "Console" : "Windows");
-                                }
-                            }
-                            else if (variable == "import_library") {
-                                if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
-                                    vcxprojFile << VCXPROJ_IMPORT_LIBRARY;
-                                }
-                            }
-                            else if (variable == "module_definition_file") {
-                                if ((thekogans_make.project_type == PROJECT_TYPE_LIBRARY ||
-                                        thekogans_make.project_type == PROJECT_TYPE_PLUGIN) &&
-                                        !thekogans_make.def_file.empty ()) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_MODULE_DEFINITION_FILE,
-                                        ToSystemPath (thekogans_make.def_file).c_str ());
-                                }
-                            }
-                            else if (variable == "masm_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = masm_headers.begin (),
-                                        end = masm_headers.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str ());
-                                }
-                            }
-                            else if (variable == "masm_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = masm_sources.begin (),
-                                        end = masm_sources.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_CUSTOM_BUILD_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        GetMasmCommandLine (thekogans_make).c_str (),
-                                        "Performing Custom Build Step on \"%(Identity)\"",
-                                        "$(ProjectDir)$(IntDir)%(Filename).obj", "");
-                                }
-                            }
-                            else if (variable == "nasm_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = nasm_headers.begin (),
-                                        end = nasm_headers.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str ());
-                                }
-                            }
-                            else if (variable == "nasm_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = nasm_sources.begin (),
-                                        end = nasm_sources.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_CUSTOM_BUILD_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        GetNasmCommandLine (thekogans_make).c_str (),
-                                        "Performing Custom Build Step on \"%(Identity)\"",
-                                        "$(ProjectDir)$(IntDir)%(Filename).obj", "");
-                                }
-                            }
-                            else if (variable == "c_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = c_headers.begin (),
-                                        end = c_headers.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str ());
-                                }
-                            }
-                            else if (variable == "c_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = c_sources.begin (),
-                                        end = c_sources.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        util::Path ((*it).first).GetDirectory (true).c_str ());
-                                }
-                            }
-                            else if (variable == "cpp_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = cpp_headers.begin (),
-                                        end = cpp_headers.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str ());
-                                }
-                            }
-                            else if (variable == "cpp_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = cpp_sources.begin (),
-                                        end = cpp_sources.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        util::Path ((*it).first).GetDirectory (true).c_str ());
-                                }
-                            }
-                            else if (variable == "rc_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = rc_sources.begin (),
-                                        end = rc_sources.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_RC_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        GetRCPreprocessorDefinitions (thekogans_make).c_str (),
-                                        GetRCIncludeDirectories (thekogans_make).c_str ());
-                                }
-                            }
-                            else if (variable == "resources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = resources.begin (),
-                                        end = resources.end (); it != end; ++it) {
-                                    vcxprojFile << util::FormatString (
-                                        VCXPROJ_RESOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str ());
-                                }
-                            }
-                            else if (variable == "custom_build_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = custom_build_sources.begin (),
-                                        end = custom_build_sources.end (); it != end; ++it) {
-                                    vcxprojFile << (*it).first;
-                                }
-                            }
-                            else {
-                                vcxprojFile << ch << '(' << variable << ')';
-                            }
-                            break;
                         }
-                        case '\r': {
-                            break;
+                        else if (variable == "use_debug_libraries") {
+                            if (thekogans_make.config == CONFIG_DEBUG) {
+                                vcxprojFile << util::XML_TRUE;
+                            }
+                            else if (thekogans_make.config == CONFIG_RELEASE) {
+                                vcxprojFile << util::XML_FALSE;
+                            }
                         }
-                        default: {
-                            vcxprojFile << ch;
-                            break;
+                        else if (variable == "whole_program_optimization") {
+                            if (thekogans_make.config == CONFIG_DEBUG) {
+                                vcxprojFile << util::XML_FALSE;
+                            }
+                            else if (thekogans_make.config == CONFIG_RELEASE) {
+                                vcxprojFile << util::XML_TRUE;
+                            }
                         }
+                        else if (variable == "optimization") {
+                            if (thekogans_make.config == CONFIG_DEBUG) {
+                                vcxprojFile << "Disabled";
+                            }
+                            else if (thekogans_make.config == CONFIG_RELEASE) {
+                                vcxprojFile << "MaxSpeed";
+                            }
+                        }
+                        else if (variable == "function_level_linking") {
+                            if (thekogans_make.config == CONFIG_DEBUG) {
+                                vcxprojFile << util::XML_FALSE;
+                            }
+                            else if (thekogans_make.config == CONFIG_RELEASE) {
+                                vcxprojFile << util::XML_TRUE;
+                            }
+                        }
+                        else if (variable == "intrinsic_functions") {
+                            if (thekogans_make.config == CONFIG_DEBUG) {
+                                vcxprojFile << util::XML_FALSE;
+                            }
+                            else if (thekogans_make.config == CONFIG_RELEASE) {
+                                vcxprojFile << util::XML_TRUE;
+                            }
+                        }
+                        else if (variable == "generate_debug_information") {
+                            if (thekogans_make.config == CONFIG_DEBUG) {
+                                vcxprojFile << util::XML_TRUE;
+                            }
+                            else if (thekogans_make.config == CONFIG_RELEASE) {
+                                vcxprojFile << util::XML_FALSE;
+                            }
+                        }
+                        else if (variable == "debug_information_format") {
+                            if (thekogans_make.config == CONFIG_DEBUG) {
+                                vcxprojFile << "OldStyle";
+                            }
+                            else if (thekogans_make.config == CONFIG_RELEASE) {
+                                vcxprojFile << "None";
+                            }
+                        }
+                        else if (variable == "pre_build_event") {
+                            vcxprojFile << thekogans_make.Expand (VCXPROJ_PRE_BUILD_EVENT);
+                        }
+                        else if (variable == "post_build_event") {
+                            if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
+                                vcxprojFile << thekogans_make.Expand (VCXPROJ_POST_BUILD_EVENT_PLUGIN);
+                            }
+                            else if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                vcxprojFile << thekogans_make.Expand (VCXPROJ_POST_BUILD_EVENT_PROGRAM);
+                            }
+                        }
+                        else if (variable == "include_directories") {
+                            std::set<std::string> include_directories;
+                            thekogans_make.GetIncludeDirectories (include_directories);
+                            for (std::set<std::string>::const_iterator
+                                    it = include_directories.begin (),
+                                    end = include_directories.end (); it != end; ++it) {
+                                vcxprojFile << ToSystemPath (*it) << ';';
+                            }
+                        }
+                        else if (variable == "preprocessor_definitions") {
+                            std::list<std::string> preprocessor_definitions;
+                            if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                preprocessor_definitions.push_back (
+                                    thekogans_make.subsystem == "Console" ? "_CONSOLE" : "_WINDOWS");
+                            }
+                            if (core::_TOOLCHAIN_ARCH == ARCH_i386) {
+                                preprocessor_definitions.push_back ("WIN32");
+                            }
+                            else if (core::_TOOLCHAIN_ARCH == ARCH_x86_64) {
+                                preprocessor_definitions.push_back ("WIN64");
+                            }
+                            if (thekogans_make.config == CONFIG_DEBUG) {
+                                preprocessor_definitions.push_back ("_DEBUG");
+                            }
+                            else if (thekogans_make.config == CONFIG_RELEASE) {
+                                preprocessor_definitions.push_back ("NDEBUG");
+                            }
+                            preprocessor_definitions.push_back ("BOOST_ALL_NO_LIB");
+                            thekogans_make.GetCommonPreprocessorDefinitions (preprocessor_definitions);
+                            for (std::list<std::string>::const_iterator
+                                    it = preprocessor_definitions.begin (),
+                                    end = preprocessor_definitions.end (); it != end; ++it) {
+                                vcxprojFile << *it << ';';
+                            }
+                            for (std::list<std::string>::const_iterator
+                                    it = thekogans_make.preprocessor_definitions.begin (),
+                                    end = thekogans_make.preprocessor_definitions.end (); it != end; ++it) {
+                                vcxprojFile << *it << ';';
+                            }
+                            for (std::list<std::string>::const_iterator
+                                    it = thekogans_make.c_preprocessor_definitions.begin (),
+                                    end = thekogans_make.c_preprocessor_definitions.end (); it != end; ++it) {
+                                vcxprojFile << *it << ';';
+                            }
+                            for (std::list<std::string>::const_iterator
+                                    it = thekogans_make.cpp_preprocessor_definitions.begin (),
+                                    end = thekogans_make.cpp_preprocessor_definitions.end (); it != end; ++it) {
+                                vcxprojFile << *it << ';';
+                            }
+                        }
+                        else if (variable == "features") {
+                            std::set<std::string> features;
+                            thekogans_make.GetFeatures (features);
+                            for (std::set<std::string>::const_iterator
+                                    it = features.begin (),
+                                    end = features.end (); it != end; ++it) {
+                                vcxprojFile << *it << ';';
+                            }
+                        }
+                        else if (variable == "runtime_library") {
+                            vcxprojFile << GetRuntimeLibrary (thekogans_make.config, thekogans_make.type);
+                        }
+                        else if (variable == "link_libraries") {
+                            std::list<std::string> link_libraries;
+                            thekogans_make.GetLinkLibraries (link_libraries);
+                            for (std::list<std::string>::const_iterator
+                                    it = link_libraries.begin (),
+                                    end = link_libraries.end (); it != end; ++it) {
+                                vcxprojFile << ToSystemPath (*it) << ';';
+                            }
+                        }
+                        else if (variable == "sub_system") {
+                            if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_SUB_SYSTEM,
+                                    thekogans_make.subsystem == "Console" ? "Console" : "Windows");
+                            }
+                        }
+                        else if (variable == "import_library") {
+                            if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY) {
+                                vcxprojFile << VCXPROJ_IMPORT_LIBRARY;
+                            }
+                        }
+                        else if (variable == "module_definition_file") {
+                            if ((thekogans_make.project_type == PROJECT_TYPE_LIBRARY ||
+                                    thekogans_make.project_type == PROJECT_TYPE_PLUGIN) &&
+                                    !thekogans_make.def_file.empty ()) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_MODULE_DEFINITION_FILE,
+                                    ToSystemPath (thekogans_make.def_file).c_str ());
+                            }
+                        }
+                        else if (variable == "masm_headers") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = masm_headers.begin (),
+                                    end = masm_headers.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_HEADER_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str ());
+                            }
+                        }
+                        else if (variable == "masm_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = masm_sources.begin (),
+                                    end = masm_sources.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_CUSTOM_BUILD_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    GetMasmCommandLine (thekogans_make).c_str (),
+                                    "Performing Custom Build Step on \"%(Identity)\"",
+                                    "$(ProjectDir)$(IntDir)%(Filename).obj", "");
+                            }
+                        }
+                        else if (variable == "nasm_headers") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = nasm_headers.begin (),
+                                    end = nasm_headers.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_HEADER_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str ());
+                            }
+                        }
+                        else if (variable == "nasm_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = nasm_sources.begin (),
+                                    end = nasm_sources.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_CUSTOM_BUILD_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    GetNasmCommandLine (thekogans_make).c_str (),
+                                    "Performing Custom Build Step on \"%(Identity)\"",
+                                    "$(ProjectDir)$(IntDir)%(Filename).obj", "");
+                            }
+                        }
+                        else if (variable == "c_headers") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = c_headers.begin (),
+                                    end = c_headers.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_HEADER_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str ());
+                            }
+                        }
+                        else if (variable == "c_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = c_sources.begin (),
+                                    end = c_sources.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_SOURCE_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    util::Path ((*it).first).GetDirectory (true).c_str ());
+                            }
+                        }
+                        else if (variable == "cpp_headers") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = cpp_headers.begin (),
+                                    end = cpp_headers.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_HEADER_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str ());
+                            }
+                        }
+                        else if (variable == "cpp_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = cpp_sources.begin (),
+                                    end = cpp_sources.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_SOURCE_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    util::Path ((*it).first).GetDirectory (true).c_str ());
+                            }
+                        }
+                        else if (variable == "rc_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = rc_sources.begin (),
+                                    end = rc_sources.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_RC_SOURCE_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    GetRCPreprocessorDefinitions (thekogans_make).c_str (),
+                                    GetRCIncludeDirectories (thekogans_make).c_str ());
+                            }
+                        }
+                        else if (variable == "resources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = resources.begin (),
+                                    end = resources.end (); it != end; ++it) {
+                                vcxprojFile << util::FormatString (
+                                    VCXPROJ_RESOURCE_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str ());
+                            }
+                        }
+                        else if (variable == "custom_build_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = custom_build_sources.begin (),
+                                    end = custom_build_sources.end (); it != end; ++it) {
+                                vcxprojFile << (*it).first;
+                            }
+                        }
+                        else {
+                            vcxprojFile << ch << '(' << variable << ')';
+                        }
+                    }
+                    else {
+                        vcxprojFile << ch;
                     }
                 }
             }
@@ -1442,173 +1428,166 @@ namespace thekogans {
             if (vcxprojfiltersFile.is_open ()) {
                 while (*vcxprojfiltersTemplate != '\'0') {
                     util::i8 ch = *vcxprojfiltersTemplate++;
-                    switch (ch) {
-                        case '$': {
-                            std::string variable = GetVariable (&vcxprojfiltersTemplate);
-                            if (variable == "tools_version") {
-                                vcxprojFile << vcxprojfiltersGetToolsVersion ();
-                            }
-                            else if (variable == "filters") {
-                                for (std::set<std::string>::const_iterator
-                                        it = header_filters.begin (),
-                                        end = header_filters.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
-                                        util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
-                                }
-                                for (std::set<std::string>::const_iterator
-                                        it = source_filters.begin (),
-                                        end = source_filters.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
-                                        util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
-                                }
-                                for (std::set<std::string>::const_iterator
-                                        it = rc_source_filters.begin (),
-                                        end = rc_source_filters.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
-                                        util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
-                                }
-                                for (std::set<std::string>::const_iterator
-                                        it = resource_filters.begin (),
-                                        end = resource_filters.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
-                                        util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
-                                }
-                                for (std::set<std::string>::const_iterator
-                                        it = custom_build_filters.begin (),
-                                        end = custom_build_filters.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
-                                        util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
-                                }
-                            }
-                            else if (variable == "masm_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = masm_headers.begin (),
-                                        end = masm_headers.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "masm_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = masm_sources.begin (),
-                                        end = masm_sources.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_CUSTOM_BUILD_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "nasm_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = nasm_headers.begin (),
-                                        end = nasm_headers.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "nasm_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = nasm_sources.begin (),
-                                        end = nasm_sources.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_CUSTOM_BUILD_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "c_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = c_headers.begin (),
-                                        end = c_headers.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "c_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = c_sources.begin (),
-                                        end = c_sources.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "cpp_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = cpp_headers.begin (),
-                                        end = cpp_headers.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "cpp_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = cpp_sources.begin (),
-                                        end = cpp_sources.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "rc_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = rc_sources.begin (),
-                                        end = rc_sources.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_RC_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "resources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = resources.begin (),
-                                        end = resources.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << util::FormatString (
-                                        VCXPROJ_FILTERS_RESOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
-                                }
-                            }
-                            else if (variable == "custom_build_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = custom_build_sources.begin (),
-                                        end = custom_build_sources.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << (*it).second;
-                                }
-                            }
-                            else {
-                                vcxprojfiltersFile << ch << '(' << variable << ')';
-                            }
-                            break;
+                    if (ch == '$') {
+                        std::string variable = GetVariable (&vcxprojfiltersTemplate);
+                        if (variable == "tools_version") {
+                            vcxprojFile << vcxprojfiltersGetToolsVersion ();
                         }
-                        case '\r': {
-                            break;
+                        else if (variable == "filters") {
+                            for (std::set<std::string>::const_iterator
+                                    it = header_filters.begin (),
+                                    end = header_filters.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_FILTER_TEMPLATE,
+                                    (*it).c_str (),
+                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                            }
+                            for (std::set<std::string>::const_iterator
+                                    it = source_filters.begin (),
+                                    end = source_filters.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_FILTER_TEMPLATE,
+                                    (*it).c_str (),
+                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                            }
+                            for (std::set<std::string>::const_iterator
+                                    it = rc_source_filters.begin (),
+                                    end = rc_source_filters.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_FILTER_TEMPLATE,
+                                    (*it).c_str (),
+                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                            }
+                            for (std::set<std::string>::const_iterator
+                                    it = resource_filters.begin (),
+                                    end = resource_filters.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_FILTER_TEMPLATE,
+                                    (*it).c_str (),
+                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                            }
+                            for (std::set<std::string>::const_iterator
+                                    it = custom_build_filters.begin (),
+                                    end = custom_build_filters.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_FILTER_TEMPLATE,
+                                    (*it).c_str (),
+                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                            }
                         }
-                        default: {
-                            vcxprojfiltersFile << ch;
-                            break;
+                        else if (variable == "masm_headers") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = masm_headers.begin (),
+                                    end = masm_headers.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_HEADER_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
                         }
+                        else if (variable == "masm_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = masm_sources.begin (),
+                                    end = masm_sources.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_CUSTOM_BUILD_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "nasm_headers") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = nasm_headers.begin (),
+                                    end = nasm_headers.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_HEADER_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "nasm_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = nasm_sources.begin (),
+                                    end = nasm_sources.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_CUSTOM_BUILD_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "c_headers") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = c_headers.begin (),
+                                    end = c_headers.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_HEADER_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "c_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = c_sources.begin (),
+                                    end = c_sources.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_SOURCE_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "cpp_headers") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = cpp_headers.begin (),
+                                    end = cpp_headers.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_HEADER_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "cpp_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = cpp_sources.begin (),
+                                    end = cpp_sources.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_SOURCE_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "rc_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = rc_sources.begin (),
+                                    end = rc_sources.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_RC_SOURCE_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "resources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = resources.begin (),
+                                    end = resources.end (); it != end; ++it) {
+                                vcxprojfiltersFile << util::FormatString (
+                                    VCXPROJ_FILTERS_RESOURCE_TEMPLATE,
+                                    CreateRelativePath ((*it).first).c_str (),
+                                    (*it).second.c_str ());
+                            }
+                        }
+                        else if (variable == "custom_build_sources") {
+                            for (std::list<FileAndFilter>::const_iterator
+                                    it = custom_build_sources.begin (),
+                                    end = custom_build_sources.end (); it != end; ++it) {
+                                vcxprojfiltersFile << (*it).second;
+                            }
+                        }
+                        else {
+                            vcxprojfiltersFile << ch << '(' << variable << ')';
+                        }
+                    }
+                    else {
+                        vcxprojfiltersFile << ch;
                     }
                 }
             }
