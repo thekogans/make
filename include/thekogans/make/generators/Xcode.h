@@ -27,12 +27,9 @@ namespace thekogans {
         struct Xcode : public core::Generator {
             THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (Xcode)
 
-        protected:
-            bool rootProject;
-
         public:
-            Xcode (bool rootProject_ = true) :
-                rootProject (rootProject_) {}
+            Xcode (bool rootProject) :
+                core::Generator (rootProject) {}
 
             /// \brief
             /// Generate a build system.

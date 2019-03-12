@@ -107,9 +107,6 @@ namespace thekogans {
             std::string GetNasmCommandLine (const core::thekogans_make &thekogans_make) const;
             std::string GetRCPreprocessorDefinitions (const core::thekogans_make &thekogans_make) const;
             std::string GetRCIncludeDirectories (const core::thekogans_make &thekogans_make) const;
-            std::string GetQualifiedName (
-                const std::string &organization,
-                const std::string &project) const;
         };
 
     } // namespace make

@@ -141,6 +141,12 @@ namespace thekogans {
                 "      <Filter>%s</Filter>\n"
                 "    </CustomBuild>\n";
 
+            inline std::string GetQualifiedName (
+                    const std::string &organization,
+                    const std::string &project) {
+                return core::GetFileName (organization, project, std::string (), std::string (), std::string ());
+            }
+
             inline std::string GetPlatform () {
                 return
                     core::_TOOLCHAIN_ARCH == ARCH_i386 ? "Win32" :
@@ -181,7 +187,7 @@ namespace thekogans {
 
             inline std::string CreateRelativePath (const std::string &path) {
                 // NOTE: Based on the design of the build folder:
-                // $(project_root)\build\$(TOOLCHAIN_BRANCH)\generator\$(config)\$(type),
+                // $(project_root)\build\$(TOOLCHAIN_BRANCH)\$(generator)\$(config)\$(type),
                 // ..\..\..\..\..\..\.. will get us back to $(project_root).
                 return "..\\..\\..\\..\\..\\..\\..\\" + path;
             }
@@ -705,7 +711,7 @@ namespace thekogans {
                 GetProjectDependencies (thekogans_make, projectDependencies);
                 const char *fileTemplate = slnTemplate;
                 while (*fileTemplate != '\0') {
-                    util::i8 ch = *fileTemplate++;
+                    char ch = *fileTemplate++;
                     if (ch == '$') {
                         std::string variable = GetVariable (&fileTemplate);
                         if (variable == "format_version") {
@@ -876,7 +882,7 @@ namespace thekogans {
                 "      <FunctionLevelLinking>$(function_level_linking)</FunctionLevelLinking>\n"
                 "      <IntrinsicFunctions>$(intrinsic_functions)</IntrinsicFunctions>\n"
                 "      <AdditionalIncludeDirectories>$(include_directories)</AdditionalIncludeDirectories>\n"
-                "      <PreprocessorDefinitions>$(preprocessor_definitions);$(features);%(PreprocessorDefinitions)</PreprocessorDefinitions>\n"
+                "      <PreprocessorDefinitions>$(preprocessor_definitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>\n"
                 "      <RuntimeLibrary>$(runtime_library)</RuntimeLibrary>\n"
                 "      <DebugInformationFormat>$(debug_information_format)</DebugInformationFormat>\n"
                 "      <MinimalRebuild>false</MinimalRebuild>\n"
@@ -963,7 +969,7 @@ namespace thekogans {
             if (vcxprojFile.is_open ()) {
                 const char *fileTemplate = vcxprojTemplate;
                 while (*fileTemplate != '\0') {
-                    util::i8 ch = *fileTemplate++;
+                    char ch = *fileTemplate++;
                     if (ch == '$') {
                         std::string variable = GetVariable (&fileTemplate);
                         if (variable == "tools_version") {
@@ -1153,28 +1159,27 @@ namespace thekogans {
                             }
                         }
                         else if (variable == "preprocessor_definitions") {
-                            std::list<std::string> preprocessor_definitions;
                             if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
-                                preprocessor_definitions.push_back (
-                                    thekogans_make.subsystem == "Console" ? "_CONSOLE" : "_WINDOWS");
+                                vcxprojFile << "Console" ? "_CONSOLE;" : "_WINDOWS;"
                             }
                             if (core::_TOOLCHAIN_ARCH == ARCH_i386) {
-                                preprocessor_definitions.push_back ("WIN32");
+                                vcxprojFile << "WIN32;";
                             }
                             else if (core::_TOOLCHAIN_ARCH == ARCH_x86_64) {
-                                preprocessor_definitions.push_back ("WIN64");
+                                vcxprojFile << "WIN64;";
                             }
                             if (thekogans_make.project_type == PROJECT_TYPE_LIBRARY &&
                                     thekogans_make.type == TYPE_STATIC) {
-                                preprocessor_definitions.push_back ("_LIB");
+                                vcxprojFile << "_LIB;";
                             }
                             if (thekogans_make.config == CONFIG_DEBUG) {
-                                preprocessor_definitions.push_back ("_DEBUG");
+                                vcxprojFile << "_DEBUG;";
                             }
                             else if (thekogans_make.config == CONFIG_RELEASE) {
-                                preprocessor_definitions.push_back ("NDEBUG");
+                                vcxprojFile << "NDEBUG;";
                             }
-                            preprocessor_definitions.push_back ("BOOST_ALL_NO_LIB");
+                            vcxprojFile << "BOOST_ALL_NO_LIB;";
+                            std::list<std::string> preprocessor_definitions;
                             thekogans_make.GetCommonPreprocessorDefinitions (preprocessor_definitions);
                             for (std::list<std::string>::const_iterator
                                     it = preprocessor_definitions.begin (),
@@ -1196,8 +1201,6 @@ namespace thekogans {
                                     end = thekogans_make.cpp_preprocessor_definitions.end (); it != end; ++it) {
                                 vcxprojFile << *it << ';';
                             }
-                        }
-                        else if (variable == "features") {
                             std::set<std::string> features;
                             thekogans_make.GetFeatures (features);
                             for (std::set<std::string>::const_iterator
@@ -1432,7 +1435,7 @@ namespace thekogans {
             if (vcxprojfiltersFile.is_open ()) {
                 const char *fileTemplate = vcxprojfiltersTemplate;
                 while (*fileTemplate != '\0') {
-                    util::i8 ch = *fileTemplate++;
+                    char ch = *fileTemplate++;
                     if (ch == '$') {
                         std::string variable = GetVariable (&fileTemplate);
                         if (variable == "tools_version") {
@@ -1858,12 +1861,6 @@ namespace thekogans {
                 }
             }
             return rcIncludeDirectories;
-        }
-
-        std::string vsBase::GetQualifiedName (
-                const std::string &organization,
-                const std::string &project) const {
-            return core::GetFileName (organization, project, std::string (), std::string (), std::string ());
         }
 
     } // namespace make
