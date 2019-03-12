@@ -1160,7 +1160,7 @@ namespace thekogans {
                         }
                         else if (variable == "preprocessor_definitions") {
                             if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM) {
-                                vcxprojFile << "Console" ? "_CONSOLE;" : "_WINDOWS;"
+                                vcxprojFile << "Console" ? "_CONSOLE;" : "_WINDOWS;";
                             }
                             if (core::_TOOLCHAIN_ARCH == ARCH_i386) {
                                 vcxprojFile << "WIN32;";
