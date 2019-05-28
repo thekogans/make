@@ -2,8 +2,8 @@
                 project = "make"
                 project_type = "program"
                 major_version = "0"
-                minor_version = "29"
-                patch_version = "1"
+                minor_version = "30"
+                patch_version = "0"
                 build_type = "Shared"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
@@ -20,15 +20,9 @@
   </features>
   <dependencies>
     <dependency organization = "thekogans"
-                name = "util">
-      <features>
-        <feature>THEKOGANS_UTIL_HAVE_PUGIXML</feature>
-      </features>
-    </dependency>
+                name = "util"/>
     <dependency organization = "thekogans"
                 name = "make_core"/>
-    <toolchain organization = "thekogans"
-               name = "pugixml"/>
     <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_XCODE_EDITOR)">
       <toolchain organization = "thekogans"
                  name = "XcodeEditor"/>

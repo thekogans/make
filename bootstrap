@@ -34,13 +34,13 @@ parallel_build=yes
 # Parse command line options.
 for i in "$@"; do
     case $i in
-        -uv:*|--util_version:*)
+        -uv:*|--util-version:*)
             util_version="${i#*:}"
             ;;
-        -mcv:*|--make_core_version:*)
+        -mcv:*|--make-core-version:*)
             make_core_version="${i#*:}"
             ;;
-        -mv:*|--make_version:*)
+        -mv:*|--make-version:*)
             make_version="${i#*:}"
             ;;
     esac

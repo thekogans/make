@@ -66,7 +66,6 @@ common_preprocessor_definitions :=\
   THEKOGANS_UTIL_MAJOR_VERSION=$(util_major_version)\
   THEKOGANS_UTIL_MINOR_VERSION=$(util_minor_version)\
   THEKOGANS_UTIL_PATCH_VERSION=$(util_patch_version)\
-  THEKOGANS_UTIL_HAVE_PUGIXML\
   THEKOGANS_MAKE_CORE_MAJOR_VERSION=$(make_core_major_version)\
   THEKOGANS_MAKE_CORE_MINOR_VERSION=$(make_core_minor_version)\
   THEKOGANS_MAKE_CORE_PATCH_VERSION=$(make_core_patch_version)\
@@ -77,8 +76,6 @@ common_preprocessor_definitions :=\
   THEKOGANS_UTIL_TYPE_$(type)\
   THEKOGANS_MAKE_CORE_CONFIG_$(config)\
   THEKOGANS_MAKE_CORE_TYPE_$(type)\
-  THEKOGANS_PUGIXML_CONFIG_$(config)\
-  THEKOGANS_PUGIXML_TYPE_$(type)
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   common_preprocessor_definitions +=\
     _CRT_SECURE_NO_WARNINGS
@@ -123,6 +120,7 @@ cpp_headers +=\
 cpp_sources :=\
   $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/*.cpp)\
   $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/3rdparty/boost/atomic/*.cpp)\
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/3rdparty/pugixml/pugixml.cpp)\
   $(wildcard $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/src/*.cpp)\
   $(project_root)/src/Action.cpp\
   $(project_root)/src/Options.cpp\
