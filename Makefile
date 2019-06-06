@@ -38,7 +38,7 @@ include_directories :=\
   $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty
 
 ifeq "$(TOOLCHAIN_OS)" "Windows"
-  link_libraries += Ws2_32.lib Iphlpapi.lib mpr.lib
+  link_libraries += Ws2_32.lib Iphlpapi.lib mpr.lib Wtsapi32.lib
 else
   ifeq "$(TOOLCHAIN_OS)" "Linux"
     link_libraries += -lpthread -lrt -ldl
