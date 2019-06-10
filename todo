@@ -5,6 +5,9 @@
 - add definitions for common compiler options
 - fix windows solution thekogans_make.xml tracking
 - update toolchain dependencies to new versions
+- replace gnu make with own build system
+- add Makefile generator
+- add cmake generator
 - add mingw, clang, intel... to Windows toolchain
 - add gcc, intel... to OSX toolchain
 - add clang, intel... to Linux toolchain
