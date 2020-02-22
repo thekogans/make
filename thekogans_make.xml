@@ -47,6 +47,7 @@
       <cpp_header>$(organization)/$(project_directory)/generators/vs2013.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2015.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2017.h</cpp_header>
+      <cpp_header>$(organization)/$(project_directory)/generators/vs2019.h</cpp_header>
     </if>
     <cpp_header>$(organization)/$(project_directory)/functions/get_directory.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/get_directory_name.h</cpp_header>
@@ -142,6 +143,7 @@
       <cpp_source>generators/vs2013.cpp</cpp_source>
       <cpp_source>generators/vs2015.cpp</cpp_source>
       <cpp_source>generators/vs2017.cpp</cpp_source>
+      <cpp_source>generators/vs2019.cpp</cpp_source>
     </if>
     <!-- functions -->
     <cpp_source>functions/get_directory.cpp</cpp_source>

@@ -1,4 +1,6 @@
 - xcode generator
+- gmake generator
+- nmake generator
 - precompiled headers
 - windows manifest
 - os x bundles (-bundle, frameworks)
