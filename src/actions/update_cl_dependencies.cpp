@@ -26,6 +26,8 @@ namespace thekogans {
     namespace make {
 
         namespace {
+            #define strncasecmp _strnicmp
+
             struct update_cl_dependencies : public Action {
                 THEKOGANS_MAKE_DECLARE_ACTION (update_cl_dependencies)
 
