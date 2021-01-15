@@ -75,7 +75,7 @@ common_preprocessor_definitions :=\
   THEKOGANS_UTIL_CONFIG_$(config)\
   THEKOGANS_UTIL_TYPE_$(type)\
   THEKOGANS_MAKE_CORE_CONFIG_$(config)\
-  THEKOGANS_MAKE_CORE_TYPE_$(type)\
+  THEKOGANS_MAKE_CORE_TYPE_$(type)
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   common_preprocessor_definitions +=\
     _CRT_SECURE_NO_WARNINGS
@@ -91,7 +91,8 @@ ifeq "$(TOOLCHAIN_OS)" "Windows"
     $(project_root)/include/$(organization)/$(project)/generators/vsBase.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2013.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2015.h\
-    $(project_root)/include/$(organization)/$(project)/generators/vs2017.h
+    $(project_root)/include/$(organization)/$(project)/generators/vs2017.h\
+    $(project_root)/include/$(organization)/$(project)/generators/vs2019.h
 else
   ifeq "$(TOOLCHAIN_OS)" "OSX"
     cpp_headers +=\
