@@ -48,10 +48,12 @@ else
       link_libraries +=\
         -lpthread\
         -framework Foundation\
+        -framework Security\
         -framework Cocoa\
         -framework CoreFoundation\
         -framework CoreServices\
-        -framework SystemConfiguration
+        -framework SystemConfiguration\
+        -framework IOKit
     endif
   endif
 endif
