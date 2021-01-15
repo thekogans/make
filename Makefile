@@ -35,7 +35,8 @@ include_directories :=\
   $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/include\
   $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/include/thekogans/make/core\
   $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include\
-  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty
+  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty\
+  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty/private
 
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   link_libraries += Ws2_32.lib Iphlpapi.lib mpr.lib Wtsapi32.lib
