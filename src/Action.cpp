@@ -25,12 +25,9 @@ namespace thekogans {
     namespace make {
 
         namespace {
-            // Believe it or not, but just declaring map static
-            // does not guarantee proper ctor call order!? Wrapping
-            // it in an accessor function does.
             Action::Map &GetMap () {
-                static Action::Map map;
-                return map;
+                static Action::Map *map = new Action::Map;
+                return *map;
             }
         }
 
