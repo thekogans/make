@@ -162,7 +162,7 @@ namespace thekogans {
             static const char * const GROUP_TOOLCHAIN;
 
             /// \brief
-            /// Return the group the action belongs to. Used as 'group' actions hierarchically.
+            /// Return the group the action belongs to. Used to 'group' actions hierarchically.
             /// \return Action group name.
             virtual const char *GetGroup () const {
                 return "";
