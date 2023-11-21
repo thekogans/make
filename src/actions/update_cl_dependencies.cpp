@@ -17,7 +17,7 @@
 
 #include <iostream>
 #include <fstream>
-#include "thekogans/util/WindowsUtils.h"
+#include "thekogans/util/os/windows/WindowsUtils.h"
 #include "thekogans/make/core/Utils.h"
 #include "thekogans/make/Options.h"
 #include "thekogans/make/Action.h"
