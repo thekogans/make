@@ -72,9 +72,10 @@ namespace thekogans {
                                     core::MakePath (outputPrefix, (*jt)->customBuild->outputs[k]));
                             }
                             customBuild->dependencies.push_back (name);
+                            std::string dependencyPrefix = core::MakePath (thekogans_make.project_root, (*it)->prefix);
                             for (std::size_t k = 0, count = (*jt)->customBuild->dependencies.size (); k < count; ++k) {
                                 customBuild->dependencies.push_back (
-                                    core::MakePath (thekogans_make.project_root, (*jt)->customBuild->dependencies[k]));
+                                    core::MakePath (dependencyPrefix, (*jt)->customBuild->dependencies[k]));
                             }
                             customBuildList.push_back (std::move (customBuild));
                         }
