@@ -154,6 +154,7 @@ namespace thekogans {
                 "goal := $(goal)\n"
                 "dependencies_goals := $(dependencies_goals)\n"
                 "include_directories := $(include_directories)\n"
+                "framework_directories := $(framework_directories)\n"
                 "linker_flags := $(linker_flags)\n"
                 "librarian_flags := $(librarian_flags)\n"
                 "link_libraries := $(link_libraries)\n"
@@ -396,6 +397,15 @@ namespace thekogans {
                                 for (std::set<std::string>::const_iterator
                                          it = include_directories.begin (),
                                          end = include_directories.end (); it != end; ++it) {
+                                    makefileFile << "\\\n  " << *it;
+                                }
+                            }
+                            else if (variable == "framework_directories") {
+                                std::set<std::string> framework_directories;
+                                thekogans_make.GetFrameworkDirectories (framework_directories);
+                                for (std::set<std::string>::const_iterator
+                                         it = framework_directories.begin (),
+                                         end = framework_directories.end (); it != end; ++it) {
                                     makefileFile << "\\\n  " << *it;
                                 }
                             }
