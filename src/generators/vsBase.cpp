@@ -351,7 +351,7 @@ namespace thekogans {
                                 (*it)->GetGenerator (),
                                 (*it)->GetConfig (),
                                 (*it)->GetType ());
-                            vsBase::Ptr dependency = core::Generator::Get (GetName (), false);
+                            vsBase::SharedPtr dependency = core::Generator::Get (GetName (), false);
                             updatedDependency =
                                 dependency->Generate (
                                     (*it)->GetProjectRoot (),
@@ -386,7 +386,7 @@ namespace thekogans {
                             (*it)->GetGenerator (),
                             (*it)->GetConfig (),
                             (*it)->GetType ());
-                        vsBase::Ptr dependency = core::Generator::Get (GetName (), false);
+                        vsBase::SharedPtr dependency = core::Generator::Get (GetName (), false);
                         updatedDependency =
                             dependency->Generate (
                                 (*it)->GetProjectRoot (),
@@ -637,7 +637,7 @@ namespace thekogans {
                         it = thekogans_make.dependencies.begin (),
                         end = thekogans_make.dependencies.end (); it != end; ++it) {
                     if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
-                        vsBase::Ptr dependency = core::Generator::Get (GetName (), false);
+                        vsBase::SharedPtr dependency = core::Generator::Get (GetName (), false);
                         dependency->Delete (
                             (*it)->GetProjectRoot (),
                             (*it)->GetConfig (),
