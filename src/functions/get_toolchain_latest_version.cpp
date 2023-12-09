@@ -39,10 +39,9 @@ namespace thekogans {
                     project = (*it).second;
                 }
             }
-            if (core::Toolchain::Find (organization, project, std::string ())) {
-                return core::Value (
-                    core::Value::TYPE_Version,
-                    core::Toolchain::GetLatestVersion (organization, project));
+            std::string version;
+            if (core::Toolchain::Find (organization, project, version)) {
+                return core::Value (core::Value::TYPE_Version, version);
             }
             else {
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
