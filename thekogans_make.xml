@@ -3,7 +3,7 @@
                 project_type = "program"
                 major_version = "0"
                 minor_version = "33"
-                patch_version = "0"
+                patch_version = "3"
                 build_type = "Shared"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
@@ -62,6 +62,10 @@
     <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_library.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_include_dir.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_lib_dir.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_toolchain_latest_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_major_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_minor_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/get_patch_version.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/have_feature.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/is_defined.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/is_installed.h</cpp_header>
@@ -159,6 +163,10 @@
     <cpp_source>functions/get_toolchain_library.cpp</cpp_source>
     <cpp_source>functions/get_toolchain_include_dir.cpp</cpp_source>
     <cpp_source>functions/get_toolchain_lib_dir.cpp</cpp_source>
+    <cpp_source>functions/get_toolchain_latest_version.cpp</cpp_source>
+    <cpp_source>functions/get_major_version.cpp</cpp_source>
+    <cpp_source>functions/get_minor_version.cpp</cpp_source>
+    <cpp_source>functions/get_patch_version.cpp</cpp_source>
     <cpp_source>functions/have_feature.cpp</cpp_source>
     <cpp_source>functions/is_defined.cpp</cpp_source>
     <cpp_source>functions/is_installed.cpp</cpp_source>

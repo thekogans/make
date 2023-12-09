@@ -116,6 +116,10 @@ cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/functions/get_toolchain_library.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_toolchain_include_dir.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_toolchain_lib_dir.h\
+  $(project_root)/include/$(organization)/$(project)/functions/get_toolchain_latest_version.h\
+  $(project_root)/include/$(organization)/$(project)/functions/get_major_version.h\
+  $(project_root)/include/$(organization)/$(project)/functions/get_minor_version.h\
+  $(project_root)/include/$(organization)/$(project)/functions/get_patch_version.h\
   $(project_root)/include/$(organization)/$(project)/functions/have_feature.h\
   $(project_root)/include/$(organization)/$(project)/functions/is_installed.h\
   $(project_root)/include/$(organization)/$(project)/functions/make_path.h\
@@ -181,6 +185,10 @@ cpp_sources +=\
   $(project_root)/src/functions/get_toolchain_library.cpp\
   $(project_root)/src/functions/get_toolchain_include_dir.cpp\
   $(project_root)/src/functions/get_toolchain_lib_dir.cpp\
+  $(project_root)/src/functions/get_toolchain_latest_version.cpp\
+  $(project_root)/src/functions/get_major_version.cpp\
+  $(project_root)/src/functions/get_minor_version.cpp\
+  $(project_root)/src/functions/get_patch_version.cpp\
   $(project_root)/src/functions/have_feature.cpp\
   $(project_root)/src/functions/is_installed.cpp\
   $(project_root)/src/functions/make_path.cpp\

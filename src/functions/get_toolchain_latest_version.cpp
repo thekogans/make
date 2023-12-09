@@ -17,21 +17,18 @@
 
 #include "thekogans/util/Exception.h"
 #include "thekogans/make/core/Toolchain.h"
-#include "thekogans/make/functions/get_toolchain_library.h"
+#include "thekogans/make/functions/get_toolchain_latest_version.h"
 
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (get_toolchain_library)
+        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (get_toolchain_latest_version)
 
-        core::Value get_toolchain_library::Exec (
+        core::Value get_toolchain_latest_version::Exec (
                 const core::thekogans_make & /*thekogans_make*/,
                 const Parameters &parameters) const {
             std::string organization;
             std::string project;
-            std::string version;
-            std::string config;
-            std::string type;
             for (Parameters::const_iterator
                     it = parameters.begin (),
                     end = parameters.end (); it != end; ++it) {
@@ -41,24 +38,16 @@ namespace thekogans {
                 else if ((*it).first == "p" || (*it).first == "project") {
                     project = (*it).second;
                 }
-                else if ((*it).first == "v" || (*it).first == "version") {
-                    version = (*it).second;
-                }
-                else if ((*it).first == "c" || (*it).first == "config") {
-                    config = (*it).second;
-                }
-                else if ((*it).first == "t" || (*it).first == "type") {
-                    type = (*it).second;
-                }
             }
-            if (core::Toolchain::Find (organization, project, version)) {
+            if (core::Toolchain::Find (organization, project, std::string ())) {
                 return core::Value (
-                    core::Toolchain::GetLibrary (organization, project, version, config, type));
+                    core::Value::TYPE_Version,
+                    core::Toolchain::GetLatestVersion (organization, project));
             }
             else {
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
                     "Unable to find: %s",
-                    core::Toolchain::GetConfig (organization, project, version).c_str ());
+                    core::Toolchain::GetConfig (organization, project, std::string ()).c_str ());
             }
         }
 
