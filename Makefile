@@ -140,9 +140,20 @@ cpp_sources :=\
   $(project_root)/src/actions/build_project.cpp
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   cpp_sources +=\
+    $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/windows/*.cpp)\
     $(project_root)/src/actions/update_cl_dependencies.cpp\
     $(project_root)/src/actions/update_windows_dependencies.cpp\
     $(project_root)/src/actions/list_cygwin_mount_table.cpp
+else
+  ifeq "$(TOOLCHAIN_OS)" "Linux"
+    cpp_sources +=\
+      $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/linux/*.cpp)
+  else
+    ifeq "$(TOOLCHAIN_OS)" "OSX"
+      cpp_sources +=\
+        $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/osx/*.cpp)
+    endif
+  endif
 endif
 cpp_sources +=\
   $(project_root)/src/actions/install_library.cpp\
@@ -196,7 +207,7 @@ cpp_sources +=\
 
 ifeq "$(TOOLCHAIN_OS)" "OSX"
   objective_cpp_sources :=\
-	$(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/OSXUtils.mm\
+	$(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/osx/OSXUtils.mm\
     $(project_root)/src/generators/Xcode.mm
 endif
 
