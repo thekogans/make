@@ -41,8 +41,8 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     core::Source::Create (
-                        Options::Instance ().organization,
-                        Options::Instance ().url);
+                        Options::Instance ()->organization,
+                        Options::Instance ()->url);
                 }
             };
 

@@ -41,9 +41,9 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     std::cout <<
-                        core::ToolchainSources::Instance ().GetSourceToolchainLatestVersion (
-                            Options::Instance ().organization,
-                            Options::Instance ().project);
+                        core::ToolchainSources::Instance ()->GetSourceToolchainLatestVersion (
+                            Options::Instance ()->organization,
+                            Options::Instance ()->project);
                     std::cout.flush ();
                 }
             };

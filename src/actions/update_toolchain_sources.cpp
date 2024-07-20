@@ -39,7 +39,8 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::ToolchainSources::Instance ().UpdateSources (Options::Instance ().organization);
+                    core::ToolchainSources::Instance ()->UpdateSources (
+                        Options::Instance ()->organization);
                 }
             };
 

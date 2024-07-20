@@ -46,12 +46,12 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     core::CreateBuildSystem (
-                        Options::Instance ().path,
-                        Options::Instance ().generator,
-                        Options::Instance ().config,
-                        Options::Instance ().type,
-                        Options::Instance ().dependencies,
-                        Options::Instance ().force);
+                        Options::Instance ()->path,
+                        Options::Instance ()->generator,
+                        Options::Instance ()->config,
+                        Options::Instance ()->type,
+                        Options::Instance ()->dependencies,
+                        Options::Instance ()->force);
                 }
             };
 

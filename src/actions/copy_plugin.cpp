@@ -41,8 +41,8 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     core::CopyPlugin (
-                        Options::Instance ().path,
-                        Options::Instance ().config);
+                        Options::Instance ()->path,
+                        Options::Instance ()->config);
                 }
             };
 

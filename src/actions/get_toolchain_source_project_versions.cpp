@@ -43,16 +43,16 @@ namespace thekogans {
                 }
 
                 virtual void Execute () {
-                    if (Options::Instance ().branch.empty ()) {
-                        Options::Instance ().branch = core::GetDefaultBranch (
-                            Options::Instance ().organization,
-                            Options::Instance ().project);
+                    if (Options::Instance ()->branch.empty ()) {
+                        Options::Instance ()->branch = core::GetDefaultBranch (
+                            Options::Instance ()->organization,
+                            Options::Instance ()->project);
                     }
                     std::set<std::string> versions;
-                    core::ToolchainSources::Instance ().GetSourceProjectVersions (
-                        Options::Instance ().organization,
-                        Options::Instance ().project,
-                        Options::Instance ().branch,
+                    core::ToolchainSources::Instance ()->GetSourceProjectVersions (
+                        Options::Instance ()->organization,
+                        Options::Instance ()->project,
+                        Options::Instance ()->branch,
                         versions);
                     for (std::set<std::string>::const_iterator
                              it = versions.begin (),

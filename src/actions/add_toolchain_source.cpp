@@ -40,9 +40,9 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::ToolchainSources::Instance ().AddSource (
-                        Options::Instance ().organization,
-                        Options::Instance ().url);
+                    core::ToolchainSources::Instance ()->AddSource (
+                        Options::Instance ()->organization,
+                        Options::Instance ()->url);
                 }
             };
 

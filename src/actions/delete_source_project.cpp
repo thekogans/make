@@ -42,28 +42,28 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source source (Options::Instance ().organization);
+                    core::Source source (Options::Instance ()->organization);
                     std::set<std::string> branches;
-                    if (!Options::Instance ().branch.empty ()) {
-                        branches.insert (Options::Instance ().branch);
+                    if (!Options::Instance ()->branch.empty ()) {
+                        branches.insert (Options::Instance ()->branch);
                     }
                     else {
-                        source.GetProjectBranches (Options::Instance ().project, branches);
+                        source.GetProjectBranches (Options::Instance ()->project, branches);
                     }
                     for (std::set<std::string>::const_iterator
                             it = branches.begin (),
                             end = branches.end (); it != end; ++it) {
                         std::set<std::string> versions;
-                        if (!Options::Instance ().version.empty ()) {
-                            versions.insert (Options::Instance ().version);
+                        if (!Options::Instance ()->version.empty ()) {
+                            versions.insert (Options::Instance ()->version);
                         }
                         else {
-                            source.GetProjectVersions (Options::Instance ().project, *it, versions);
+                            source.GetProjectVersions (Options::Instance ()->project, *it, versions);
                         }
                         for (std::set<std::string>::const_iterator
                                 jt = versions.begin (),
                                 end = versions.end (); jt != end; ++jt) {
-                            source.DeleteProject (Options::Instance ().project, *it, *jt);
+                            source.DeleteProject (Options::Instance ()->project, *it, *jt);
                         }
                     }
                     source.Save ();

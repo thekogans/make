@@ -38,7 +38,7 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::CygwinMountTable::Instance ().DumpEntries ();
+                    core::CygwinMountTable::Instance ()->DumpEntries ();
                 }
             };
 

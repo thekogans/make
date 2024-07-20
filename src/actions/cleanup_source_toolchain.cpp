@@ -43,10 +43,10 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source source (Options::Instance ().organization);
+                    core::Source source (Options::Instance ()->organization);
                     std::set<std::string> toolchain;
-                    if (!Options::Instance ().project.empty ()) {
-                        toolchain.insert (Options::Instance ().project);
+                    if (!Options::Instance ()->project.empty ()) {
+                        toolchain.insert (Options::Instance ()->project);
                     }
                     else {
                         source.GetToolchainNames (toolchain);

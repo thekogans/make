@@ -41,7 +41,7 @@ namespace thekogans {
                 virtual void Execute  () {
                     std::cout << core::thekogans_make::GetBuildType (
                         std::string (),
-                        Options::Instance ().path);
+                        Options::Instance ()->path);
                     std::cout.flush ();
                 }
             };

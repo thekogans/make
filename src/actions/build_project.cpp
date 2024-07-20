@@ -49,13 +49,13 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     core::BuildProject (
-                        Options::Instance ().path,
-                        Options::Instance ().config,
-                        Options::Instance ().type,
-                        Options::Instance ().mode,
-                        Options::Instance ().hide_commands,
-                        Options::Instance ().parallel_build,
-                        Options::Instance ().target);
+                        Options::Instance ()->path,
+                        Options::Instance ()->config,
+                        Options::Instance ()->type,
+                        Options::Instance ()->mode,
+                        Options::Instance ()->hide_commands,
+                        Options::Instance ()->parallel_build,
+                        Options::Instance ()->target);
                 }
             };
 

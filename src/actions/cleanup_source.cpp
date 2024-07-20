@@ -41,8 +41,8 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     std::set<std::string> sources;
-                    if (!Options::Instance ().organization.empty ()) {
-                        sources.insert (Options::Instance ().organization);
+                    if (!Options::Instance ()->organization.empty ()) {
+                        sources.insert (Options::Instance ()->organization);
                     }
                     else {
                         core::Source::GetSources (sources);

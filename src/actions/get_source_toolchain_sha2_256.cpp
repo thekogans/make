@@ -41,14 +41,14 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source source (Options::Instance ().organization);
-                    if (Options::Instance ().version.empty ()) {
-                        Options::Instance ().version =
-                            source.GetToolchainLatestVersion (Options::Instance ().project);
+                    core::Source source (Options::Instance ()->organization);
+                    if (Options::Instance ()->version.empty ()) {
+                        Options::Instance ()->version =
+                            source.GetToolchainLatestVersion (Options::Instance ()->project);
                     }
                     std::cout << source.GetToolchainSHA2_256 (
-                        Options::Instance ().project,
-                        Options::Instance ().version);
+                        Options::Instance ()->project,
+                        Options::Instance ()->version);
                     std::cout.flush ();
                 }
             };

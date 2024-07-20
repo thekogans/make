@@ -44,12 +44,12 @@ int main (
         util::LoggerMgr::NoDecorations);
     THEKOGANS_UTIL_LOG_ADD_LOGGER (util::Logger::SharedPtr (new util::ConsoleLogger ()));
     THEKOGANS_UTIL_IMPLEMENT_LOG_FLUSHER;
-    make::Options::Instance ().Parse (argc, argv, "hvagopbefsctdyumwxz");
+    make::Options::Instance ()->Parse (argc, argv, "hvagopbefsctdyumwxz");
     int result = 0;
-    if (make::Options::Instance ().help) {
-        if (!make::Options::Instance ().action.empty ()) {
+    if (make::Options::Instance ()->help) {
+        if (!make::Options::Instance ()->action.empty ()) {
             make::Action::UniquePtr action = make::Action::Get (
-                make::Options::Instance ().action);
+                make::Options::Instance ()->action);
             if (action.get () != 0) {
                 std::cout << argv[0] << " " << *action << std::endl;
             }
@@ -67,14 +67,14 @@ int main (
             }
         }
     }
-    else if (make::Options::Instance ().showVersion) {
+    else if (make::Options::Instance ()->showVersion) {
         std::cout <<
             "libthekogans_util - " << util::GetVersion ().ToString () << "\n" <<
             "libthekogans_make_core - " << make::core::GetVersion ().ToString () << "\n" <<
             argv[0] << " - " << make::GetVersion ().ToString () << "\n";
         std::cout.flush ();
     }
-    else if (make::Options::Instance ().action.empty ()) {
+    else if (make::Options::Instance ()->action.empty ()) {
         std::cout << "No action specified.\n";
         std::cout.flush ();
         result = 1;
@@ -86,7 +86,7 @@ int main (
                 util::Plugins plugins (pluginsPath.path);
                 plugins.Load ();
             }
-            make::Action::UniquePtr action = make::Action::Get (make::Options::Instance ().action);
+            make::Action::UniquePtr action = make::Action::Get (make::Options::Instance ()->action);
             if (action.get () != 0) {
                 action->Execute ();
             }
@@ -95,7 +95,7 @@ int main (
                 make::Action::GetActions (actions);
                 std::cout << util::FormatString (
                     "Invlalid action: %s (%s)\n",
-                    make::Options::Instance ().action.c_str (),
+                    make::Options::Instance ()->action.c_str (),
                     util::FormatList (actions, " | ").c_str ());
                 result = 1;
             }

@@ -39,8 +39,8 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::ToolchainSources::Instance ().DeleteSource (
-                        Options::Instance ().organization);
+                    core::ToolchainSources::Instance ()->DeleteSource (
+                        Options::Instance ()->organization);
                 }
             };
 

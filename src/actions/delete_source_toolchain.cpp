@@ -41,18 +41,18 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source source (Options::Instance ().organization);
+                    core::Source source (Options::Instance ()->organization);
                     std::set<std::string> versions;
-                    if (!Options::Instance ().version.empty ()) {
-                        versions.insert (Options::Instance ().version);
+                    if (!Options::Instance ()->version.empty ()) {
+                        versions.insert (Options::Instance ()->version);
                     }
                     else {
-                        source.GetToolchainVersions (Options::Instance ().project, versions);
+                        source.GetToolchainVersions (Options::Instance ()->project, versions);
                     }
                     for (std::set<std::string>::const_iterator
                             it = versions.begin (),
                             end = versions.end (); it != end; ++it) {
-                        source.DeleteToolchain (Options::Instance ().project, *it);
+                        source.DeleteToolchain (Options::Instance ()->project, *it);
                     }
                     source.Save ();
                 }

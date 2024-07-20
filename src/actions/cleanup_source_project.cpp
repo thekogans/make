@@ -44,10 +44,10 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source source (Options::Instance ().organization);
+                    core::Source source (Options::Instance ()->organization);
                     std::set<std::string> projects;
-                    if (!Options::Instance ().project.empty ()) {
-                        projects.insert (Options::Instance ().project);
+                    if (!Options::Instance ()->project.empty ()) {
+                        projects.insert (Options::Instance ()->project);
                     }
                     else {
                         source.GetProjectNames (projects);
@@ -56,8 +56,8 @@ namespace thekogans {
                             it = projects.begin (),
                             end = projects.end (); it != end; ++it) {
                         std::set<std::string> branches;
-                        if (!Options::Instance ().branch.empty ()) {
-                            branches.insert (Options::Instance ().branch);
+                        if (!Options::Instance ()->branch.empty ()) {
+                            branches.insert (Options::Instance ()->branch);
                         }
                         else {
                             source.GetProjectBranches (*it, branches);

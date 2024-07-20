@@ -43,12 +43,12 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source source (Options::Instance ().organization);
+                    core::Source source (Options::Instance ()->organization);
                     source.AddProject (
-                        Options::Instance ().project,
-                        Options::Instance ().branch,
-                        Options::Instance ().version,
-                        Options::Instance ().SHA2_256);
+                        Options::Instance ()->project,
+                        Options::Instance ()->branch,
+                        Options::Instance ()->version,
+                        Options::Instance ()->SHA2_256);
                     source.Save ();
                 }
             };

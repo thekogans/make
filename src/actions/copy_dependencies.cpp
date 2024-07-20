@@ -43,9 +43,9 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     core::CopyDependencies (
-                        Options::Instance ().path,
-                        Options::Instance ().config,
-                        Options::Instance ().type);
+                        Options::Instance ()->path,
+                        Options::Instance ()->config,
+                        Options::Instance ()->type);
                 }
             };
 

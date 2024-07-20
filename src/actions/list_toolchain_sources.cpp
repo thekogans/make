@@ -38,7 +38,7 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::ToolchainSources::Instance ().ListSources ();
+                    core::ToolchainSources::Instance ()->ListSources ();
                 }
             };
 

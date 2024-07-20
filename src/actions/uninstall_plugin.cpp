@@ -43,10 +43,10 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     core::UninstallProgram (
-                        Options::Instance ().organization,
-                        Options::Instance ().project,
-                        Options::Instance ().version,
-                        Options::Instance ().dependencies);
+                        Options::Instance ()->organization,
+                        Options::Instance ()->project,
+                        Options::Instance ()->version,
+                        Options::Instance ()->dependencies);
                 }
             };
 

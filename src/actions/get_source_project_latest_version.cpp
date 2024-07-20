@@ -41,15 +41,15 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    if (Options::Instance ().branch.empty ()) {
-                        Options::Instance ().branch = core::GetDefaultBranch (
-                            Options::Instance ().organization,
-                            Options::Instance ().project);
+                    if (Options::Instance ()->branch.empty ()) {
+                        Options::Instance ()->branch = core::GetDefaultBranch (
+                            Options::Instance ()->organization,
+                            Options::Instance ()->project);
                     }
-                    core::Source source (Options::Instance ().organization);
+                    core::Source source (Options::Instance ()->organization);
                     std::cout << source.GetProjectLatestVersion (
-                        Options::Instance ().project,
-                        Options::Instance ().branch);
+                        Options::Instance ()->project,
+                        Options::Instance ()->branch);
                     std::cout.flush ();
                 }
             };

@@ -39,7 +39,7 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source source (Options::Instance ().organization);
+                    core::Source source (Options::Instance ()->organization);
                     std::cout << source.url;
                     std::cout.flush ();
                 }

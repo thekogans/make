@@ -47,13 +47,13 @@ namespace thekogans {
                     const core::thekogans_make &thekogans_make =
                         core::thekogans_make::GetConfig (
                             std::string (),
-                            Options::Instance ().path,
-                            Options::Instance ().generator,
-                            Options::Instance ().config,
-                            Options::Instance ().type);
+                            Options::Instance ()->path,
+                            Options::Instance ()->generator,
+                            Options::Instance ()->config,
+                            Options::Instance ()->type);
                     std::cout << thekogans_make.GetToolchainDependencyVersion (
-                        Options::Instance ().organization,
-                        Options::Instance ().project);
+                        Options::Instance ()->organization,
+                        Options::Instance ()->project);
                     std::cout.flush ();
                 }
             };

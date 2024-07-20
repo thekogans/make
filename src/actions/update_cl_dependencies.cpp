@@ -45,21 +45,21 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    if (!Options::Instance ().dependency.empty ()) {
+                    if (!Options::Instance ()->dependency.empty ()) {
                         const std::string vsInstallDir =
-                            core::CygwinMountTable::Instance ().ToCygwinPath (
+                            core::CygwinMountTable::Instance ()->ToCygwinPath (
                                 util::GetEnvironmentVariable ("VSINSTALLDIR"));
                         const std::string windowsSdkDir =
-                            core::CygwinMountTable::Instance ().ToCygwinPath (
+                            core::CygwinMountTable::Instance ()->ToCygwinPath (
                                 util::GetEnvironmentVariable ("WindowsSdkDir"));
                         std::set<std::string> dependencies;
                         {
-                            std::fstream file (Options::Instance ().path.c_str (), std::fstream::in);
+                            std::fstream file (Options::Instance ()->path.c_str (), std::fstream::in);
                             if (file.is_open ()) {
                                 for (std::string line; std::getline (file, line);) {
                                     if (strncmp (line.c_str (), "Note: including file:", 21) == 0) {
                                         std::string dependencyPath =
-                                            core::CygwinMountTable::Instance ().ToCygwinPath (
+                                            core::CygwinMountTable::Instance ()->ToCygwinPath (
                                                 util::TrimSpaces (line.substr (21).c_str ()));
                                         if (!dependencyPath.empty () &&
                                             strncasecmp (dependencyPath.c_str (),
@@ -74,14 +74,14 @@ namespace thekogans {
                             else {
                                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
                                     "Unable to open '%s'.",
-                                    Options::Instance ().path.size ());
+                                    Options::Instance ()->path.size ());
                             }
                         }
                         WriteDependencies (
-                            Options::Instance ().dependent,
-                            Options::Instance ().dependency,
+                            Options::Instance ()->dependent,
+                            Options::Instance ()->dependency,
                             dependencies,
-                            Options::Instance ().path);
+                            Options::Instance ()->path);
                     }
                     else {
                         THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("%s",

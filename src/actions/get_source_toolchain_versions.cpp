@@ -41,10 +41,10 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source source (Options::Instance ().organization);
+                    core::Source source (Options::Instance ()->organization);
                     std::set<std::string> versions;
                     source.GetToolchainVersions (
-                        Options::Instance ().project,
+                        Options::Instance ()->project,
                         versions);
                     for (std::set<std::string>::const_iterator
                             it = versions.begin (),

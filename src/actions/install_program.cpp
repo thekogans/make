@@ -45,11 +45,11 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     core::Installer installer (
-                        Options::Instance ().config,
-                        Options::Instance ().type,
-                        Options::Instance ().hide_commands,
-                        Options::Instance ().parallel_build);
-                    installer.InstallProgram (Options::Instance ().path);
+                        Options::Instance ()->config,
+                        Options::Instance ()->type,
+                        Options::Instance ()->hide_commands,
+                        Options::Instance ()->parallel_build);
+                    installer.InstallProgram (Options::Instance ()->path);
                 }
             };
 

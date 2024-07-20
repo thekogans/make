@@ -42,22 +42,22 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    if (Options::Instance ().branch.empty ()) {
-                        Options::Instance ().branch = core::GetDefaultBranch (
-                            Options::Instance ().organization,
-                            Options::Instance ().project);
+                    if (Options::Instance ()->branch.empty ()) {
+                        Options::Instance ()->branch = core::GetDefaultBranch (
+                            Options::Instance ()->organization,
+                            Options::Instance ()->project);
                     }
-                    core::Source source (Options::Instance ().organization);
-                    if (Options::Instance ().version.empty ()) {
-                        Options::Instance ().version =
+                    core::Source source (Options::Instance ()->organization);
+                    if (Options::Instance ()->version.empty ()) {
+                        Options::Instance ()->version =
                             source.GetProjectLatestVersion (
-                                Options::Instance ().project,
-                                Options::Instance ().branch);
+                                Options::Instance ()->project,
+                                Options::Instance ()->branch);
                     }
                     std::cout << source.GetProjectSHA2_256 (
-                        Options::Instance ().project,
-                        Options::Instance ().branch,
-                        Options::Instance ().version);
+                        Options::Instance ()->project,
+                        Options::Instance ()->branch,
+                        Options::Instance ()->version);
                     std::cout.flush ();
                 }
             };

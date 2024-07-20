@@ -39,7 +39,7 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    core::Source::Destroy (Options::Instance ().organization);
+                    core::Source::Destroy (Options::Instance ()->organization);
                 }
             };
 

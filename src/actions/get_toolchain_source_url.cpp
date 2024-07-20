@@ -39,8 +39,8 @@ namespace thekogans {
                 }
 
                 virtual void Execute  () {
-                    std::cout << core::ToolchainSources::Instance ().GetSourceURL (
-                        Options::Instance ().organization);
+                    std::cout << core::ToolchainSources::Instance ()->GetSourceURL (
+                        Options::Instance ()->organization);
                     std::cout.flush ();
                 }
             };

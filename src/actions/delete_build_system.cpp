@@ -45,11 +45,11 @@ namespace thekogans {
 
                 virtual void Execute  () {
                     core::DeleteBuildSystem (
-                        Options::Instance ().path,
-                        Options::Instance ().generator,
-                        Options::Instance ().config,
-                        Options::Instance ().type,
-                        Options::Instance ().dependencies);
+                        Options::Instance ()->path,
+                        Options::Instance ()->generator,
+                        Options::Instance ()->config,
+                        Options::Instance ()->type,
+                        Options::Instance ()->dependencies);
                 }
             };
 

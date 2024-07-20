@@ -44,7 +44,7 @@ namespace thekogans {
                     std::string dependency;
                     std::set<std::string> dependencies;
                     {
-                        std::fstream file (Options::Instance ().path.c_str (), std::fstream::in);
+                        std::fstream file (Options::Instance ()->path.c_str (), std::fstream::in);
                         if (file.is_open ()) {
                             if (std::getline (file, dependent)) {
                                 dependent = util::TrimSpaces (dependent.c_str ());
@@ -69,7 +69,7 @@ namespace thekogans {
                                         }
                                         else {
                                             dependencies.insert (
-                                                core::CygwinMountTable::Instance ().ToCygwinPath (line));
+                                                core::CygwinMountTable::Instance ()->ToCygwinPath (line));
                                         }
                                     }
                                 }
@@ -80,7 +80,7 @@ namespace thekogans {
                         dependent,
                         dependency,
                         dependencies,
-                        Options::Instance ().path);
+                        Options::Instance ()->path);
                 }
 
             private:

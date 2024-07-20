@@ -70,10 +70,10 @@ namespace thekogans {
                                         branch,
                                         version,
                                         ext) == 5 &&
-                                        (Options::Instance ().organization.empty () ||
-                                            Options::Instance ().organization == organization) &&
-                                        (Options::Instance ().project.empty () ||
-                                            Options::Instance ().project == project) &&
+                                        (Options::Instance ()->organization.empty () ||
+                                            Options::Instance ()->organization == organization) &&
+                                        (Options::Instance ()->project.empty () ||
+                                            Options::Instance ()->project == project) &&
                                         ext == core::XML_EXT) {
                                     // Toolchain config files are branchless.
                                     assert (branch.empty ());
