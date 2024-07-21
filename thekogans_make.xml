@@ -2,8 +2,8 @@
                 project = "make"
                 project_type = "program"
                 major_version = "0"
-                minor_version = "33"
-                patch_version = "4"
+                minor_version = "34"
+                patch_version = "0"
                 build_type = "Shared"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
