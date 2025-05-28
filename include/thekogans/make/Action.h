@@ -23,6 +23,7 @@
 #include <map>
 #include <iostream>
 #include <list>
+#include "thekogans/util/DynamicCreatable.h"
 
 namespace thekogans {
     namespace make {
@@ -98,60 +99,11 @@ namespace thekogans {
         // toolchain
         //   cleanup_toolchain
 
-        struct Action {
-            /// \brief
-            /// Convenient typedef for std::shared_ptr<Action>.
-            typedef std::unique_ptr<Action> UniquePtr;
+        struct Action : public util::DynamicCreatable {
+            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE_ABSTRACT_BASE (Action)
 
-            /// \brief
-            /// typedef for the Action factory function.
-            typedef UniquePtr (*Factory) ();
-            /// \brief
-            /// typedef for the Action map.
-            typedef std::map<std::string, Factory> Map;
-            /// \brief
-            /// Used for Action dynamic discovery and creation.
-            /// \param[in] type Action type (it's name).
-            /// \return A Action based on the passed in type.
-            static UniquePtr Get (const std::string &type);
-            /// \struct MapInitializer Action.h thekogans/make/Action.h
-            ///
-            /// \brief
-            /// MapInitializer is used to initialize the Action::map.
-            /// It should not be used directly, and instead is included
-            /// in THEKOGANS_MAKE_DECLARE_ACTION/THEKOGANS_MAKE_IMPLEMENT_ACTION.
-            /// If you are deriving a action from Action, and you want
-            /// it to be dynamically discoverable/creatable, add
-            /// THEKOGANS_MAKE_DECLARE_ACTION to it's declaration,
-            /// and THEKOGANS_MAKE_IMPLEMENT_ACTION to it's definition.
-            struct MapInitializer {
-                /// \brief
-                /// ctor. Add action of type, and factory for creating it
-                /// to the Action::map
-                /// \param[in] type Action type (it's class name).
-                /// \param[in] factory Action creation factory.
-                MapInitializer (
-                    const std::string &type,
-                    Factory factory);
-            };
-            /// \brief
-            /// Get the list of all actions registered with the map.
-            /// \param[out] actions List of registered generetors.
-            static void GetActions (std::list<std::string> &actions);
-
-            static void GetGroups (std::list<std::string> &groups);
-            static void GetGroupActions (
-                const std::string &group,
-                std::list<std::string> &groups);
-
-            /// \brief
-            /// Virtual dtor.
-            virtual ~Action () {}
-
-            /// \brief
-            /// Return the class name of the action.
-            /// \return Class name of the action.
-            virtual const char *GetName () const = 0;
+            static std::list<std::string> GetGroups ();
+            static TypeMapType GetGroupActions (const std::string &group);
 
             static const char * const GROUP_BUILD;
             static const char * const GROUP_WINDOWS;
@@ -164,8 +116,8 @@ namespace thekogans {
             /// \brief
             /// Return the group the action belongs to. Used to 'group' actions hierarchically.
             /// \return Action group name.
-            virtual const char *GetGroup () const {
-                return "";
+            virtual std::string GetGroup () const {
+                return std::string ();
             }
 
             /// \brief
@@ -174,35 +126,6 @@ namespace thekogans {
             /// \brief
             virtual void Execute  () = 0;
         };
-
-        /// \brief
-        /// Dynamic discovery macro. Add this to your class declaration.
-        /// Example:
-        /// \code{.cpp}
-        /// struct create_build_system : public Action {
-        ///     THEKOGANS_MAKE_DECLARE_ACTION (create_build_system)
-        ///     ...
-        /// };
-        /// \endcode
-        #define THEKOGANS_MAKE_DECLARE_ACTION(type)\
-        public:\
-            static thekogans::make::Action::MapInitializer mapInitializer;\
-            static thekogans::make::Action::UniquePtr Create () {\
-                return thekogans::make::Action::UniquePtr (new type);\
-            }\
-            virtual const char *GetName () const {\
-                return #type;\
-            }
-
-        /// \brief
-        /// Dynamic discovery macro. Instantiate one of these in the class cpp file.
-        /// Example:
-        /// \code{.cpp}
-        /// THEKOGANS_MAKE_IMPLEMENT_ACTION (create_build_system)
-        /// \endcode
-        #define THEKOGANS_MAKE_IMPLEMENT_ACTION(type)\
-            thekogans::make::Action::MapInitializer type::mapInitializer (\
-                #type, type::Create);
 
         inline std::ostream &operator << (
                 std::ostream &stream,

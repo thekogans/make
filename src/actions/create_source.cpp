@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct create_source : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (create_source)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (create_source)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_SOURCES;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization -u:url\n\n"
+                        "-a:" << Type () << " -o:organization -u:url\n\n"
                         "a - Create a new source in $DEVELOPMENT_ROOT/sources.\n"
                         "o - Organization name.\n"
                         "u - Organization URL.\n";
@@ -46,7 +46,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (create_source)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (create_source, Action::TYPE)
         }
 
     } // namespace make

@@ -289,16 +289,9 @@ namespace thekogans {
             }
         }
 
-        bool vsBase::Generate (
-                const std::string &project_root,
-                const std::string &config,
-                const std::string &type,
-                bool generateDependencies,
-                bool force) {
+        namespace {
             struct to_build_system_path : public core::Function {
-                static core::Function::UniquePtr Create () {
-                    return core::Function::UniquePtr (new to_build_system_path);
-                }
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (to_build_system_path)
 
                 virtual core::Value Exec (
                         const core::thekogans_make & /*thekogans_make*/,
@@ -314,14 +307,21 @@ namespace thekogans {
                     return core::Value (ToSystemPath (path));
                 }
             };
-            static core::Function::MapInitializer mapInitializer (
-                "to_build_system_path",
-                to_build_system_path::Create);
+
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (to_build_system_path, Function::TYPE)
+        }
+
+        bool vsBase::Generate (
+                const std::string &project_root,
+                const std::string &config,
+                const std::string &type,
+                bool generateDependencies,
+                bool force) {
             const core::thekogans_make &thekogans_make =
                 core::thekogans_make::GetConfig (
                     project_root,
                     THEKOGANS_MAKE_XML,
-                    GetName (),
+                    Type (),
                     config,
                     type);
             if (rootProject) {
@@ -330,8 +330,11 @@ namespace thekogans {
             std::string vcxprojFilePath =
                 ToSystemPath (
                     core::MakePath (
-                        core::GetBuildRoot (project_root, GetName (), config, type),
-                        GetQualifiedName (thekogans_make.organization, thekogans_make.project) + VCXPROJ_EXT));
+                        core::GetBuildRoot (project_root, Type (), config, type),
+                        GetQualifiedName (
+                            thekogans_make.organization,
+                            thekogans_make.project) +
+                        VCXPROJ_EXT));
             bool vcxprojFilePathExists = util::Path (vcxprojFilePath).Exists ();
             time_t vcxprojFilePathLastModifiedDate = 0;
             if (vcxprojFilePathExists) {
@@ -345,34 +348,36 @@ namespace thekogans {
                             it = thekogans_make.plugin_hosts.begin (),
                             end = thekogans_make.plugin_hosts.end (); it != end; ++it) {
                         if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
-                            const core::thekogans_make &dependencyConfig = core::thekogans_make::GetConfig (
-                                (*it)->GetProjectRoot (),
-                                (*it)->GetConfigFile (),
-                                (*it)->GetGenerator (),
-                                (*it)->GetConfig (),
-                                (*it)->GetType ());
-                            vsBase::SharedPtr dependency = core::Generator::Get (GetName (), false);
-                            updatedDependency =
+                            const core::thekogans_make &dependencyConfig =
+                                core::thekogans_make::GetConfig (
+                                    (*it)->GetProjectRoot (),
+                                    (*it)->GetConfigFile (),
+                                    (*it)->GetGenerator (),
+                                    (*it)->GetConfig (),
+                                    (*it)->GetType ());
+                            vsBase::SharedPtr dependency =
+                                core::Generator::CreateGenerator (Type (), false);
+                            updatedDependency |=
                                 dependency->Generate (
                                     (*it)->GetProjectRoot (),
                                     (*it)->GetConfig (),
                                     (*it)->GetType (),
                                     generateDependencies,
                                     force) ||
-                                updatedDependency ||
                                 !vcxprojFilePathExists ||
                                 vcxprojFilePathLastModifiedDate <
-                                util::Directory::Entry (
-                                    ToSystemPath (
-                                        core::MakePath (
-                                            core::GetBuildRoot (
-                                                (*it)->GetProjectRoot (),
-                                                GetName (),
-                                                (*it)->GetConfig (),
-                                                (*it)->GetType ()),
-                                            GetQualifiedName (
-                                                dependencyConfig.organization,
-                                                dependencyConfig.project) + VCXPROJ_EXT))).lastModifiedDate;
+                                    util::Directory::Entry (
+                                        ToSystemPath (
+                                            core::MakePath (
+                                                core::GetBuildRoot (
+                                                    (*it)->GetProjectRoot (),
+                                                    Type (),
+                                                    (*it)->GetConfig (),
+                                                    (*it)->GetType ()),
+                                                GetQualifiedName (
+                                                    dependencyConfig.organization,
+                                                    dependencyConfig.project) +
+                                                VCXPROJ_EXT))).lastModifiedDate;
                         }
                     }
                 }
@@ -380,21 +385,22 @@ namespace thekogans {
                         it = thekogans_make.dependencies.begin (),
                         end = thekogans_make.dependencies.end (); it != end; ++it) {
                     if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
-                        const core::thekogans_make &dependencyConfig = core::thekogans_make::GetConfig (
-                            (*it)->GetProjectRoot (),
-                            (*it)->GetConfigFile (),
-                            (*it)->GetGenerator (),
-                            (*it)->GetConfig (),
-                            (*it)->GetType ());
-                        vsBase::SharedPtr dependency = core::Generator::Get (GetName (), false);
-                        updatedDependency =
+                        const core::thekogans_make &dependencyConfig =
+                            core::thekogans_make::GetConfig (
+                                (*it)->GetProjectRoot (),
+                                (*it)->GetConfigFile (),
+                                (*it)->GetGenerator (),
+                                (*it)->GetConfig (),
+                                (*it)->GetType ());
+                        vsBase::SharedPtr dependency =
+                            core::Generator::CreateGenerator (Type (), false);
+                        updatedDependency |=
                             dependency->Generate (
                                 (*it)->GetProjectRoot (),
                                 (*it)->GetConfig (),
                                 (*it)->GetType (),
                                 generateDependencies,
                                 force) ||
-                            updatedDependency ||
                             !vcxprojFilePathExists ||
                             vcxprojFilePathLastModifiedDate <
                                 util::Directory::Entry (
@@ -402,12 +408,13 @@ namespace thekogans {
                                         core::MakePath (
                                             core::GetBuildRoot (
                                                 (*it)->GetProjectRoot (),
-                                                GetName (),
+                                                Type (),
                                                 (*it)->GetConfig (),
                                                 (*it)->GetType ()),
                                             GetQualifiedName (
                                                 dependencyConfig.organization,
-                                                dependencyConfig.project) + VCXPROJ_EXT))).lastModifiedDate;
+                                                dependencyConfig.project) +
+                                            VCXPROJ_EXT))).lastModifiedDate;
                     }
                 }
             }
@@ -607,7 +614,7 @@ namespace thekogans {
                 }
                 core::CreateBuildRoot (
                     thekogans_make.project_root,
-                    GetName (),
+                    Type (),
                     thekogans_make.config,
                     thekogans_make.type);
                 if (rootProject) {
@@ -629,7 +636,7 @@ namespace thekogans {
                 core::thekogans_make::GetConfig (
                     project_root,
                     THEKOGANS_MAKE_XML,
-                    GetName (),
+                    Type (),
                     config,
                     type);
             if (deleteDependencies) {
@@ -637,7 +644,8 @@ namespace thekogans {
                         it = thekogans_make.dependencies.begin (),
                         end = thekogans_make.dependencies.end (); it != end; ++it) {
                     if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
-                        vsBase::SharedPtr dependency = core::Generator::Get (GetName (), false);
+                        vsBase::SharedPtr dependency =
+                            core::Generator::CreateGenerator (Type (), false);
                         dependency->Delete (
                             (*it)->GetProjectRoot (),
                             (*it)->GetConfig (),
@@ -646,7 +654,7 @@ namespace thekogans {
                     }
                 }
             }
-            std::string build_root = core::GetBuildRoot (project_root, GetName (), config, type);
+            std::string build_root = core::GetBuildRoot (project_root, Type (), config, type);
             util::Path (ToSystemPath (build_root)).Delete ();
             while (build_root != project_root) {
                 build_root = util::Path (build_root).GetDirectory ();
@@ -685,7 +693,7 @@ namespace thekogans {
                 core::MakePath (
                     core::GetBuildRoot (
                         thekogans_make.project_root,
-                        GetName (),
+                        Type (),
                         thekogans_make.config,
                         thekogans_make.type),
                     GetQualifiedName (
@@ -697,7 +705,7 @@ namespace thekogans {
                 core::MakePath (
                     core::GetBuildRoot (
                         thekogans_make.project_root,
-                        GetName (),
+                        Type (),
                         thekogans_make.config,
                         thekogans_make.type),
                     GetQualifiedName (
@@ -736,7 +744,7 @@ namespace thekogans {
                                 const core::thekogans_make &dependency = core::thekogans_make::GetConfig (
                                     (*it).project_root,
                                     THEKOGANS_MAKE_XML,
-                                    GetName (),
+                                    Type (),
                                     (*it).config,
                                     (*it).type);
                                 slnFile << util::FormatString (
@@ -746,13 +754,13 @@ namespace thekogans {
                                         core::MakePath (
                                             core::GetBuildRoot (
                                                 dependency.project_root,
-                                                GetName (),
+                                                Type (),
                                                 dependency.config,
                                                 dependency.type),
                                             GetQualifiedName (
                                                 dependency.organization,
                                                 dependency.project) + VCXPROJ_EXT)).c_str (),
-                                    dependency.guid.ToWindowsGUIDString (true).c_str ());
+                                    dependency.guid.ToHexString (true).c_str ());
                                 std::list<ProjectRootAndGUID> dependencyDependencies;
                                 GetProjectDependencies (dependency, dependencyDependencies, false);
                                 if (!dependencyDependencies.empty ()) {
@@ -760,7 +768,7 @@ namespace thekogans {
                                     for (std::list<ProjectRootAndGUID>::const_iterator
                                             jt = dependencyDependencies.begin (),
                                             end = dependencyDependencies.end (); jt != end; ++jt) {
-                                        std::string guidString = (*jt).guid.ToWindowsGUIDString (true);
+                                        std::string guidString = (*jt).guid.ToHexString (true);
                                         slnFile << util::FormatString (
                                             SLN_DEPENDENCY_TEMPLATE,
                                             guidString.c_str (),
@@ -779,13 +787,13 @@ namespace thekogans {
                                     core::MakePath (
                                         core::GetBuildRoot (
                                             thekogans_make.project_root,
-                                            GetName (),
+                                            Type (),
                                             thekogans_make.config,
                                             thekogans_make.type),
                                         GetQualifiedName (
                                             thekogans_make.organization,
                                             thekogans_make.project) + VCXPROJ_EXT)).c_str (),
-                                thekogans_make.guid.ToWindowsGUIDString (true).c_str ());
+                                thekogans_make.guid.ToHexString (true).c_str ());
                             std::list<ProjectRootAndGUID> projectDependencies;
                             GetProjectDependencies (thekogans_make, projectDependencies, false);
                             if (!projectDependencies.empty ()) {
@@ -793,7 +801,7 @@ namespace thekogans {
                                 for (std::list<ProjectRootAndGUID>::const_iterator
                                         it = projectDependencies.begin (),
                                         end = projectDependencies.end (); it != end; ++it) {
-                                    std::string guidString = (*it).guid.ToWindowsGUIDString (true);
+                                    std::string guidString = (*it).guid.ToHexString (true);
                                     slnFile << util::FormatString (
                                         SLN_DEPENDENCY_TEMPLATE,
                                         guidString.c_str (),
@@ -807,7 +815,7 @@ namespace thekogans {
                             for (std::list<ProjectRootAndGUID>::const_iterator
                                     it = projectDependencies.begin (),
                                     end = projectDependencies.end (); it != end; ++it) {
-                                std::string guidString = (*it).guid.ToWindowsGUIDString (true);
+                                std::string guidString = (*it).guid.ToHexString (true);
                                 slnFile << thekogans_make.Expand (
                                     util::FormatString (
                                         GetSLN_DEPENDENCY_TARGET_TEMPLATE (),
@@ -816,7 +824,7 @@ namespace thekogans {
                             }
                         }
                         else if (variable == "project_targets") {
-                            std::string guidString = thekogans_make.guid.ToWindowsGUIDString (true);
+                            std::string guidString = thekogans_make.guid.ToHexString (true);
                             slnFile << thekogans_make.Expand (
                                 util::FormatString (
                                     GetSLN_DEPENDENCY_TARGET_TEMPLATE (),
@@ -895,6 +903,7 @@ namespace thekogans {
                 "$(import_library)\n"
                 "$(module_definition_file)\n"
                 "$(sub_system)\n"
+                "      <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>"
                 "    </Link>\n"
                 "    <Lib>\n"
                 "      <TargetMachine>$(target_machine)</TargetMachine>\n"
@@ -946,7 +955,7 @@ namespace thekogans {
                 core::MakePath (
                     core::GetBuildRoot (
                         thekogans_make.project_root,
-                        GetName (),
+                        Type (),
                         thekogans_make.config,
                         thekogans_make.type),
                     GetQualifiedName (
@@ -957,7 +966,7 @@ namespace thekogans {
                 core::MakePath (
                     core::GetBuildRoot (
                         thekogans_make.project_root,
-                        GetName (),
+                        Type (),
                         thekogans_make.config,
                         thekogans_make.type),
                     GetQualifiedName (
@@ -979,7 +988,7 @@ namespace thekogans {
                             vcxprojFile << vcxprojGetPlatformToolset ();
                         }
                         else if (variable == "project_guid") {
-                            vcxprojFile << thekogans_make.guid.ToWindowsGUIDString (true);
+                            vcxprojFile << thekogans_make.guid.ToHexString (true);
                         }
                         else if (variable == "project_root") {
                             vcxprojFile << ToSystemPath (thekogans_make.project_root);
@@ -1037,7 +1046,7 @@ namespace thekogans {
                             }
                         }
                         else if (variable == "generator") {
-                            vcxprojFile << GetName ();
+                            vcxprojFile << Type ();
                         }
                         else if (variable == "target_machine") {
                             vcxprojFile << GetTargetMachine ();
@@ -1412,7 +1421,7 @@ namespace thekogans {
                 core::MakePath (
                     core::GetBuildRoot (
                         thekogans_make.project_root,
-                        GetName (),
+                        Type (),
                         thekogans_make.config,
                         thekogans_make.type),
                     GetQualifiedName (
@@ -1423,7 +1432,7 @@ namespace thekogans {
                 core::MakePath (
                     core::GetBuildRoot (
                         thekogans_make.project_root,
-                        GetName (),
+                        Type (),
                         thekogans_make.config,
                         thekogans_make.type),
                     GetQualifiedName (
@@ -1448,7 +1457,7 @@ namespace thekogans {
                                 vcxprojfiltersFile << util::FormatString (
                                     VCXPROJ_FILTERS_FILTER_TEMPLATE,
                                     (*it).c_str (),
-                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                                    util::GUID::FromRandom ().ToHexString (true).c_str ());
                             }
                             for (std::set<std::string>::const_iterator
                                     it = source_filters.begin (),
@@ -1456,7 +1465,7 @@ namespace thekogans {
                                 vcxprojfiltersFile << util::FormatString (
                                     VCXPROJ_FILTERS_FILTER_TEMPLATE,
                                     (*it).c_str (),
-                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                                    util::GUID::FromRandom ().ToHexString (true).c_str ());
                             }
                             for (std::set<std::string>::const_iterator
                                     it = rc_source_filters.begin (),
@@ -1464,7 +1473,7 @@ namespace thekogans {
                                 vcxprojfiltersFile << util::FormatString (
                                     VCXPROJ_FILTERS_FILTER_TEMPLATE,
                                     (*it).c_str (),
-                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                                    util::GUID::FromRandom ().ToHexString (true).c_str ());
                             }
                             for (std::set<std::string>::const_iterator
                                     it = resource_filters.begin (),
@@ -1472,7 +1481,7 @@ namespace thekogans {
                                 vcxprojfiltersFile << util::FormatString (
                                     VCXPROJ_FILTERS_FILTER_TEMPLATE,
                                     (*it).c_str (),
-                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                                    util::GUID::FromRandom ().ToHexString (true).c_str ());
                             }
                             for (std::set<std::string>::const_iterator
                                     it = custom_build_filters.begin (),
@@ -1480,7 +1489,7 @@ namespace thekogans {
                                 vcxprojfiltersFile << util::FormatString (
                                     VCXPROJ_FILTERS_FILTER_TEMPLATE,
                                     (*it).c_str (),
-                                    util::GUID::FromRandom ().ToWindowsGUIDString (true).c_str ());
+                                    util::GUID::FromRandom ().ToHexString (true).c_str ());
                             }
                         }
                         else if (variable == "masm_headers") {

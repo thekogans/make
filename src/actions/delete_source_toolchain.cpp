@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct delete_source_toolchain : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (delete_source_toolchain)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (delete_source_toolchain)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_SOURCES;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization -p:project [-v:version]\n\n"
+                        "-a:" << Type () << " -o:organization -p:project [-v:version]\n\n"
                         "a - Delete a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
                         "o - Organization name.\n"
                         "p - Project name.\n"
@@ -58,7 +58,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (delete_source_toolchain)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_toolchain, Action::TYPE)
         }
 
     } // namespace make

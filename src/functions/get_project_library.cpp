@@ -24,7 +24,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (get_project_library)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_library, Function::TYPE)
 
         core::Value get_project_library::Exec (
                 const core::thekogans_make & /*thekogans_make*/,

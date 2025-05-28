@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct get_project_version : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_project_version)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_project_version)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " path\n\n"
+                        "-a:" << Type () << " path\n\n"
                         "a - Get the version (major.minor.patch) from a " THEKOGANS_MAKE_XML " file.\n"
                         "path - Path to " THEKOGANS_MAKE_XML " file.\n";
                 }
@@ -46,7 +46,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_project_version)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_version, Action::TYPE)
         }
 
     } // namespace make

@@ -23,7 +23,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (get_full_file_name)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_full_file_name, Function::TYPE)
 
         core::Value get_full_file_name::Exec (
                 const core::thekogans_make & /*thekogans_make*/,

@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct get_toolchain_source_url : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_toolchain_source_url)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_source_url)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization\n\n"
+                        "-a:" << Type () << " -o:organization\n\n"
                         "a - Return the URL associated with the given source.\n"
                         "o - Source organization name.\n";
                 }
@@ -45,7 +45,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_toolchain_source_url)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_url, Action::TYPE)
         }
 
     } // namespace make

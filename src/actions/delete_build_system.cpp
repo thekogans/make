@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct delete_build_system : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (delete_build_system)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (delete_build_system)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_BUILD;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -g:[" << core::GetGeneratorList (" | ") << "] "
+                        "-a:" << Type () << " -g:[" << core::GetGeneratorList (" | ") << "] "
                         "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] path\n\n"
                         "a - Delete a build system.\n"
                         "g - Build system generator.\n"
@@ -53,7 +53,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (delete_build_system)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_build_system, Action::TYPE)
         }
 
     } // namespace make

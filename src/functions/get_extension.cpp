@@ -23,7 +23,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (get_extension)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_extension, Function::TYPE)
 
         core::Value get_extension::Exec (
                 const core::thekogans_make & /*thekogans_make*/,

@@ -21,7 +21,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_GENERATOR (Xcode)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (Xcode, Generator)
 
         bool Xcode::Generate (
                 const std::string &project_root,

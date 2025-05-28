@@ -50,7 +50,7 @@ namespace thekogans {
             std::set<std::string> custom_build_filters;
 
         public:
-            vsBase (bool rootProject) :
+            vsBase (bool rootProject = true) :
                 core::Generator (rootProject) {}
 
             virtual std::string slnGetFormatVersion () const = 0;

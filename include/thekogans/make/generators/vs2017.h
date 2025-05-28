@@ -25,9 +25,9 @@ namespace thekogans {
     namespace make {
 
         struct vs2017 : public vsBase {
-            THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (vs2017)
+            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (vs2017)
 
-            vs2017 (bool rootProject) :
+            vs2017 (bool rootProject = true) :
                 vsBase (rootProject) {}
 
             virtual std::string slnGetFormatVersion () const {

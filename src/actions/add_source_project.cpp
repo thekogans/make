@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct add_source_project : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (add_source_project)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (add_source_project)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_SOURCES;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization -p:project [-b:branch] -v:version -s:SHA2_256\n\n"
+                        "-a:" << Type () << " -o:organization -p:project [-b:branch] -v:version -s:SHA2_256\n\n"
                         "a - Add a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
                         "o - Organization name.\n"
                         "p - Project name.\n"
@@ -53,7 +53,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (add_source_project)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_source_project, Action::TYPE)
         }
 
     } // namespace make

@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct build_project : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (build_project)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (build_project)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_BUILD;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                        "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
                         "-t:[" TYPE_STATIC " | " TYPE_SHARED "] [-m:[" MODE_DEVELOPMENT " | " MODE_INSTALL "]] "
                         "[-w:[yes | no]] [-x:[yes | no]] [-z:[" TARGET_ALL " | " TARGET_TESTS " | " TARGET_TESTS_SELF " | "
                         TARGET_CLEAN " | " TARGET_CLEAN_SELF " | " TARGET_TAGS " | " TARGET_TAGS_SELF "]] path\n\n"
@@ -59,7 +59,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (build_project)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (build_project, Action::TYPE)
         }
 
     } // namespace make

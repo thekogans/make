@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct get_source_project_latest_version : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_source_project_latest_version)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_source_project_latest_version)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_SOURCES;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization -p:project [-b:branch]\n\n"
+                        "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
                         "a - Return the latest version of a specified project.\n"
                         "o - Organization name.\n"
                         "p - Project name.\n"
@@ -54,7 +54,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_source_project_latest_version)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_project_latest_version, Action::TYPE)
         }
 
     } // namespace make

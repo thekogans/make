@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct list_toolchain_sources : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (list_toolchain_sources)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (list_toolchain_sources)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << "\n\n"
+                        "-a:" << Type () << "\n\n"
                         "a - List all projects and toolchain from the $TOOLCHAIN_ROOT/Sources.xml file.\n";
                 }
 
@@ -42,7 +42,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (list_toolchain_sources)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_toolchain_sources, Action::TYPE)
         }
 
     } // namespace make

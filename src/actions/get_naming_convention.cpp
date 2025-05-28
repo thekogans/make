@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct get_naming_convention : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_naming_convention)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_naming_convention)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " path\n\n"
+                        "-a:" << Type () << " path\n\n"
                         "a - Get the naming convention (" NAMING_CONVENTION_FLAT " | " NAMING_CONVENTION_HIERARCHICAL ") from a project or toolchain config file.\n"
                         "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
                 }
@@ -46,7 +46,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_naming_convention)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_naming_convention, Action::TYPE)
         }
 
     } // namespace make

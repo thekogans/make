@@ -23,7 +23,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (get_toolchain_include_dir)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_include_dir, Function::TYPE)
 
         core::Value get_toolchain_include_dir::Exec (
                 const core::thekogans_make & /*thekogans_make*/,

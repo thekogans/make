@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct install_plugin_hosts : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (install_plugin_hosts)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (install_plugin_hosts)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_INSTALL;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
+                        "-a:" << Type () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
                         "[-w:[yes | no]] [-x:[yes | no]] path\n\n"
                         "a - Install the given plugin hosts.\n"
                         "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
@@ -52,7 +52,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (install_plugin_hosts)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_plugin_hosts, Action::TYPE)
         }
 
     } // namespace make

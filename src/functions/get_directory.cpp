@@ -23,7 +23,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (get_directory)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_directory, Function::TYPE)
 
         core::Value get_directory::Exec (
                 const core::thekogans_make & /*thekogans_make*/,

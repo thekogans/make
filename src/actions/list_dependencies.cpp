@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct list_dependencies : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (list_dependencies)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (list_dependencies)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                        "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
                         "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
                         "a - List project/toolchain dependencies hierarchically.\n"
                         "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
@@ -53,7 +53,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (list_dependencies)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_dependencies, Action::TYPE)
         }
 
     } // namespace make

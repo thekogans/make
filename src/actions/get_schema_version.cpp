@@ -24,15 +24,15 @@ namespace thekogans {
 
         namespace {
             struct get_schema_version : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_schema_version)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_schema_version)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << "\n\n"
+                        "-a:" << Type () << "\n\n"
                         "a - Print the schema version (" << THEKOGANS_MAKE_XML_SCHEMA_VERSION << ").\n";
                 }
 
@@ -42,7 +42,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_schema_version)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_schema_version, Action::TYPE)
         }
 
     } // namespace make

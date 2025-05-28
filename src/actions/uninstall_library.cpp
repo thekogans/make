@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct uninstall_library : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (uninstall_library)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (uninstall_library)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_INSTALL;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization -p:project [-v:version] [-d]\n\n"
+                        "-a:" << Type () << " -o:organization -p:project [-v:version] [-d]\n\n"
                         "a - Uninstall a toolchain library.\n"
                         "o - Organization name.\n"
                         "p - Project name.\n"
@@ -50,7 +50,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (uninstall_library)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (uninstall_library, Action::TYPE)
         }
 
     } // namespace make

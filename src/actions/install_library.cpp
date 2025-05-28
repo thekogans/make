@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct install_library : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (install_library)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (install_library)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_INSTALL;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
+                        "-a:" << Type () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
                         "[-t:[" TYPE_STATIC " | " TYPE_SHARED "]] [-w:[yes | no]] [-x:[yes | no]] path\n\n"
                         "a - Install the given library in to the toolchain (including dependencies).\n"
                         "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
@@ -53,7 +53,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (install_library)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_library, Action::TYPE)
         }
 
     } // namespace make

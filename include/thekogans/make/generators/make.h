@@ -25,10 +25,10 @@ namespace thekogans {
     namespace make {
 
         struct make : public core::Generator {
-            THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (make)
+            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (make)
 
         public:
-            make (bool rootProject) :
+            make (bool rootProject = true) :
                 core::Generator (rootProject) {}
 
             /// \brief

@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct get_build_config : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_build_config)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_build_config)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " path\n\n"
+                        "-a:" << Type () << " path\n\n"
                         "a - Get the build config (" CONFIG_DEBUG " | " CONFIG_RELEASE ") from a project or toolchain config file.\n"
                         "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
                 }
@@ -46,7 +46,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_build_config)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_build_config, Action::TYPE)
         }
 
     } // namespace make

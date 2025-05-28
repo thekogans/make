@@ -26,15 +26,15 @@ namespace thekogans {
 
         namespace {
             struct get_toolchain_source_project_versions : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_toolchain_source_project_versions)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_source_project_versions)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization -p:project [-b:branch]\n\n"
+                        "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
                         "a - Return all versions of a specified project from organization "
                         "in $TOOLCHAIN_ROOT/Sources.xml.\n"
                         "o - Organization name.\n"
@@ -63,7 +63,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_toolchain_source_project_versions)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_project_versions, Action::TYPE)
         }
 
     } // namespace make

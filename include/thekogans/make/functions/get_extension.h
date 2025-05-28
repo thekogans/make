@@ -24,7 +24,7 @@ namespace thekogans {
     namespace make {
 
         struct get_extension : public core::Function {
-            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (get_extension)
+            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_extension)
 
             virtual core::Value Exec (
                 const core::thekogans_make & /*thekogans_make*/,

@@ -26,15 +26,15 @@ namespace thekogans {
 
         namespace {
             struct get_toolchain_source_project_sha2_256 : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_toolchain_source_project_sha2_256)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_source_project_sha2_256)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
+                        "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
                         "a - Return the SHA2-256 hash of a specified project.\n"
                         "o - Organization name.\n"
                         "p - Project name.\n"
@@ -64,7 +64,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_toolchain_source_project_sha2_256)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_project_sha2_256, Action::TYPE)
         }
 
     } // namespace make

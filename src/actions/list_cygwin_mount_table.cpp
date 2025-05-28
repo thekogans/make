@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct list_cygwin_mount_table : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (list_cygwin_mount_table)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (list_cygwin_mount_table)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_WINDOWS;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << "\n\n"
+                        "-a:" << Type () << "\n\n"
                         "a - Dump " << util::GetEnvironmentVariable ("TOOLCHAIN_CYGWIN_MOUNT_TABLE") << " maps.\n";
                 }
 
@@ -42,7 +42,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (list_cygwin_mount_table)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_cygwin_mount_table, Action::TYPE)
         }
 
     } // namespace make

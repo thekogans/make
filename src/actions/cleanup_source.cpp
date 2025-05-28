@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct cleanup_source : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (cleanup_source)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (cleanup_source)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_SOURCES;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " [-o:organization]\n\n"
+                        "-a:" << Type () << " [-o:organization]\n\n"
                         "a - Remove old project and toolchain versions form a given "
                         "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
                         "o - Optional organization name.\n";
@@ -80,7 +80,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (cleanup_source)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source, Action::TYPE)
         }
 
     } // namespace make

@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct copy_dependencies : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (copy_dependencies)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (copy_dependencies)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_INSTALL;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                        "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
                         "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
                         "a - Copy shared libraries to program's bin directory.\n"
                         "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
@@ -49,7 +49,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (copy_dependencies)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_dependencies, Action::TYPE)
         }
 
     } // namespace make

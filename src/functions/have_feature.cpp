@@ -23,7 +23,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (have_feature)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (have_feature, Function::TYPE)
 
         core::Value have_feature::Exec (
                 const core::thekogans_make &thekogans_make,

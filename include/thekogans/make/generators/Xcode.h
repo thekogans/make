@@ -25,10 +25,10 @@ namespace thekogans {
     namespace make {
 
         struct Xcode : public core::Generator {
-            THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (Xcode)
+            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (Xcode)
 
         public:
-            Xcode (bool rootProject) :
+            Xcode (bool rootProject = true) :
                 core::Generator (rootProject) {}
 
             /// \brief

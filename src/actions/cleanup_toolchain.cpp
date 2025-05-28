@@ -30,15 +30,15 @@ namespace thekogans {
 
         namespace {
             struct cleanup_toolchain : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (cleanup_toolchain)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (cleanup_toolchain)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_TOOLCHAIN;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " [-o:organization] [-p:project]\n\n"
+                        "-a:" << Type () << " [-o:organization] [-p:project]\n\n"
                         "a - Delete old toolchain versions.\n"
                         "o - Optional organization name.\n"
                         "p - Optional project name.\n";
@@ -76,7 +76,9 @@ namespace thekogans {
                                         ext == core::XML_EXT) {
                                     // Toolchain config files are branchless.
                                     assert (branch.empty ());
-                                    toolchainVersions[Toolchain (organization, project)].insert (util::Version (version));
+                                    toolchainVersions[
+                                        Toolchain (organization, project)].insert (
+                                            util::Version (version));
                                 }
                             }
                         }
@@ -101,7 +103,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (cleanup_toolchain)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_toolchain, Action::TYPE)
         }
 
     } // namespace make

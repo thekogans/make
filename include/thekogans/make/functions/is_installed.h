@@ -24,7 +24,7 @@ namespace thekogans {
     namespace make {
 
         struct is_installed : public core::Function {
-            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (is_installed)
+            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (is_installed)
 
             virtual core::Value Exec (
                 const core::thekogans_make & /*thekogans_make*/,

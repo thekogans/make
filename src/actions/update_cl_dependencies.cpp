@@ -29,15 +29,15 @@ namespace thekogans {
             #define strncasecmp _strnicmp
 
             struct update_cl_dependencies : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (update_cl_dependencies)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (update_cl_dependencies)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_WINDOWS;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -d:'dependency path' path\n\n"
+                        "-a:" << Type () << " -d:'dependency path' path\n\n"
                         "a - Convert cl showIncludes output to make dependency list.\n"
                         "d - Dependent for which the conversion is being made (*.obj).\n"
                         "y - Dependency for which the conversion is being made (*.[c | cpp].\n"
@@ -117,7 +117,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (update_cl_dependencies)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (update_cl_dependencies, Action::TYPE)
         }
 
     } // namespace make

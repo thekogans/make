@@ -25,9 +25,9 @@ namespace thekogans {
     namespace make {
 
         struct vs2013 : public vsBase {
-            THEKOGANS_MAKE_CORE_DECLARE_GENERATOR (vs2013)
+            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (vs2013)
 
-            vs2013 (bool rootProject) :
+            vs2013 (bool rootProject = true) :
                 vsBase (rootProject) {}
 
             virtual std::string slnGetFormatVersion () const {

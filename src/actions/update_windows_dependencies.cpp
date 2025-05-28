@@ -26,15 +26,15 @@ namespace thekogans {
 
         namespace {
             struct update_windows_dependencies : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (update_windows_dependencies)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (update_windows_dependencies)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_WINDOWS;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " path\n\n"
+                        "-a:" << Type () << " path\n\n"
                         "a - Convert windows dependency list to cygwin path.\n"
                         "path - Path to windows dependency output.\n";
                 }
@@ -111,7 +111,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (update_windows_dependencies)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (update_windows_dependencies, Action::TYPE)
         }
 
     } // namespace make

@@ -24,7 +24,7 @@ namespace thekogans {
     namespace make {
 
         struct get_toolchain_library : public core::Function {
-            THEKOGANS_MAKE_CORE_DECLARE_FUNCTION (get_toolchain_library)
+            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_library)
 
             virtual core::Value Exec (
                 const core::thekogans_make & /*thekogans_make*/,

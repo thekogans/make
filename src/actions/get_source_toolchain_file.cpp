@@ -25,15 +25,15 @@ namespace thekogans {
 
         namespace {
             struct get_source_toolchain_file : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_source_toolchain_file)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_source_toolchain_file)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_SOURCES;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization -p:project -v:version\n\n"
+                        "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
                         "a - Return the file of a specified toolchain library/program/plugin.\n"
                         "o - Organization name.\n"
                         "p - Project name.\n"
@@ -53,7 +53,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_source_toolchain_file)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_file, Action::TYPE)
         }
 
     } // namespace make

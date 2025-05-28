@@ -25,7 +25,7 @@ namespace thekogans {
 
         namespace {
             struct destroy_source : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (destroy_source)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (destroy_source)
 
                 virtual const char *GetGroup () const {
                     return GROUP_SOURCES;
@@ -33,7 +33,7 @@ namespace thekogans {
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " -o:organization\n\n"
+                        "-a:" << Type () << " -o:organization\n\n"
                         "a - Destroy the given source in $DEVELOPMENT_ROOT/sources.\n"
                         "o - Organization name.\n";
                 }
@@ -43,7 +43,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (destroy_source)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (destroy_source, Action)
         }
 
     } // namespace make

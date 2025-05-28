@@ -20,7 +20,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_GENERATOR (vs2013)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (vs2013, Generator::TYPE)
 
     } // namespace make
 } // namespace thekogans

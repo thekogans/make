@@ -21,7 +21,7 @@
 namespace thekogans {
     namespace make {
 
-        THEKOGANS_MAKE_CORE_IMPLEMENT_FUNCTION (get_minor_version)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_minor_version, Function::TYPE)
 
         core::Value get_minor_version::Exec (
                 const core::thekogans_make & /*thekogans_make*/,

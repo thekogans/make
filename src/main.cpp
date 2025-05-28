@@ -48,20 +48,19 @@ int main (
     int result = 0;
     if (make::Options::Instance ()->help) {
         if (!make::Options::Instance ()->action.empty ()) {
-            make::Action::UniquePtr action = make::Action::Get (
-                make::Options::Instance ()->action);
-            if (action.get () != 0) {
+            make::Action::SharedPtr action = make::Action::CreateType (
+                make::Options::Instance ()->action.c_str ());
+            if (action != nullptr) {
                 std::cout << argv[0] << " " << *action << std::endl;
             }
         }
         else {
-            std::list<std::string> actions;
-            make::Action::GetActions (actions);
-            for (std::list<std::string>::const_iterator
+            const util::DynamicCreatable::TypeMapType &actions = make::Action::GetTypes ();
+            for (util::DynamicCreatable::TypeMapType::const_iterator
                     it = actions.begin (),
                     end = actions.end (); it != end; ++it) {
-                make::Action::UniquePtr action = make::Action::Get (*it);
-                if (action.get () != 0) {
+                make::Action::SharedPtr action = it->second (nullptr);
+                if (action != nullptr) {
                     std::cout << argv[0] << " " << *action << std::endl;
                 }
             }
@@ -81,22 +80,21 @@ int main (
     }
     else {
         THEKOGANS_UTIL_TRY {
-            util::Path pluginsPath (ToSystemPath (std::string (argv[0]) + "." + make::core::PLUGINS_EXT));
+            util::Path pluginsPath (
+                ToSystemPath (std::string (argv[0]) + "." + make::core::PLUGINS_EXT));
             if (pluginsPath.Exists ()) {
                 util::Plugins plugins (pluginsPath.path);
                 plugins.Load ();
             }
-            make::Action::UniquePtr action = make::Action::Get (make::Options::Instance ()->action);
-            if (action.get () != 0) {
+            make::Action::SharedPtr action = make::Action::CreateType (
+                make::Options::Instance ()->action.c_str ());
+            if (action != nullptr) {
                 action->Execute ();
             }
             else {
-                std::list<std::string> actions;
-                make::Action::GetActions (actions);
                 std::cout << util::FormatString (
-                    "Invlalid action: %s (%s)\n",
-                    make::Options::Instance ()->action.c_str (),
-                    util::FormatList (actions, " | ").c_str ());
+                    "Invlalid action: %s\n",
+                    make::Options::Instance ()->action.c_str ());
                 result = 1;
             }
         }

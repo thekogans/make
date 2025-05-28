@@ -31,15 +31,15 @@ namespace thekogans {
 
         namespace {
             struct get_toolchain_versions : public Action {
-                THEKOGANS_MAKE_DECLARE_ACTION (get_toolchain_versions)
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_versions)
 
-                virtual const char *GetGroup () const {
+                virtual std::string GetGroup () const {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
                 virtual void PrintHelp (std::ostream &stream) const {
                     stream <<
-                        "-a:" << GetName () << " [-o:organization] [-p:project]\n\n"
+                        "-a:" << Type () << " [-o:organization] [-p:project]\n\n"
                         "a - Get all installed versions for a given toolchain.\n"
                         "o - Optional organization name.\n"
                         "p - Optional project name.\n";
@@ -77,7 +77,9 @@ namespace thekogans {
                                         ext == core::XML_EXT) {
                                     // Toolchain config files are branchless.
                                     assert (branch.empty ());
-                                    toolchainVersions[Toolchain (organization, project)].insert (util::Version (version));
+                                    toolchainVersions[
+                                        Toolchain (organization, project)].insert (
+                                            util::Version (version));
                                 }
                             }
                         }
@@ -100,7 +102,7 @@ namespace thekogans {
                 }
             };
 
-            THEKOGANS_MAKE_IMPLEMENT_ACTION (get_toolchain_versions)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_versions, Action::TYPE)
         }
 
     } // namespace make

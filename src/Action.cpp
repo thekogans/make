@@ -24,64 +24,43 @@
 namespace thekogans {
     namespace make {
 
-        namespace {
-            Action::Map &GetMap () {
-                static Action::Map *map = new Action::Map;
-                return *map;
-            }
-        }
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE_ABSTRACT_BASE (thekogans::make::Action)
 
-        Action::UniquePtr Action::Get (const std::string &type) {
-            Map::iterator it = GetMap ().find (type);
-            return it != GetMap ().end () ?
-                it->second () : Action::UniquePtr ();
-        }
-
-        Action::MapInitializer::MapInitializer (
-                const std::string &type,
-                Factory factory) {
-            std::pair<Map::iterator, bool> result =
-                GetMap ().insert (Map::value_type (type, factory));
-            assert (result.second);
-            if (!result.second) {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "Duplicate Action: %s", type.c_str ());
-            }
-        }
-
-        void Action::GetActions (std::list<std::string> &actions) {
-            for (Map::const_iterator
-                    it = GetMap ().begin (),
-                    end = GetMap ().end (); it != end; ++it) {
-                actions.push_back (it->first);
-            }
-        }
-
-        void Action::GetGroups (std::list<std::string> &groups) {
-            std::set<std::string> groups_;
-            for (Map::const_iterator
-                    it = GetMap ().begin (),
-                    end = GetMap ().end (); it != end; ++it) {
-                UniquePtr action = it->second ();
-                if (groups_.find (action->GetGroup ()) == groups_.end ()) {
-                    groups_.insert (action->GetGroup ());
-                    groups.push_back (action->GetGroup ());
+        std::list<std::string> Action::GetGroups () {
+            std::list<std::string> groupList;
+            std::set<std::string> groupSet;
+            BaseMapType::const_iterator it = BaseMap::Instance ()->find (Action::TYPE);
+            if (it != BaseMap::Instance ()->end ()) {
+                for (TypeMapType::const_iterator
+                        jt = it->second.begin (),
+                        end = it->second.end (); jt != end; ++jt) {
+                    SharedPtr action = jt->second (nullptr);
+                    if (action != nullptr &&
+                            groupSet.find (action->GetGroup ()) == groupSet.end ()) {
+                        groupSet.insert (action->GetGroup ());
+                        groupList.push_back (action->GetGroup ());
+                    }
                 }
             }
+            return groupList;
         }
 
-        void Action::GetGroupActions (
-                const std::string &group,
-                std::list<std::string> &actions) {
-            std::set<std::string> groups_;
-            for (Map::const_iterator
-                    it = GetMap ().begin (),
-                    end = GetMap ().end (); it != end; ++it) {
-                UniquePtr action = it->second ();
-                if (action->GetGroup () == group) {
-                    actions.push_back (it->first);
+        util::DynamicCreatable::TypeMapType Action::GetGroupActions (
+                const std::string &group) {
+            TypeMapType actions;
+            std::set<std::string> groups;
+            BaseMapType::const_iterator it = BaseMap::Instance ()->find (Action::TYPE);
+            if (it != BaseMap::Instance ()->end ()) {
+                for (TypeMapType::const_iterator
+                        jt = it->second.begin (),
+                        end = it->second.end (); jt != end; ++jt) {
+                    SharedPtr action = jt->second (nullptr);
+                    if (action != nullptr && action->GetGroup () == group) {
+                        actions[jt->first] = jt->second;
+                    }
                 }
             }
+            return actions;
         }
 
         const char * const Action::GROUP_BUILD = "build";
