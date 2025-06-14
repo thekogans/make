@@ -29,17 +29,14 @@ namespace thekogans {
         std::list<std::string> Action::GetGroups () {
             std::list<std::string> groupList;
             std::set<std::string> groupSet;
-            BaseMapType::const_iterator it = BaseMap::Instance ()->find (Action::TYPE);
-            if (it != BaseMap::Instance ()->end ()) {
-                for (TypeMapType::const_iterator
-                        jt = it->second.begin (),
-                        end = it->second.end (); jt != end; ++jt) {
-                    SharedPtr action = jt->second (nullptr);
-                    if (action != nullptr &&
-                            groupSet.find (action->GetGroup ()) == groupSet.end ()) {
-                        groupSet.insert (action->GetGroup ());
-                        groupList.push_back (action->GetGroup ());
-                    }
+            for (TypeMapType::const_iterator
+                    it = GetTypes ().begin (),
+                    end = GetTypes ().end (); it != end; ++it) {
+                SharedPtr action = it->second (nullptr);
+                if (action != nullptr &&
+                        groupSet.find (action->GetGroup ()) == groupSet.end ()) {
+                    groupSet.insert (action->GetGroup ());
+                    groupList.push_back (action->GetGroup ());
                 }
             }
             return groupList;
@@ -49,15 +46,12 @@ namespace thekogans {
                 const std::string &group) {
             TypeMapType actions;
             std::set<std::string> groups;
-            BaseMapType::const_iterator it = BaseMap::Instance ()->find (Action::TYPE);
-            if (it != BaseMap::Instance ()->end ()) {
-                for (TypeMapType::const_iterator
-                        jt = it->second.begin (),
-                        end = it->second.end (); jt != end; ++jt) {
-                    SharedPtr action = jt->second (nullptr);
-                    if (action != nullptr && action->GetGroup () == group) {
-                        actions[jt->first] = jt->second;
-                    }
+            for (TypeMapType::const_iterator
+                    it = GetTypes ().begin (),
+                    end = GetTypes ().end (); it != end; ++it) {
+                SharedPtr action = it->second (nullptr);
+                if (action != nullptr && action->GetGroup () == group) {
+                    actions[it->first] = it->second;
                 }
             }
             return actions;
