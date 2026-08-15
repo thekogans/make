@@ -16,7 +16,7 @@
         <feature>THEKOGANS_MAKE_HAVE_XCODE_EDITOR</feature>
       </when>
     </choose>
-    <feature>THEKOGANS_MAKE_HAVE_CURL</feature>
+    <!-- <feature>THEKOGANS_MAKE_HAVE_CURL</feature> -->
   </features>
   <dependencies>
     <dependency organization = "thekogans"
