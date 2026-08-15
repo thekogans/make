@@ -27,11 +27,11 @@ namespace thekogans {
             struct build_project : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (build_project)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_BUILD;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
                         "-t:[" TYPE_STATIC " | " TYPE_SHARED "] [-m:[" MODE_DEVELOPMENT " | " MODE_INSTALL "]] "
@@ -47,7 +47,7 @@ namespace thekogans {
                         "path - Path to " THEKOGANS_MAKE_XML " file.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::BuildProject (
                         Options::Instance ()->path,
                         Options::Instance ()->config,

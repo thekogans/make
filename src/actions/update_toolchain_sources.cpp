@@ -27,18 +27,18 @@ namespace thekogans {
             struct update_toolchain_sources : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (update_toolchain_sources)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " [-o:organization]\n\n"
                         "a - Update the $TOOLCHAIN_ROOT/Sources.xml file.\n"
                         "o - Organization name.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::ToolchainSources::Instance ()->UpdateSources (
                         Options::Instance ()->organization);
                 }

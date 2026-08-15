@@ -33,11 +33,11 @@ namespace thekogans {
             struct get_toolchain_versions : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_versions)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " [-o:organization] [-p:project]\n\n"
                         "a - Get all installed versions for a given toolchain.\n"
@@ -45,7 +45,7 @@ namespace thekogans {
                         "p - Optional project name.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     std::string path =
                         ToSystemPath (core::MakePath (core::_TOOLCHAIN_DIR, core::CONFIG_DIR));
                     if (util::Path (path).Exists ()) {

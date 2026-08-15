@@ -29,11 +29,11 @@ namespace thekogans {
             struct cleanup_source_project : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (cleanup_source_project)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_SOURCES;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
                         "a - Remove old versions associated with the given project in "
@@ -43,7 +43,7 @@ namespace thekogans {
                         "b - Project branch.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::Source source (Options::Instance ()->organization);
                     std::set<std::string> projects;
                     if (!Options::Instance ()->project.empty ()) {

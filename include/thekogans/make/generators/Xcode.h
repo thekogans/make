@@ -44,7 +44,7 @@ namespace thekogans {
                 const std::string &config,
                 const std::string &type,
                 bool generateDependencies,
-                bool force);
+                bool force) override;
 
             /// \brief
             /// Delete a build system.
@@ -56,7 +56,7 @@ namespace thekogans {
                 const std::string &project_root,
                 const std::string &config,
                 const std::string &type,
-                bool deleteDependencies);
+                bool deleteDependencies) override;
         };
 
     } // namespace make

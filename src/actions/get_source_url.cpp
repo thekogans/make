@@ -27,18 +27,18 @@ namespace thekogans {
             struct get_source_url : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_source_url)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_SOURCES;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization\n\n"
                         "a - Return the URL associated with the given source.\n"
                         "o - Source organization name.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::Source source (Options::Instance ()->organization);
                     std::cout << source.url;
                     std::cout.flush ();

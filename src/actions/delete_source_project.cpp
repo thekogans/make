@@ -27,11 +27,11 @@ namespace thekogans {
             struct delete_source_project : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (delete_source_project)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_SOURCES;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
                         "a - Delete a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
@@ -41,7 +41,7 @@ namespace thekogans {
                         "v - Project version. Empty = Delete all versions.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::Source source (Options::Instance ()->organization);
                     std::set<std::string> branches;
                     if (!Options::Instance ()->branch.empty ()) {

@@ -27,11 +27,11 @@ namespace thekogans {
             struct copy_dependencies : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (copy_dependencies)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_INSTALL;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
                         "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
@@ -41,7 +41,7 @@ namespace thekogans {
                         "path - Path to " THEKOGANS_MAKE_XML " file.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::CopyDependencies (
                         Options::Instance ()->path,
                         Options::Instance ()->config,

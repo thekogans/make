@@ -28,7 +28,7 @@ namespace thekogans {
 
             virtual core::Value Exec (
                 const core::thekogans_make &thekogans_make,
-                const Parameters &parameters) const;
+                const Parameters &parameters) const override;
         };
 
     } // namespace make

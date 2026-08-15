@@ -27,11 +27,11 @@ namespace thekogans {
             struct add_toolchain_source : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (add_toolchain_source)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -u:url\n\n"
                         "a - Add a new organization to the $TOOLCHAIN_ROOT/Sources.xml file.\n"
@@ -39,7 +39,7 @@ namespace thekogans {
                         "u - Organization URL.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::ToolchainSources::Instance ()->AddSource (
                         Options::Instance ()->organization,
                         Options::Instance ()->url);

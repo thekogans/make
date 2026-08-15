@@ -27,11 +27,11 @@ namespace thekogans {
             struct add_source_project : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (add_source_project)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_SOURCES;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -p:project [-b:branch] -v:version -s:SHA2_256\n\n"
                         "a - Add a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
@@ -42,7 +42,7 @@ namespace thekogans {
                         "s - Project SHA2-256 hash.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::Source source (Options::Instance ()->organization);
                     source.AddProject (
                         Options::Instance ()->project,

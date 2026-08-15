@@ -27,11 +27,11 @@ namespace thekogans {
             struct uninstall_program : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (uninstall_program)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_INSTALL;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -p:project [-v:version] [-d]\n\n"
                         "a - Uninstall a toolchain program.\n"
@@ -41,7 +41,7 @@ namespace thekogans {
                         "d - Delete dependencies.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::UninstallProgram (
                         Options::Instance ()->organization,
                         Options::Instance ()->project,

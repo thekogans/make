@@ -26,17 +26,17 @@ namespace thekogans {
             struct get_schema_version : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_schema_version)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << "\n\n"
                         "a - Print the schema version (" << THEKOGANS_MAKE_XML_SCHEMA_VERSION << ").\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     std::cout << THEKOGANS_MAKE_XML_SCHEMA_VERSION;
                     std::cout.flush ();
                 }

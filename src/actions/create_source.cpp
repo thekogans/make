@@ -27,11 +27,11 @@ namespace thekogans {
             struct create_source : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (create_source)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_SOURCES;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -u:url\n\n"
                         "a - Create a new source in $DEVELOPMENT_ROOT/sources.\n"
@@ -39,7 +39,7 @@ namespace thekogans {
                         "u - Organization URL.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::Source::Create (
                         Options::Instance ()->organization,
                         Options::Instance ()->url);

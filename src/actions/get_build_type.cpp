@@ -27,18 +27,18 @@ namespace thekogans {
             struct get_build_type : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_build_type)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " path\n\n"
                         "a - Get the build type (" TYPE_STATIC " | " TYPE_SHARED ") from a project or toolchain config file.\n"
                         "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     std::cout << core::thekogans_make::GetBuildType (
                         std::string (),
                         Options::Instance ()->path);

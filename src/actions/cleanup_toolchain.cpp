@@ -32,11 +32,11 @@ namespace thekogans {
             struct cleanup_toolchain : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (cleanup_toolchain)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_TOOLCHAIN;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " [-o:organization] [-p:project]\n\n"
                         "a - Delete old toolchain versions.\n"
@@ -44,7 +44,7 @@ namespace thekogans {
                         "p - Optional project name.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     std::string path =
                         ToSystemPath (core::MakePath (core::_TOOLCHAIN_DIR, core::CONFIG_DIR));
                     if (util::Path (path).Exists ()) {

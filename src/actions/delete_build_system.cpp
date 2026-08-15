@@ -27,11 +27,11 @@ namespace thekogans {
             struct delete_build_system : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (delete_build_system)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_BUILD;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -g:[" << core::GetGeneratorList (" | ") << "] "
                         "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] path\n\n"
@@ -43,7 +43,7 @@ namespace thekogans {
                         "path - Path to " THEKOGANS_MAKE_XML " file.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::DeleteBuildSystem (
                         Options::Instance ()->path,
                         Options::Instance ()->generator,

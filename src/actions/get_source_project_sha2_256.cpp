@@ -27,11 +27,11 @@ namespace thekogans {
             struct get_source_project_sha2_256 : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_source_project_sha2_256)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_SOURCES;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
                         "a - Return the SHA2-256 hash of a specified project.\n"
@@ -41,7 +41,7 @@ namespace thekogans {
                         "v - Project version.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     if (Options::Instance ()->branch.empty ()) {
                         Options::Instance ()->branch = core::GetDefaultBranch (
                             Options::Instance ()->organization,

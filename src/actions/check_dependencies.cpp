@@ -27,11 +27,11 @@ namespace thekogans {
             struct check_dependencies : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (check_dependencies)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_THEKOGANS_MAKE_XML;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
                         "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
@@ -41,7 +41,7 @@ namespace thekogans {
                         "path - Path to configuration file.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     const core::thekogans_make &thekogans_make =
                         core::thekogans_make::GetConfig (
                             std::string (),

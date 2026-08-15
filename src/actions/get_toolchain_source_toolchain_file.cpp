@@ -27,11 +27,11 @@ namespace thekogans {
             struct get_toolchain_source_toolchain_file : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_file)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_TOOLCHAIN_SOURCES_XML;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
                         "a - Return the file of a specified toolchain library/program/plugin.\n"
@@ -40,7 +40,7 @@ namespace thekogans {
                         "v - Project version.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     if (Options::Instance ()->version.empty ()) {
                         Options::Instance ()->version =
                             core::ToolchainSources::Instance ()->GetSourceToolchainLatestVersion (

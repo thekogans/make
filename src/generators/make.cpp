@@ -208,7 +208,7 @@ namespace thekogans {
 
                 virtual core::Value Exec (
                         const core::thekogans_make & /*thekogans_make*/,
-                        const Parameters &parameters) const {
+                        const Parameters &parameters) const override {
                     std::string path;
                     for (Parameters::const_iterator
                              it = parameters.begin (),

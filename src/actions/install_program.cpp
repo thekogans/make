@@ -27,11 +27,11 @@ namespace thekogans {
             struct install_program : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (install_program)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_INSTALL;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
                         "-t:[" TYPE_STATIC " | " TYPE_SHARED "] [-w:[yes | no]] [-x:[yes | no]] path\n\n"
@@ -43,7 +43,7 @@ namespace thekogans {
                         "path - Path to " THEKOGANS_MAKE_XML " file.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     core::Installer installer (
                         Options::Instance ()->config,
                         Options::Instance ()->type,

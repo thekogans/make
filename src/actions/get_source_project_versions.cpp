@@ -27,11 +27,11 @@ namespace thekogans {
             struct get_source_project_versions : public Action {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_source_project_versions)
 
-                virtual std::string GetGroup () const {
+                virtual std::string GetGroup () const override {
                     return GROUP_SOURCES;
                 }
 
-                virtual void PrintHelp (std::ostream &stream) const {
+                virtual void PrintHelp (std::ostream &stream) const override {
                     stream <<
                         "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
                         "a - Return all versions of a specified project from source "
@@ -41,7 +41,7 @@ namespace thekogans {
                         "b - Project branch.\n";
                 }
 
-                virtual void Execute  () {
+                virtual void Execute  () override {
                     if (Options::Instance ()->branch.empty ()) {
                         Options::Instance ()->branch = core::GetDefaultBranch (
                             Options::Instance ()->organization,
