@@ -82,6 +82,9 @@ common_preprocessor_definitions :=\
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   common_preprocessor_definitions +=\
     _CRT_SECURE_NO_WARNINGS
+else
+  common_preprocessor_definitions +=\
+	THEKOGANS_UTIL_HAVE_MMAP
 endif
 
 cpp_headers :=\
