@@ -36,7 +36,8 @@ include_directories :=\
   $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/include/thekogans/make/core\
   $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include\
   $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty\
-  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty/private
+  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty/private\
+  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty/private/zlib
 
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   link_libraries += Ws2_32.lib Iphlpapi.lib mpr.lib Wtsapi32.lib
@@ -127,6 +128,9 @@ cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/functions/is_installed.h\
   $(project_root)/include/$(organization)/$(project)/functions/make_path.h\
   $(project_root)/include/$(organization)/$(project)/functions/to_system_path.h
+
+c_sources :=\
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/3rdparty/zlib/*.c)
 
 cpp_sources :=\
   $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/*.cpp)\
