@@ -255,7 +255,7 @@ cpp_sources +=\
   $(project_root)/src/actions/get_toolchain_dependency_version.cpp\
   $(project_root)/src/actions/get_toolchain_versions.cpp\
   $(project_root)/src/actions/cleanup_toolchain.cpp\
-  $(project_root)/src/generators/Generators.cpp
+  $(project_root)/src/generators/Generators.cpp\
   $(project_root)/src/generators/make.cpp
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   cpp_sources +=\
