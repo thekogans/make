@@ -76,6 +76,8 @@ common_preprocessor_definitions :=\
   THEKOGANS_MAKE_MAJOR_VERSION=$(major_version)\
   THEKOGANS_MAKE_MINOR_VERSION=$(minor_version)\
   THEKOGANS_MAKE_PATCH_VERSION=$(patch_version)\
+  THEKOGANS_MAKE_CONFIG_=$(config)\
+  THEKOGANS_MAKE_TYPE_=$(type)\
   THEKOGANS_UTIL_CONFIG_$(config)\
   THEKOGANS_UTIL_TYPE_$(type)\
   THEKOGANS_MAKE_CORE_CONFIG_$(config)\
@@ -91,7 +93,72 @@ endif
 cpp_headers :=\
   $(project_root)/include/$(organization)/$(project)/Action.h\
   $(project_root)/include/$(organization)/$(project)/Options.h\
-  $(project_root)/include/$(organization)/$(project)/Version.h\
+  $(project_root)/include/$(organization)/$(project)/Version.h
+    <!-- actions -->
+    <cpp_header>$(organization)/$(project_directory)/actions/Actions.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/add_source_project.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/add_source_toolchain.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/build_project.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/check_dependencies.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source_project.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source_toolchain.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/cleanup_toolchain.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/copy_dependencies.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/copy_plugin.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/create_build_system.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/create_source.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/delete_build_system.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/delete_source_project.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/delete_source_toolchain.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/delete_toolchain_source.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/destroy_source.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_build_config.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_build_type.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_naming_convention.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_project_dependency_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_project_type.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_project_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_schema_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_latest_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_sha2_256.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_versions.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_file.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_latest_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_sha2_256.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_versions.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_source_url.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_dependency_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_latest_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_sha2_256.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_versions.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_file.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_latest_version.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_sha2_256.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_versions.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_url.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_versions.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/install_library.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/install_plugin_hosts.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/install_plugin.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/install_program.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/list_dependencies.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/list_toolchain_sources.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/uninstall_library.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/uninstall_plugin.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/actions/uninstall_program.h</cpp_header>
+    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
+      <cpp_header>$(organization)/$(project_directory)/actions/add_toolchain_source.h</cpp_header>
+      <cpp_header>$(organization)/$(project_directory)/actions/update_toolchain_sources.h</cpp_header>
+    </if>
+    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+      <cpp_header>$(organization)/$(project_directory)/actions/list_cygwin_mount_table.h</cpp_header>
+      <cpp_header>$(organization)/$(project_directory)/actions/update_cl_dependencies.h</cpp_header>
+      <cpp_header>$(organization)/$(project_directory)/actions/update_windows_dependencies.h</cpp_header>
+    </if>
+# generators
+cpp_headers :=\
+  $(project_root)/include/$(organization)/$(project)/generators/Generators.h\
   $(project_root)/include/$(organization)/$(project)/generators/make.h
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   cpp_headers +=\
@@ -106,7 +173,9 @@ else
       $(project_root)/include/$(organization)/$(project)/generators/Xcode.h
   endif
 endif
+# functions
 cpp_headers +=\
+  $(project_root)/include/$(organization)/$(project)/functions/Functions.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_directory.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_directory_name.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_extension.h\
@@ -125,8 +194,13 @@ cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/functions/get_minor_version.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_patch_version.h\
   $(project_root)/include/$(organization)/$(project)/functions/have_feature.h\
+  $(project_root)/include/$(organization)/$(project)/functions/is_defined.h\
   $(project_root)/include/$(organization)/$(project)/functions/is_installed.h\
   $(project_root)/include/$(organization)/$(project)/functions/make_path.h\
+  $(project_root)/include/$(organization)/$(project)/functions/path_exists.h\
+  $(project_root)/include/$(organization)/$(project)/functions/to_build_system_path.h\
+  $(project_root)/include/$(organization)/$(project)/functions/to_project_build_path.h\
+  $(project_root)/include/$(organization)/$(project)/functions/to_project_path.h\
   $(project_root)/include/$(organization)/$(project)/functions/to_system_path.h
 
 c_sources :=\
@@ -181,6 +255,7 @@ cpp_sources +=\
   $(project_root)/src/actions/get_toolchain_dependency_version.cpp\
   $(project_root)/src/actions/get_toolchain_versions.cpp\
   $(project_root)/src/actions/cleanup_toolchain.cpp\
+  $(project_root)/src/generators/Generators.cpp
   $(project_root)/src/generators/make.cpp
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   cpp_sources +=\
@@ -190,6 +265,7 @@ ifeq "$(TOOLCHAIN_OS)" "Windows"
     $(project_root)/src/generators/vs2017.cpp
 endif
 cpp_sources +=\
+  $(project_root)/src/functions/Functions.cpp\
   $(project_root)/src/functions/get_directory.cpp\
   $(project_root)/src/functions/get_directory_name.cpp\
   $(project_root)/src/functions/get_extension.cpp\
