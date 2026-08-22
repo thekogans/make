@@ -22,23 +22,25 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_directory_name, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_directory_name, Function::TYPE)
 
-        core::Value get_directory_name::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "p" || (*it).first == "path") {
-                    return core::Value (util::Path (ToSystemPath ((*it).second)).GetDirectoryName ());
+            core::Value get_directory_name::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                         it = parameters.begin (),
+                         end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "p" || (*it).first == "path") {
+                        return core::Value (util::Path (ToSystemPath ((*it).second)).GetDirectoryName ());
+                    }
                 }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                    "get_directory_name: missing parameter [%s]",
+                    "-p | --path");
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "get_directory_name: missing parameter [%s]",
-                "-p | --path");
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

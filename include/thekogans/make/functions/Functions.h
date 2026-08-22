@@ -20,22 +20,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        /// \struct Functions Functions.h thekogans/make/functions/Functions.h
-        ///
-        /// \brief
-        /// Functions collects all functions in one convenient place. It exposes
-        /// a StaticInit method to register them all for discovery.
-        struct Functions {
         #if defined (THEKOGANS_MAKE_TYPE_Static)
+            /// \struct Functions Functions.h thekogans/make/functions/Functions.h
+            ///
             /// \brief
-            /// Because Make uses dynamic initialization, when using it in
-            /// static builds call this method to have it explicitly include
-            /// all known internal functions.
-            static void StaticInit ();
+            /// Functions collects all functions in one convenient place. It exposes
+            /// a StaticInit method to register them all for discovery.
+            struct Functions {
+                /// \brief
+                /// Because Make uses dynamic initialization, when using it in
+                /// static builds call this method to have it explicitly include
+                /// all known internal functions.
+                static void StaticInit ();
+            };
         #endif // defined (THEKOGANS_MAKE_TYPE_Static)
-        };
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans
 

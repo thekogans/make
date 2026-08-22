@@ -22,20 +22,22 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (update_toolchain_sources, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (update_toolchain_sources, Action::TYPE)
 
-        void update_toolchain_sources::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " [-o:organization]\n\n"
-                "a - Update the $TOOLCHAIN_ROOT/Sources.xml file.\n"
-                "o - Organization name.\n";
-        }
+            void update_toolchain_sources::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " [-o:organization]\n\n"
+                    "a - Update the $TOOLCHAIN_ROOT/Sources.xml file.\n"
+                    "o - Organization name.\n";
+            }
 
-        void update_toolchain_sources::Execute () {
-            core::ToolchainSources::Instance ()->UpdateSources (
-                Options::Instance ()->organization);
-        }
+            void update_toolchain_sources::Execute () {
+                core::ToolchainSources::Instance ()->UpdateSources (
+                    Options::Instance ()->organization);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

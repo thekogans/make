@@ -22,22 +22,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_version, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_version, Action::TYPE)
 
-        void get_project_version::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " path\n\n"
-                "a - Get the version (major.minor.patch) from a " THEKOGANS_MAKE_XML " file.\n"
-                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-        }
+            void get_project_version::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " path\n\n"
+                    "a - Get the version (major.minor.patch) from a " THEKOGANS_MAKE_XML " file.\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+            }
 
-        void get_project_version::Execute () {
-            std::cout << core::thekogans_make::GetVersion (
-                std::string (),
-                Options::Instance ()->path);
-            std::cout.flush ();
-        }
+            void get_project_version::Execute () {
+                std::cout << core::thekogans_make::GetVersion (
+                    std::string (),
+                    Options::Instance ()->path);
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

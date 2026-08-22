@@ -38,6 +38,7 @@
     #include "thekogans/make/functions/is_installed.h"
     #include "thekogans/make/functions/make_path.h"
     #include "thekogans/make/functions/path_exists.h"
+    #include "thekogans/make/functions/to_build_system_path.h"
     #include "thekogans/make/functions/to_project_build_path.h"
     #include "thekogans/make/functions/to_project_path.h"
     #include "thekogans/make/functions/to_system_path.h"
@@ -45,36 +46,39 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-    #if defined (THEKOGANS_MAKE_TYPE_Static)
-        static void Actions::StaticInit () {
-            get_directory_name::StaticInit ();
-            get_directory::StaticInit ();
-            get_extension::StaticInit ();
-            get_file_name::StaticInit ();
-            get_full_file_name::StaticInit ();
-            get_major_version::StaticInit ();
-            get_minor_version::StaticInit ();
-            get_patch_version::StaticInit ();
-            get_project_library::StaticInit ();
-            get_project_program::StaticInit ();
-            get_project_root::StaticInit ();
-            get_project_version::StaticInit ();
-            get_toolchain_include_dir::StaticInit ();
-            get_toolchain_latest_version::StaticInit ();
-            get_toolchain_lib_dir::StaticInit ();
-            get_toolchain_library::StaticInit ();
-            get_toolchain_program::StaticInit ();
-            have_feature::StaticInit ();
-            is_defined::StaticInit ();
-            is_installed::StaticInit ();
-            make_path::StaticInit ();
-            path_exists::StaticInit ();
-            to_project_build_path::StaticInit ();
-            to_project_path::StaticInit ();
-            to_system_path::StaticInit ();
-        }
-    #endif // defined (THEKOGANS_MAKE_TYPE_Static)
+        #if defined (THEKOGANS_MAKE_TYPE_Static)
+            void Functions::StaticInit () {
+                get_directory_name::StaticInit ();
+                get_directory::StaticInit ();
+                get_extension::StaticInit ();
+                get_file_name::StaticInit ();
+                get_full_file_name::StaticInit ();
+                get_major_version::StaticInit ();
+                get_minor_version::StaticInit ();
+                get_patch_version::StaticInit ();
+                get_project_library::StaticInit ();
+                get_project_program::StaticInit ();
+                get_project_root::StaticInit ();
+                get_project_version::StaticInit ();
+                get_toolchain_include_dir::StaticInit ();
+                get_toolchain_latest_version::StaticInit ();
+                get_toolchain_lib_dir::StaticInit ();
+                get_toolchain_library::StaticInit ();
+                get_toolchain_program::StaticInit ();
+                have_feature::StaticInit ();
+                is_defined::StaticInit ();
+                is_installed::StaticInit ();
+                make_path::StaticInit ();
+                path_exists::StaticInit ();
+                to_build_system_path::StaticInit ();
+                to_project_build_path::StaticInit ();
+                to_project_path::StaticInit ();
+                to_system_path::StaticInit ();
+            }
+        #endif // defined (THEKOGANS_MAKE_TYPE_Static)
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

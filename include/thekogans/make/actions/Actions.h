@@ -20,22 +20,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        /// \struct Actions Actions.h thekogans/make/actions/Actions.h
-        ///
-        /// \brief
-        /// Actions collects all actions in one convenient place. It exposes
-        /// a StaticInit method to register them all for discovery.
-        struct Actions {
         #if defined (THEKOGANS_MAKE_TYPE_Static)
+            /// \struct Actions Actions.h thekogans/make/actions/Actions.h
+            ///
             /// \brief
-            /// Because Make uses dynamic initialization, when using it in
-            /// static builds call this method to have it explicitly include
-            /// all known internal actions.
-            static void StaticInit ();
+            /// Actions collects all actions in one convenient place. It exposes
+            /// a StaticInit method to register them all for discovery.
+            struct Actions {
+                /// \brief
+                /// Because Make uses dynamic initialization, when using it in
+                /// static builds call this method to have it explicitly include
+                /// all known internal actions.
+                static void StaticInit ();
+            };
         #endif // defined (THEKOGANS_MAKE_TYPE_Static)
-        };
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans
 

@@ -22,18 +22,20 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_cygwin_mount_table, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_cygwin_mount_table, Action::TYPE)
 
-        void list_cygwin_mount_table::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << "\n\n"
-                "a - Dump " << util::GetEnvironmentVariable ("TOOLCHAIN_CYGWIN_MOUNT_TABLE") << " maps.\n";
-        }
+            void list_cygwin_mount_table::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << "\n\n"
+                    "a - Dump " << util::GetEnvironmentVariable ("TOOLCHAIN_CYGWIN_MOUNT_TABLE") << " maps.\n";
+            }
 
-        void list_cygwin_mount_table::Execute () {
-            core::CygwinMountTable::Instance ()->DumpEntries ();
-        }
+            void list_cygwin_mount_table::Execute () {
+                core::CygwinMountTable::Instance ()->DumpEntries ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

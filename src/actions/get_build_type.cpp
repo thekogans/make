@@ -22,22 +22,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_build_type, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_build_type, Action::TYPE)
 
-        void get_build_type::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " path\n\n"
-                "a - Get the build type (" TYPE_STATIC " | " TYPE_SHARED ") from a project or toolchain config file.\n"
-                "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
-        }
+            void get_build_type::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " path\n\n"
+                    "a - Get the build type (" TYPE_STATIC " | " TYPE_SHARED ") from a project or toolchain config file.\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
+            }
 
-        void get_build_type::Execute () {
-            std::cout << core::thekogans_make::GetBuildType (
-                std::string (),
-                Options::Instance ()->path);
-            std::cout.flush ();
-        }
+            void get_build_type::Execute () {
+                std::cout << core::thekogans_make::GetBuildType (
+                    std::string (),
+                    Options::Instance ()->path);
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

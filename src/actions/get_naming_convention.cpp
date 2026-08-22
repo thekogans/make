@@ -22,22 +22,25 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_naming_convention, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_naming_convention, Action::TYPE)
 
-        void get_naming_convention::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " path\n\n"
-                "a - Get the naming convention (" NAMING_CONVENTION_FLAT " | " NAMING_CONVENTION_HIERARCHICAL ") from a project or toolchain config file.\n"
-                "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
-        }
+            void get_naming_convention::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " path\n\n"
+                    "a - Get the naming convention (" NAMING_CONVENTION_FLAT " | " NAMING_CONVENTION_HIERARCHICAL
+                    ") from a project or toolchain config file.\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
+            }
 
-        void get_naming_convention::Execute () {
-            std::cout << core::thekogans_make::GetNamingConvention (
-                std::string (),
-                Options::Instance ()->path);
-            std::cout.flush ();
-        }
+            void get_naming_convention::Execute () {
+                std::cout << core::thekogans_make::GetNamingConvention (
+                    std::string (),
+                    Options::Instance ()->path);
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

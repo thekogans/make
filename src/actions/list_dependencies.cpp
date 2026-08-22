@@ -22,29 +22,31 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_dependencies, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_dependencies, Action::TYPE)
 
-        void list_dependencies::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
-                "a - List project/toolchain dependencies hierarchically.\n"
-                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                "path - Path to configuration file.\n";
-        }
+            void list_dependencies::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                    "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                    "a - List project/toolchain dependencies hierarchically.\n"
+                    "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                    "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                    "path - Path to configuration file.\n";
+            }
 
-        void list_dependencies::Execute () {
-            const core::thekogans_make &thekogans_make =
-                core::thekogans_make::GetConfig (
-                    std::string (),
-                    Options::Instance ()->path,
-                    Options::Instance ()->generator,
-                    Options::Instance ()->config,
-                    Options::Instance ()->type);
-            thekogans_make.ListDependencies (0);
-        }
+            void list_dependencies::Execute () {
+                const core::thekogans_make &thekogans_make =
+                    core::thekogans_make::GetConfig (
+                        std::string (),
+                        Options::Instance ()->path,
+                        Options::Instance ()->generator,
+                        Options::Instance ()->config,
+                        Options::Instance ()->type);
+                thekogans_make.ListDependencies (0);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

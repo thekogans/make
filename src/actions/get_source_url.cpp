@@ -22,21 +22,23 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_url, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_url, Action::TYPE)
 
-        void get_source_url::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization\n\n"
-                "a - Return the URL associated with the given source.\n"
-                "o - Source organization name.\n";
-        }
+            void get_source_url::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization\n\n"
+                    "a - Return the URL associated with the given source.\n"
+                    "o - Source organization name.\n";
+            }
 
-        void get_source_url::Execute () {
-            core::Source source (Options::Instance ()->organization);
-            std::cout << source.url;
-            std::cout.flush ();
-        }
+            void get_source_url::Execute () {
+                core::Source source (Options::Instance ()->organization);
+                std::cout << source.url;
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

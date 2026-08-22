@@ -22,32 +22,34 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (to_project_build_path, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (to_project_build_path, Function::TYPE)
 
-        core::Value to_project_build_path::Exec (
-                const core::thekogans_make &thekogans_make,
-                const Parameters &parameters) const {
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "p" || (*it).first == "path") {
-                    core::Value project_root =
-                        thekogans_make.LookupSymbol (core::thekogans_make::VAR_PROJECT_ROOT);
-                    core::Value build_directory =
-                        thekogans_make.LookupSymbol (core::thekogans_make::VAR_BUILD_DIRECTORY);
-                    return core::Value (
-                        core::MakePath (
+            core::Value to_project_build_path::Exec (
+                    const core::thekogans_make &thekogans_make,
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "p" || (*it).first == "path") {
+                        core::Value project_root =
+                            thekogans_make.LookupSymbol (core::thekogans_make::VAR_PROJECT_ROOT);
+                        core::Value build_directory =
+                            thekogans_make.LookupSymbol (core::thekogans_make::VAR_BUILD_DIRECTORY);
+                        return core::Value (
                             core::MakePath (
-                                project_root.ToString (),
-                                build_directory.ToString ()),
-                            (*it).second));
+                                core::MakePath (
+                                    project_root.ToString (),
+                                    build_directory.ToString ()),
+                                (*it).second));
+                    }
                 }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                    "to_project_build_path: missing parameter [%s]",
+                    "-p | --path");
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "to_project_build_path: missing parameter [%s]",
-                "-p | --path");
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

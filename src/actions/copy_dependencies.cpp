@@ -22,25 +22,27 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_dependencies, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_dependencies, Action::TYPE)
 
-        void copy_dependencies::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
-                "a - Copy shared libraries to program's bin directory.\n"
-                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-        }
+            void copy_dependencies::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                    "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                    "a - Copy shared libraries to program's bin directory.\n"
+                    "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                    "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+            }
 
-        void copy_dependencies::Execute  () {
-            core::CopyDependencies (
-                Options::Instance ()->path,
-                Options::Instance ()->config,
-                Options::Instance ()->type);
-        }
+            void copy_dependencies::Execute  () {
+                core::CopyDependencies (
+                    Options::Instance ()->path,
+                    Options::Instance ()->config,
+                    Options::Instance ()->type);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

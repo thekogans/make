@@ -30,21 +30,23 @@
 #include "thekogans/make/Options.h"
 #include "thekogans/make/Action.h"
 #include "thekogans/make/Version.h"
+#if defined (THEKOGANS_UTIL_TYPE_Static)
 #include "thekogans/make/actions/Actions.h"
 #include "thekogans/make/generators/Generators.h"
 #include "thekogans/make/functions/Functions.h"
+#endif // defined (THEKOGANS_UTIL_TYPE_Static)
 
 using namespace thekogans;
 
 int main (
         int argc,
         const char *argv[]) {
-#if defined (THEKOGANS_UTIL_TYPE_Static)
+#if defined (THEKOGANS_MAKE_TYPE_Static)
     util::StaticInit ();
-    make::Actions::StaticInit ();
-    make::Generators::StaticInit ();
-    make::Functions::StaticInit ();
-#endif // defined (THEKOGANS_UTIL_TYPE_Static)
+    make::actions::Actions::StaticInit ();
+    make::generators::Generators::StaticInit ();
+    make::functions::Functions::StaticInit ();
+#endif // defined (THEKOGANS_MAKE_TYPE_Static)
 #if defined (THEKOGANS_MAKE_HAVE_CURL)
     curl_global_init (CURL_GLOBAL_ALL);
 #endif // defined (THEKOGANS_MAKE_HAVE_CURL)

@@ -21,34 +21,36 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_latest_version, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_latest_version, Function::TYPE)
 
-        core::Value get_toolchain_latest_version::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            std::string organization;
-            std::string project;
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "o" || (*it).first == "organization") {
-                    organization = (*it).second;
+            core::Value get_toolchain_latest_version::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                std::string organization;
+                std::string project;
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "o" || (*it).first == "organization") {
+                        organization = (*it).second;
+                    }
+                    else if ((*it).first == "p" || (*it).first == "project") {
+                        project = (*it).second;
+                    }
                 }
-                else if ((*it).first == "p" || (*it).first == "project") {
-                    project = (*it).second;
+                std::string version;
+                if (core::Toolchain::Find (organization, project, version)) {
+                    return core::Value (core::Value::TYPE_Version, version);
+                }
+                else {
+                    THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                        "Unable to find: %s",
+                        core::Toolchain::GetConfig (organization, project, std::string ()).c_str ());
                 }
             }
-            std::string version;
-            if (core::Toolchain::Find (organization, project, version)) {
-                return core::Value (core::Value::TYPE_Version, version);
-            }
-            else {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "Unable to find: %s",
-                    core::Toolchain::GetConfig (organization, project, std::string ()).c_str ());
-            }
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

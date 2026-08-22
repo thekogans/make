@@ -24,34 +24,36 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source_toolchain, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source_toolchain, Action::TYPE)
 
-        void cleanup_source_toolchain::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
-                "a - Remove old versions associated with the given toolchain in "
-                "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n";
-        }
-
-        void cleanup_source_toolchain::Execute  () {
-            core::Source source (Options::Instance ()->organization);
-            std::set<std::string> toolchain;
-            if (!Options::Instance ()->project.empty ()) {
-                toolchain.insert (Options::Instance ()->project);
+            void cleanup_source_toolchain::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
+                    "a - Remove old versions associated with the given toolchain in "
+                    "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n";
             }
-            else {
-                source.GetToolchainNames (toolchain);
-            }
-            for (std::set<std::string>::const_iterator
-                     it = toolchain.begin (),
-                     end = toolchain.end (); it != end; ++it) {
-                source.CleanupToolchain (*it);
-            }
-            source.Save ();
-        }
 
+            void cleanup_source_toolchain::Execute  () {
+                core::Source source (Options::Instance ()->organization);
+                std::set<std::string> toolchain;
+                if (!Options::Instance ()->project.empty ()) {
+                    toolchain.insert (Options::Instance ()->project);
+                }
+                else {
+                    source.GetToolchainNames (toolchain);
+                }
+                for (std::set<std::string>::const_iterator
+                         it = toolchain.begin (),
+                         end = toolchain.end (); it != end; ++it) {
+                    source.CleanupToolchain (*it);
+                }
+                source.Save ();
+            }
+
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

@@ -20,22 +20,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace generators {
 
-        /// \struct Generators Generators.h thekogans/make/generators/Generators.h
-        ///
-        /// \brief
-        /// Generators collects all generators in one convenient place. It exposes
-        /// a StaticInit method to register them all for discovery.
-        struct Generators {
         #if defined (THEKOGANS_MAKE_TYPE_Static)
+            /// \struct Generators Generators.h thekogans/make/generators/Generators.h
+            ///
             /// \brief
-            /// Because Make uses dynamic initialization, when using it in
-            /// static builds call this method to have it explicitly include
-            /// all known internal generators.
-            static void StaticInit ();
+            /// Generators collects all generators in one convenient place. It exposes
+            /// a StaticInit method to register them all for discovery.
+            struct Generators {
+                /// \brief
+                /// Because Make uses dynamic initialization, when using it in
+                /// static builds call this method to have it explicitly include
+                /// all known internal generators.
+                static void StaticInit ();
+            };
         #endif // defined (THEKOGANS_MAKE_TYPE_Static)
-        };
 
+        } // namespace generators
     } // namespace make
 } // namespace thekogans
 

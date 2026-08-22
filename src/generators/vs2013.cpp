@@ -19,8 +19,10 @@
 
 namespace thekogans {
     namespace make {
+        namespace generators {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (vs2013, Generator::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (vs2013, Generator::TYPE)
 
+        } // namespace generators
     } // namespace make
 } // namespace thekogans

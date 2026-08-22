@@ -22,23 +22,25 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_file_name, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_file_name, Function::TYPE)
 
-        core::Value get_file_name::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "p" || (*it).first == "path") {
-                    return core::Value (util::Path (ToSystemPath ((*it).second)).GetFileName ());
+            core::Value get_file_name::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                         it = parameters.begin (),
+                         end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "p" || (*it).first == "path") {
+                        return core::Value (util::Path (ToSystemPath ((*it).second)).GetFileName ());
+                    }
                 }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                    "get_file_name: missing parameter [%s]",
+                    "-p | --path");
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "get_file_name: missing parameter [%s]",
-                "-p | --path");
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

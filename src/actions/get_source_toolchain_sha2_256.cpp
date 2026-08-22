@@ -22,29 +22,31 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_sha2_256, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_sha2_256, Action::TYPE)
 
-        void get_source_toolchain_sha2_256::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
-                "a - Return the SHA2-256 hash of a specified toolchain library/program/plugin.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "v - Project version.\n";
-        }
-
-        void get_source_toolchain_sha2_256::Execute () {
-            core::Source source (Options::Instance ()->organization);
-            if (Options::Instance ()->version.empty ()) {
-                Options::Instance ()->version =
-                    source.GetToolchainLatestVersion (Options::Instance ()->project);
+            void get_source_toolchain_sha2_256::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
+                    "a - Return the SHA2-256 hash of a specified toolchain library/program/plugin.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "v - Project version.\n";
             }
-            std::cout << source.GetToolchainSHA2_256 (
-                Options::Instance ()->project,
-                Options::Instance ()->version);
-            std::cout.flush ();
-        }
 
+            void get_source_toolchain_sha2_256::Execute () {
+                core::Source source (Options::Instance ()->organization);
+                if (Options::Instance ()->version.empty ()) {
+                    Options::Instance ()->version =
+                        source.GetToolchainLatestVersion (Options::Instance ()->project);
+                }
+                std::cout << source.GetToolchainSHA2_256 (
+                    Options::Instance ()->project,
+                    Options::Instance ()->version);
+                std::cout.flush ();
+            }
+
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

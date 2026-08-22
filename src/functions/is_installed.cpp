@@ -20,33 +20,35 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (is_installed, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (is_installed, Function::TYPE)
 
-        core::Value is_installed::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            std::string organization;
-            std::string project;
-            std::string version;
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "o" || (*it).first == "organization") {
-                    organization = (*it).second;
+            core::Value is_installed::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                std::string organization;
+                std::string project;
+                std::string version;
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "o" || (*it).first == "organization") {
+                        organization = (*it).second;
+                    }
+                    else if ((*it).first == "p" || (*it).first == "project") {
+                        project = (*it).second;
+                    }
+                    else if ((*it).first == "v" || (*it).first == "version") {
+                        version = (*it).second;
+                    }
                 }
-                else if ((*it).first == "p" || (*it).first == "project") {
-                    project = (*it).second;
+                if (version.empty ()) {
+                    version = core::Toolchain::GetLatestVersion (organization, project);
                 }
-                else if ((*it).first == "v" || (*it).first == "version") {
-                    version = (*it).second;
-                }
+                return core::Value (core::Toolchain::IsInstalled (organization, project, version));
             }
-            if (version.empty ()) {
-                version = core::Toolchain::GetLatestVersion (organization, project);
-            }
-            return core::Value (core::Toolchain::IsInstalled (organization, project, version));
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

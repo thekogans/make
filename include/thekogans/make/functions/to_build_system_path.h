@@ -15,28 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include "thekogans/make/core/Source.h"
-#include "thekogans/make/Options.h"
-#include "thekogans/make/actions/destroy_source.h"
+#if !defined (__thekogans_make_functions_to_build_system_path_h)
+#define __thekogans_make_functions_to_build_system_path_h
+
+#include "thekogans/make/core/Function.h"
 
 namespace thekogans {
     namespace make {
-        namespace actions {
+        namespace functions {
 
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (destroy_source, Action::TYPE)
+            struct to_build_system_path : public core::Function {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (to_build_system_path)
 
-            void destroy_source::PrintHelp (std::ostream &stream) const {
-                stream <<
-                    "-a:" << Type () << " -o:organization\n\n"
-                    "a - Destroy the given source in $DEVELOPMENT_ROOT/sources.\n"
-                    "o - Organization name.\n";
-            }
+                virtual core::Value Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const override;
+            };
 
-            void destroy_source::Execute () {
-                core::Source::Destroy (Options::Instance ()->organization);
-            }
-
-        } // namespace actions
+        } // namespace functions
     } // namespace make
 } // namespace thekogans
+
+#endif // __thekogans_make_functions_to_build_system_path_h

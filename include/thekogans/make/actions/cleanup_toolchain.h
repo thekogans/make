@@ -22,18 +22,20 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        struct cleanup_toolchain : public Action {
-            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (cleanup_toolchain)
+            struct cleanup_toolchain : public Action {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (cleanup_toolchain)
 
-            virtual std::string GetGroup () const override {
-                return GROUP_TOOLCHAIN;
-            }
+                virtual std::string GetGroup () const override {
+                    return GROUP_TOOLCHAIN;
+                }
 
-            virtual void PrintHelp (std::ostream &stream) const override;
-            virtual void Execute () override;
-        };
+                virtual void PrintHelp (std::ostream &stream) const override;
+                virtual void Execute () override;
+            };
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans
 

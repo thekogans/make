@@ -22,23 +22,25 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_latest_version, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_latest_version, Action::TYPE)
 
-        void get_source_toolchain_latest_version::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project\n\n"
-                "a - Return the latest version of a specified toolchain library/program/plugin.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n";
-        }
+            void get_source_toolchain_latest_version::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project\n\n"
+                    "a - Return the latest version of a specified toolchain library/program/plugin.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n";
+            }
 
-        void get_source_toolchain_latest_version::Execute () {
-            core::Source source (Options::Instance ()->organization);
-            std::cout <<
-                source.GetToolchainLatestVersion (Options::Instance ()->project);
-            std::cout.flush ();
-        }
+            void get_source_toolchain_latest_version::Execute () {
+                core::Source source (Options::Instance ()->organization);
+                std::cout <<
+                    source.GetToolchainLatestVersion (Options::Instance ()->project);
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

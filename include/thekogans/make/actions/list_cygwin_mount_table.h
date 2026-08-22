@@ -22,18 +22,20 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        struct list_cygwin_mount_table : public Action {
-            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (list_cygwin_mount_table)
+            struct list_cygwin_mount_table : public Action {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (list_cygwin_mount_table)
 
-            virtual std::string GetGroup () const override {
-                return GROUP_WINDOWS;
-            }
+                virtual std::string GetGroup () const override {
+                    return GROUP_WINDOWS;
+                }
 
-            virtual void PrintHelp (std::ostream &stream) const override;
-            virtual void Execute () override;
-        };
+                virtual void PrintHelp (std::ostream &stream) const override;
+                virtual void Execute () override;
+            };
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans
 

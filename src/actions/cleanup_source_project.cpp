@@ -23,46 +23,48 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source_project, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source_project, Action::TYPE)
 
-        void cleanup_source_project::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
-                "a - Remove old versions associated with the given project in "
-                "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "b - Project branch.\n";
-        }
+            void cleanup_source_project::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
+                    "a - Remove old versions associated with the given project in "
+                    "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "b - Project branch.\n";
+            }
 
-        void cleanup_source_project::Execute  () {
-             core::Source source (Options::Instance ()->organization);
-             std::set<std::string> projects;
-             if (!Options::Instance ()->project.empty ()) {
-                 projects.insert (Options::Instance ()->project);
-             }
-             else {
-                 source.GetProjectNames (projects);
-             }
-             for (std::set<std::string>::const_iterator
-                      it = projects.begin (),
-                      end = projects.end (); it != end; ++it) {
-                 std::set<std::string> branches;
-                 if (!Options::Instance ()->branch.empty ()) {
-                     branches.insert (Options::Instance ()->branch);
+            void cleanup_source_project::Execute  () {
+                 core::Source source (Options::Instance ()->organization);
+                 std::set<std::string> projects;
+                 if (!Options::Instance ()->project.empty ()) {
+                     projects.insert (Options::Instance ()->project);
                  }
                  else {
-                     source.GetProjectBranches (*it, branches);
+                     source.GetProjectNames (projects);
                  }
                  for (std::set<std::string>::const_iterator
-                          jt = branches.begin (),
-                          end = branches.end (); jt != end; ++jt) {
-                     source.CleanupProject (*it, *jt);
+                          it = projects.begin (),
+                          end = projects.end (); it != end; ++it) {
+                     std::set<std::string> branches;
+                     if (!Options::Instance ()->branch.empty ()) {
+                         branches.insert (Options::Instance ()->branch);
+                     }
+                     else {
+                         source.GetProjectBranches (*it, branches);
+                     }
+                     for (std::set<std::string>::const_iterator
+                              jt = branches.begin (),
+                              end = branches.end (); jt != end; ++jt) {
+                         source.CleanupProject (*it, *jt);
+                     }
                  }
+                 source.Save ();
              }
-             source.Save ();
-         }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

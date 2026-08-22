@@ -22,46 +22,48 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_project, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_project, Action::TYPE)
 
-        void delete_source_project::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
-                "a - Delete a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "b - Project branch.\n"
-                "v - Project version. Empty = Delete all versions.\n";
-        }
-
-        void delete_source_project::Execute () {
-            core::Source source (Options::Instance ()->organization);
-            std::set<std::string> branches;
-            if (!Options::Instance ()->branch.empty ()) {
-                branches.insert (Options::Instance ()->branch);
+            void delete_source_project::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
+                    "a - Delete a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "b - Project branch.\n"
+                    "v - Project version. Empty = Delete all versions.\n";
             }
-            else {
-                source.GetProjectBranches (Options::Instance ()->project, branches);
-            }
-            for (std::set<std::string>::const_iterator
-                     it = branches.begin (),
-                     end = branches.end (); it != end; ++it) {
-                std::set<std::string> versions;
-                if (!Options::Instance ()->version.empty ()) {
-                    versions.insert (Options::Instance ()->version);
+
+            void delete_source_project::Execute () {
+                core::Source source (Options::Instance ()->organization);
+                std::set<std::string> branches;
+                if (!Options::Instance ()->branch.empty ()) {
+                    branches.insert (Options::Instance ()->branch);
                 }
                 else {
-                    source.GetProjectVersions (Options::Instance ()->project, *it, versions);
+                    source.GetProjectBranches (Options::Instance ()->project, branches);
                 }
                 for (std::set<std::string>::const_iterator
-                         jt = versions.begin (),
-                         end = versions.end (); jt != end; ++jt) {
-                    source.DeleteProject (Options::Instance ()->project, *it, *jt);
+                         it = branches.begin (),
+                         end = branches.end (); it != end; ++it) {
+                    std::set<std::string> versions;
+                    if (!Options::Instance ()->version.empty ()) {
+                        versions.insert (Options::Instance ()->version);
+                    }
+                    else {
+                        source.GetProjectVersions (Options::Instance ()->project, *it, versions);
+                    }
+                    for (std::set<std::string>::const_iterator
+                             jt = versions.begin (),
+                             end = versions.end (); jt != end; ++jt) {
+                        source.DeleteProject (Options::Instance ()->project, *it, *jt);
+                    }
                 }
+                source.Save ();
             }
-            source.Save ();
-        }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

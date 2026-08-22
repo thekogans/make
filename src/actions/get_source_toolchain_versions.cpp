@@ -22,31 +22,33 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_versions, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_versions, Action::TYPE)
 
-        void get_source_toolchain_versions::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project\n\n"
-                "a - Return all versions of a specified toolchain library/program/plugin "
-                "from source $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n";
-        }
-
-        void get_source_toolchain_versions::Execute () {
-            core::Source source (Options::Instance ()->organization);
-            std::set<std::string> versions;
-            source.GetToolchainVersions (
-                Options::Instance ()->project,
-                versions);
-            for (std::set<std::string>::const_iterator
-                     it = versions.begin (),
-                     end = versions.end (); it != end; ++it) {
-                std::cout << *it << std::endl;
+            void get_source_toolchain_versions::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project\n\n"
+                    "a - Return all versions of a specified toolchain library/program/plugin "
+                    "from source $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n";
             }
-            std::cout.flush ();
-        }
 
+            void get_source_toolchain_versions::Execute () {
+                core::Source source (Options::Instance ()->organization);
+                std::set<std::string> versions;
+                source.GetToolchainVersions (
+                    Options::Instance ()->project,
+                    versions);
+                for (std::set<std::string>::const_iterator
+                         it = versions.begin (),
+                         end = versions.end (); it != end; ++it) {
+                    std::cout << *it << std::endl;
+                }
+                std::cout.flush ();
+            }
+
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

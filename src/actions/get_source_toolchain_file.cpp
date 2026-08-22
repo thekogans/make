@@ -22,29 +22,31 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_file, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_file, Action::TYPE)
 
-        void get_source_toolchain_file::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
-                "a - Return the file of a specified toolchain library/program/plugin.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "v - Project version.\n";
-        }
-
-        void get_source_toolchain_file::Execute () {
-            core::Source source (Options::Instance ()->organization);
-            if (Options::Instance ()->version.empty ()) {
-                Options::Instance ()->version =
-                    source.GetToolchainLatestVersion (Options::Instance ()->project);
+            void get_source_toolchain_file::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
+                    "a - Return the file of a specified toolchain library/program/plugin.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "v - Project version.\n";
             }
-            std::cout << source.GetToolchainFile (
-                Options::Instance ()->project,
-                Options::Instance ()->version);
-            std::cout.flush ();
-        }
 
+            void get_source_toolchain_file::Execute () {
+                core::Source source (Options::Instance ()->organization);
+                if (Options::Instance ()->version.empty ()) {
+                    Options::Instance ()->version =
+                        source.GetToolchainLatestVersion (Options::Instance ()->project);
+                }
+                std::cout << source.GetToolchainFile (
+                    Options::Instance ()->project,
+                    Options::Instance ()->version);
+                std::cout.flush ();
+            }
+
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

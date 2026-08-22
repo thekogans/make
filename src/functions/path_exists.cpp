@@ -22,23 +22,25 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (path_exists, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (path_exists, Function::TYPE)
 
-        core::Value path_exists::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "p" || (*it).first == "path") {
-                    return core::Value (util::Path ((*it).second).Exists ());
+            core::Value path_exists::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "p" || (*it).first == "path") {
+                        return core::Value (util::Path ((*it).second).Exists ());
+                    }
                 }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                    "path_exists: missing parameter [%s]",
+                    "-p | --path");
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "path_exists: missing parameter [%s]",
-                "-p | --path");
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

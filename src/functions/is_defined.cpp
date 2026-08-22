@@ -22,25 +22,27 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (is_defined, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (is_defined, Function::TYPE)
 
-        core::Value is_defined::Exec (
-                const core::thekogans_make &thekogans_make,
-                const Parameters &parameters) const {
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "s" || (*it).first == "symbol") {
-                    return core::Value (
-                        thekogans_make.LookupSymbol ((*it).second).type !=
-                        core::Value::TYPE_Unknown);
+            core::Value is_defined::Exec (
+                    const core::thekogans_make &thekogans_make,
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "s" || (*it).first == "symbol") {
+                        return core::Value (
+                            thekogans_make.LookupSymbol ((*it).second).type !=
+                            core::Value::TYPE_Unknown);
+                    }
                 }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                    "is_defined: missing parameter [%s]",
+                    "-s | --symbol");
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "is_defined: missing parameter [%s]",
-                "-s | --symbol");
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

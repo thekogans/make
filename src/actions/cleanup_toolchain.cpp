@@ -27,69 +27,71 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_toolchain, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_toolchain, Action::TYPE)
 
-        void cleanup_toolchain::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " [-o:organization] [-p:project]\n\n"
-                "a - Delete old toolchain versions.\n"
-                "o - Optional organization name.\n"
-                "p - Optional project name.\n";
-        }
+            void cleanup_toolchain::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " [-o:organization] [-p:project]\n\n"
+                    "a - Delete old toolchain versions.\n"
+                    "o - Optional organization name.\n"
+                    "p - Optional project name.\n";
+            }
 
-        void cleanup_toolchain::Execute  () {
-            std::string path =
-                ToSystemPath (core::MakePath (core::_TOOLCHAIN_DIR, core::CONFIG_DIR));
-            if (util::Path (path).Exists ()) {
-                typedef std::pair<std::string, std::string> Toolchain;
-                typedef std::set<util::Version, std::greater<util::Version>> Versions;
-                typedef std::map<Toolchain, Versions> ToolchainVersions;
-                ToolchainVersions toolchainVersions;
-                util::Directory directory (path);
-                util::Directory::Entry entry;
-                for (bool gotEntry = directory.GetFirstEntry (entry);
-                     gotEntry; gotEntry = directory.GetNextEntry (entry)) {
-                    if (entry.type == util::Directory::Entry::File) {
-                        std::string organization;
-                        std::string project;
-                        std::string branch;
-                        std::string version;
-                        std::string ext;
-                        if (core::ParseFileName (entry.name, organization, project,
-                                branch, version, ext) == 5 &&
-                                (Options::Instance ()->organization.empty () ||
-                                    Options::Instance ()->organization == organization) &&
-                                (Options::Instance ()->project.empty () ||
-                                    Options::Instance ()->project == project) &&
-                                ext == core::XML_EXT) {
-                            // Toolchain config files are branchless.
-                            assert (branch.empty ());
-                            toolchainVersions[
-                                Toolchain (organization, project)].insert (
-                                    util::Version (version));
+            void cleanup_toolchain::Execute  () {
+                std::string path =
+                    ToSystemPath (core::MakePath (core::_TOOLCHAIN_DIR, core::CONFIG_DIR));
+                if (util::Path (path).Exists ()) {
+                    typedef std::pair<std::string, std::string> Toolchain;
+                    typedef std::set<util::Version, std::greater<util::Version>> Versions;
+                    typedef std::map<Toolchain, Versions> ToolchainVersions;
+                    ToolchainVersions toolchainVersions;
+                    util::Directory directory (path);
+                    util::Directory::Entry entry;
+                    for (bool gotEntry = directory.GetFirstEntry (entry);
+                         gotEntry; gotEntry = directory.GetNextEntry (entry)) {
+                        if (entry.type == util::Directory::Entry::File) {
+                            std::string organization;
+                            std::string project;
+                            std::string branch;
+                            std::string version;
+                            std::string ext;
+                            if (core::ParseFileName (entry.name, organization, project,
+                                    branch, version, ext) == 5 &&
+                                    (Options::Instance ()->organization.empty () ||
+                                        Options::Instance ()->organization == organization) &&
+                                    (Options::Instance ()->project.empty () ||
+                                        Options::Instance ()->project == project) &&
+                                    ext == core::XML_EXT) {
+                                // Toolchain config files are branchless.
+                                assert (branch.empty ());
+                                toolchainVersions[
+                                    Toolchain (organization, project)].insert (
+                                        util::Version (version));
+                            }
                         }
                     }
-                }
-                std::unordered_set<std::string> visitedDependencies;
-                for (ToolchainVersions::const_iterator
-                         it = toolchainVersions.begin (),
-                         end = toolchainVersions.end (); it != end; ++it) {
-                    if (it->second.size () > 1) {
-                        Versions::const_iterator jt = it->second.begin ();
-                        Versions::const_iterator end = it->second.end ();
-                        for (++jt; jt != end; ++jt) {
-                            core::Uninstall (
-                                it->first.first,
-                                it->first.second,
-                                (*jt).ToString (),
-                                false,
-                                visitedDependencies);
+                    std::unordered_set<std::string> visitedDependencies;
+                    for (ToolchainVersions::const_iterator
+                             it = toolchainVersions.begin (),
+                             end = toolchainVersions.end (); it != end; ++it) {
+                        if (it->second.size () > 1) {
+                            Versions::const_iterator jt = it->second.begin ();
+                            Versions::const_iterator end = it->second.end ();
+                            for (++jt; jt != end; ++jt) {
+                                core::Uninstall (
+                                    it->first.first,
+                                    it->first.second,
+                                    (*jt).ToString (),
+                                    false,
+                                    visitedDependencies);
+                            }
                         }
                     }
                 }
             }
-        }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

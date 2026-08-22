@@ -22,20 +22,22 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_toolchain_source, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_toolchain_source, Action::TYPE)
 
-        void delete_toolchain_source::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization\n\n"
-                "a - Delete the given organization from the $TOOLCHAIN_ROOT/Sources.xml file.\n"
-                "o - Name of organization to delete as source.\n";
-        }
+            void delete_toolchain_source::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization\n\n"
+                    "a - Delete the given organization from the $TOOLCHAIN_ROOT/Sources.xml file.\n"
+                    "o - Name of organization to delete as source.\n";
+            }
 
-        void delete_toolchain_source::Execute () {
-            core::ToolchainSources::Instance ()->DeleteSource (
-                Options::Instance ()->organization);
-        }
+            void delete_toolchain_source::Execute () {
+                core::ToolchainSources::Instance ()->DeleteSource (
+                    Options::Instance ()->organization);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

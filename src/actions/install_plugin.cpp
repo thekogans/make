@@ -22,28 +22,30 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_plugin, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_plugin, Action::TYPE)
 
-        void install_plugin::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
-                "[-w:[yes | no]] [-x:[yes | no]] path\n\n"
-                "a - Install the given plugin in to it's toolchain hosts.\n"
-                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                "w - Hide commands [yes | no].\n"
-                "x - Parallel build [yes | no].\n"
-                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-        }
+            void install_plugin::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
+                    "[-w:[yes | no]] [-x:[yes | no]] path\n\n"
+                    "a - Install the given plugin in to it's toolchain hosts.\n"
+                    "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                    "w - Hide commands [yes | no].\n"
+                    "x - Parallel build [yes | no].\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+            }
 
-        void install_plugin::Execute () {
-            core::Installer installer (
-                Options::Instance ()->config,
-                Options::Instance ()->type,
-                Options::Instance ()->hide_commands,
-                Options::Instance ()->parallel_build);
-            installer.InstallPlugin (Options::Instance ()->path);
-        }
+            void install_plugin::Execute () {
+                core::Installer installer (
+                    Options::Instance ()->config,
+                    Options::Instance ()->type,
+                    Options::Instance ()->hide_commands,
+                    Options::Instance ()->parallel_build);
+                installer.InstallPlugin (Options::Instance ()->path);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

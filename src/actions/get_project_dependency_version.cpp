@@ -22,37 +22,39 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_dependency_version, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_dependency_version, Action::TYPE)
 
-        void get_project_dependency_version::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project [-b:branch] [-e:example] "
-                "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
-                "a - Get the project dependency version.\n"
-                "o - Dependency organization name.\n"
-                "p - Dependency project name.\n"
-                "b - Dependency project branch.\n"
-                "e - Dependency project example.\n"
-                "c - Project build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                "t - Project link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
-        }
+            void get_project_dependency_version::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project [-b:branch] [-e:example] "
+                    "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                    "a - Get the project dependency version.\n"
+                    "o - Dependency organization name.\n"
+                    "p - Dependency project name.\n"
+                    "b - Dependency project branch.\n"
+                    "e - Dependency project example.\n"
+                    "c - Project build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                    "t - Project link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
+            }
 
-        void get_project_dependency_version::Execute () {
-            const core::thekogans_make &thekogans_make =
-                core::thekogans_make::GetConfig (
-                    std::string (),
-                    Options::Instance ()->path,
-                    Options::Instance ()->generator,
-                    Options::Instance ()->config,
-                    Options::Instance ()->type);
-            std::cout << thekogans_make.GetProjectDependencyVersion (
-                Options::Instance ()->organization,
-                Options::Instance ()->project,
-                Options::Instance ()->example);
-            std::cout.flush ();
-        }
+            void get_project_dependency_version::Execute () {
+                const core::thekogans_make &thekogans_make =
+                    core::thekogans_make::GetConfig (
+                        std::string (),
+                        Options::Instance ()->path,
+                        Options::Instance ()->generator,
+                        Options::Instance ()->config,
+                        Options::Instance ()->type);
+                std::cout << thekogans_make.GetProjectDependencyVersion (
+                    Options::Instance ()->organization,
+                    Options::Instance ()->project,
+                    Options::Instance ()->example);
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

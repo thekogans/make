@@ -23,32 +23,34 @@
 
 namespace thekogans {
     namespace make {
+        namespace generators {
 
-        struct vs2015 : public vsBase {
-            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (vs2015)
+            struct vs2015 : public vsBase {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (vs2015)
 
-            vs2015 (bool rootProject = true) :
-                vsBase (rootProject) {}
+                vs2015 (bool rootProject = true) :
+                    vsBase (rootProject) {}
 
-            virtual std::string slnGetFormatVersion () const {
-                return "12.00";
-            }
-            virtual std::string slnGetVisualStudio () const {
-                return "14";
-            }
+                virtual std::string slnGetFormatVersion () const {
+                    return "12.00";
+                }
+                virtual std::string slnGetVisualStudio () const {
+                    return "14";
+                }
 
-            virtual std::string vcxprojGetToolsVersion () const {
-                return "14.0";
-            }
-            virtual std::string vcxprojGetPlatformToolset () const {
-                return "v140";
-            }
+                virtual std::string vcxprojGetToolsVersion () const {
+                    return "14.0";
+                }
+                virtual std::string vcxprojGetPlatformToolset () const {
+                    return "v140";
+                }
 
-            virtual std::string vcxprojfiltersGetToolsVersion () const {
-                return "4.0";
-            }
-        };
+                virtual std::string vcxprojfiltersGetToolsVersion () const {
+                    return "4.0";
+                }
+            };
 
+        } // namespace generators
     } // namespace make
 } // namespace thekogans
 

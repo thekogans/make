@@ -22,15 +22,17 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        struct get_project_root : public core::Function {
-            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_project_root)
+            struct get_project_root : public core::Function {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_project_root)
 
-            virtual core::Value Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const override;
-        };
+                virtual core::Value Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const override;
+            };
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans
 

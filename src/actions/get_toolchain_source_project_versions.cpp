@@ -24,38 +24,40 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_project_versions, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_project_versions, Action::TYPE)
 
-        void get_toolchain_source_project_versions::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
-                "a - Return all versions of a specified project from organization "
-                "in $TOOLCHAIN_ROOT/Sources.xml.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "b - Project branch.\n";
-        }
+            void get_toolchain_source_project_versions::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
+                    "a - Return all versions of a specified project from organization "
+                    "in $TOOLCHAIN_ROOT/Sources.xml.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "b - Project branch.\n";
+            }
 
-        void get_toolchain_source_project_versions::Execute () {
-            if (Options::Instance ()->branch.empty ()) {
-                Options::Instance ()->branch = core::GetDefaultBranch (
+            void get_toolchain_source_project_versions::Execute () {
+                if (Options::Instance ()->branch.empty ()) {
+                    Options::Instance ()->branch = core::GetDefaultBranch (
+                        Options::Instance ()->organization,
+                        Options::Instance ()->project);
+                }
+                std::set<std::string> versions;
+                core::ToolchainSources::Instance ()->GetSourceProjectVersions (
                     Options::Instance ()->organization,
-                    Options::Instance ()->project);
+                    Options::Instance ()->project,
+                    Options::Instance ()->branch,
+                    versions);
+                for (std::set<std::string>::const_iterator
+                         it = versions.begin (),
+                         end = versions.end (); it != end; ++it) {
+                    std::cout << *it << std::endl;
+                }
+                std::cout.flush ();
             }
-            std::set<std::string> versions;
-            core::ToolchainSources::Instance ()->GetSourceProjectVersions (
-                Options::Instance ()->organization,
-                Options::Instance ()->project,
-                Options::Instance ()->branch,
-                versions);
-            for (std::set<std::string>::const_iterator
-                     it = versions.begin (),
-                     end = versions.end (); it != end; ++it) {
-                std::cout << *it << std::endl;
-            }
-            std::cout.flush ();
-        }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

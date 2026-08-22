@@ -22,43 +22,45 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_lib_dir, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_lib_dir, Function::TYPE)
 
-        core::Value get_toolchain_lib_dir::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            std::string organization;
-            std::string project;
-            std::string version;
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "o" || (*it).first == "organization") {
-                    organization = (*it).second;
+            core::Value get_toolchain_lib_dir::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                std::string organization;
+                std::string project;
+                std::string version;
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "o" || (*it).first == "organization") {
+                        organization = (*it).second;
+                    }
+                    else if ((*it).first == "p" || (*it).first == "project") {
+                        project = (*it).second;
+                    }
+                    else if ((*it).first == "v" || (*it).first == "version") {
+                        version = (*it).second;
+                    }
                 }
-                else if ((*it).first == "p" || (*it).first == "project") {
-                    project = (*it).second;
+                if (core::Toolchain::Find (organization, project, version)) {
+                    std::list<std::string> components;
+                    components.push_back (core::_TOOLCHAIN_DIR);
+                    components.push_back (core::LIB_DIR);
+                    components.push_back (
+                        core::GetFileName (
+                            organization, project, std::string (), version, std::string ()));
+                    return core::Value (core::MakePath (components, false));
                 }
-                else if ((*it).first == "v" || (*it).first == "version") {
-                    version = (*it).second;
+                else {
+                    THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                        "Unable to find: %s",
+                        core::Toolchain::GetConfig (organization, project, version).c_str ());
                 }
             }
-            if (core::Toolchain::Find (organization, project, version)) {
-                std::list<std::string> components;
-                components.push_back (core::_TOOLCHAIN_DIR);
-                components.push_back (core::LIB_DIR);
-                components.push_back (
-                    core::GetFileName (
-                        organization, project, std::string (), version, std::string ()));
-                return core::Value (core::MakePath (components, false));
-            }
-            else {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "Unable to find: %s",
-                    core::Toolchain::GetConfig (organization, project, version).c_str ());
-            }
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

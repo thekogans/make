@@ -22,29 +22,31 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_library, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_library, Action::TYPE)
 
-        void install_library::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
-                "[-t:[" TYPE_STATIC " | " TYPE_SHARED "]] [-w:[yes | no]] [-x:[yes | no]] path\n\n"
-                "a - Install the given library in to the toolchain (including dependencies).\n"
-                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                "w - Hide commands [yes | no].\n"
-                "x - Parallel build [yes | no].\n"
-                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-        }
+            void install_library::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
+                    "[-t:[" TYPE_STATIC " | " TYPE_SHARED "]] [-w:[yes | no]] [-x:[yes | no]] path\n\n"
+                    "a - Install the given library in to the toolchain (including dependencies).\n"
+                    "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                    "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                    "w - Hide commands [yes | no].\n"
+                    "x - Parallel build [yes | no].\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+            }
 
-        void install_library::Execute () {
-            core::Installer installer (
-                Options::Instance ()->config,
-                Options::Instance ()->type,
-                Options::Instance ()->hide_commands,
-                Options::Instance ()->parallel_build);
-            installer.InstallLibrary (Options::Instance ()->path);
-        }
+            void install_library::Execute () {
+                core::Installer installer (
+                    Options::Instance ()->config,
+                    Options::Instance ()->type,
+                    Options::Instance ()->hide_commands,
+                    Options::Instance ()->parallel_build);
+                installer.InstallLibrary (Options::Instance ()->path);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

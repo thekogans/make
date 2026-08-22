@@ -22,19 +22,21 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_version, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_version, Function::TYPE)
 
-        core::Value get_project_version::Exec (
-                const core::thekogans_make &thekogans_make,
-                const Parameters &parameters) const {
-            return
-                core::Value (
-                    core::Value::TYPE_Version,
-                    core::thekogans_make::GetVersion (
-                        get_project_root ().Exec (thekogans_make, parameters).ToString (),
-                        THEKOGANS_MAKE_XML));
-        }
+            core::Value get_project_version::Exec (
+                    const core::thekogans_make &thekogans_make,
+                    const Parameters &parameters) const {
+                return
+                    core::Value (
+                        core::Value::TYPE_Version,
+                        core::thekogans_make::GetVersion (
+                            get_project_root ().Exec (thekogans_make, parameters).ToString (),
+                            THEKOGANS_MAKE_XML));
+            }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

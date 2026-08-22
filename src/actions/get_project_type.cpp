@@ -22,22 +22,25 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_type, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_type, Action::TYPE)
 
-        void get_project_type::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " path\n\n"
-                "a - Get the project type (" PROJECT_TYPE_LIBRARY " | " PROJECT_TYPE_PROGRAM " | " PROJECT_TYPE_PLUGIN ") from a project or toolchain config file.\n"
-                "path - Path to " THEKOGANS_MAKE_XML " or toolchain config file.\n";
-        }
+            void get_project_type::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " path\n\n"
+                    "a - Get the project type (" PROJECT_TYPE_LIBRARY " | " PROJECT_TYPE_PROGRAM
+                    " | " PROJECT_TYPE_PLUGIN ") from a project or toolchain config file.\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " or toolchain config file.\n";
+            }
 
-        void get_project_type::Execute () {
-            std::cout << core::thekogans_make::GetProjectType (
-                std::string (),
-                Options::Instance ()->path);
-            std::cout.flush ();
-        }
+            void get_project_type::Execute () {
+                std::cout << core::thekogans_make::GetProjectType (
+                    std::string (),
+                    Options::Instance ()->path);
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

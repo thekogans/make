@@ -15,25 +15,30 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#if !defined (__thekogans_make_functions_get_toolchain_library_h)
-#define __thekogans_make_functions_get_toolchain_library_h
-
-#include "thekogans/make/core/Function.h"
+#include "thekogans/util/Exception.h"
+#include "thekogans/make/core/Utils.h"
+#include "thekogans/make/functions/to_build_system_path.h"
 
 namespace thekogans {
     namespace make {
         namespace functions {
 
-            struct get_toolchain_library : public core::Function {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_library)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (to_build_system_path, Function::TYPE)
 
-                virtual core::Value Exec (
+            core::Value to_build_system_path::Exec (
                     const core::thekogans_make & /*thekogans_make*/,
-                    const Parameters &parameters) const override;
-            };
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                         it = parameters.begin (),
+                         end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "p" || (*it).first == "path") {
+                        return core::Value (ToSystemPath ((*it).second));
+                    }
+                }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                    "to_build_system_path: missing parameter [-p | --path]");
+            }
 
         } // namespace functions
     } // namespace make
 } // namespace thekogans
-
-#endif // __thekogans_make_functions_get_toolchain_library_h

@@ -22,26 +22,28 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (uninstall_plugin, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (uninstall_plugin, Action::TYPE)
 
-        void uninstall_plugin::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project [-v:version] [-d]\n\n"
-                "a - Uninstall a toolchain plugin.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "v - Project version.\n"
-                "d - Delete dependencies.\n";
-        }
+            void uninstall_plugin::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project [-v:version] [-d]\n\n"
+                    "a - Uninstall a toolchain plugin.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "v - Project version.\n"
+                    "d - Delete dependencies.\n";
+            }
 
-        void uninstall_plugin::Execute () {
-            core::UninstallProgram (
-                Options::Instance ()->organization,
-                Options::Instance ()->project,
-                Options::Instance ()->version,
-                Options::Instance ()->dependencies);
-        }
+            void uninstall_plugin::Execute () {
+                core::UninstallProgram (
+                    Options::Instance ()->organization,
+                    Options::Instance ()->project,
+                    Options::Instance ()->version,
+                    Options::Instance ()->dependencies);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

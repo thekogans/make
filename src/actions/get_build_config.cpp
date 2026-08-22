@@ -22,22 +22,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_build_config, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_build_config, Action::TYPE)
 
-        void get_build_config::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " path\n\n"
-                "a - Get the build config (" CONFIG_DEBUG " | " CONFIG_RELEASE ") from a project or toolchain config file.\n"
-                "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
-        }
+            void get_build_config::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " path\n\n"
+                    "a - Get the build config (" CONFIG_DEBUG " | " CONFIG_RELEASE ") from a project or toolchain config file.\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
+            }
 
-        void get_build_config::Execute () {
-            std::cout << core::thekogans_make::GetBuildConfig (
-                std::string (),
-                Options::Instance ()->path);
-            std::cout.flush ();
-        }
+            void get_build_config::Execute () {
+                std::cout << core::thekogans_make::GetBuildConfig (
+                    std::string (),
+                    Options::Instance ()->path);
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

@@ -21,19 +21,21 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_schema_version, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_schema_version, Action::TYPE)
 
-        void get_schema_version::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << "\n\n"
-                "a - Print the schema version (" << THEKOGANS_MAKE_XML_SCHEMA_VERSION << ").\n";
-        }
+            void get_schema_version::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << "\n\n"
+                    "a - Print the schema version (" << THEKOGANS_MAKE_XML_SCHEMA_VERSION << ").\n";
+            }
 
-        void get_schema_version::Execute () {
-            std::cout << THEKOGANS_MAKE_XML_SCHEMA_VERSION;
-            std::cout.flush ();
-        }
+            void get_schema_version::Execute () {
+                std::cout << THEKOGANS_MAKE_XML_SCHEMA_VERSION;
+                std::cout.flush ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

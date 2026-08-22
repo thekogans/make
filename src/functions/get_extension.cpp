@@ -22,21 +22,23 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_extension, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_extension, Function::TYPE)
 
-        core::Value get_extension::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "p" || (*it).first == "path") {
-                    return core::Value (util::Path ((*it).second).GetExtension ());
+            core::Value get_extension::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                         it = parameters.begin (),
+                         end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "p" || (*it).first == "path") {
+                        return core::Value (util::Path ((*it).second).GetExtension ());
+                    }
                 }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("get_extension: missing parameter [-p | --path]");
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("get_extension: missing parameter [-p | --path]");
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

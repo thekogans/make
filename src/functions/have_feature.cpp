@@ -22,25 +22,27 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (have_feature, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (have_feature, Function::TYPE)
 
-        core::Value have_feature::Exec (
-                const core::thekogans_make &thekogans_make,
-                const Parameters &parameters) const {
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "f" || (*it).first == "feature") {
-                    return core::Value (
-                        thekogans_make.features.find ((*it).second) !=
-                        thekogans_make.features.end ());
+            core::Value have_feature::Exec (
+                    const core::thekogans_make &thekogans_make,
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "f" || (*it).first == "feature") {
+                        return core::Value (
+                            thekogans_make.features.find ((*it).second) !=
+                            thekogans_make.features.end ());
+                    }
                 }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                    "have_feature: missing parameter [%s]",
+                    "-f | --feature");
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "have_feature: missing parameter [%s]",
-                "-f | --feature");
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

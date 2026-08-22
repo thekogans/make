@@ -22,29 +22,31 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_build_system, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_build_system, Action::TYPE)
 
-        void delete_build_system::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -g:[" << core::GetGeneratorList (" | ") << "] "
-                "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] path\n\n"
-                "a - Delete a build system.\n"
-                "g - Build system generator.\n"
-                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                "d - Follow dependencies.\n"
-                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-        }
+            void delete_build_system::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -g:[" << core::GetGeneratorList (" | ") << "] "
+                    "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] path\n\n"
+                    "a - Delete a build system.\n"
+                    "g - Build system generator.\n"
+                    "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                    "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                    "d - Follow dependencies.\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+            }
 
-        void delete_build_system::Execute () {
-            core::DeleteBuildSystem (
-                Options::Instance ()->path,
-                Options::Instance ()->generator,
-                Options::Instance ()->config,
-                Options::Instance ()->type,
-                Options::Instance ()->dependencies);
-        }
+            void delete_build_system::Execute () {
+                core::DeleteBuildSystem (
+                    Options::Instance ()->path,
+                    Options::Instance ()->generator,
+                    Options::Instance ()->config,
+                    Options::Instance ()->type,
+                    Options::Instance ()->dependencies);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

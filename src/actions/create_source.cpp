@@ -22,22 +22,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (create_source, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (create_source, Action::TYPE)
 
-        void create_source::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -u:url\n\n"
-                "a - Create a new source in $DEVELOPMENT_ROOT/sources.\n"
-                "o - Organization name.\n"
-                "u - Organization URL.\n";
-        }
+            void create_source::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -u:url\n\n"
+                    "a - Create a new source in $DEVELOPMENT_ROOT/sources.\n"
+                    "o - Organization name.\n"
+                    "u - Organization URL.\n";
+            }
 
-        void create_source::Execute () {
-            core::Source::Create (
-                Options::Instance ()->organization,
-                Options::Instance ()->url);
-        }
+            void create_source::Execute () {
+                core::Source::Create (
+                    Options::Instance ()->organization,
+                    Options::Instance ()->url);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

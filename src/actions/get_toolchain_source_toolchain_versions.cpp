@@ -22,30 +22,32 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_versions, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_versions, Action::TYPE)
 
-        void get_toolchain_source_toolchain_versions::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project\n\n"
-                "a - Return all version of a specified toolchain library/program/plugin.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n";
-        }
-
-        void get_toolchain_source_toolchain_versions::Execute () {
-            std::set<std::string> versions;
-            core::ToolchainSources::Instance ()->GetSourceToolchainVersions (
-                Options::Instance ()->organization,
-                Options::Instance ()->project,
-                versions);
-            for (std::set<std::string>::const_iterator
-                     it = versions.begin (),
-                     end = versions.end (); it != end; ++it) {
-                std::cout << *it << std::endl;
+            void get_toolchain_source_toolchain_versions::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project\n\n"
+                    "a - Return all version of a specified toolchain library/program/plugin.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n";
             }
-            std::cout.flush ();
-        }
 
+            void get_toolchain_source_toolchain_versions::Execute () {
+                std::set<std::string> versions;
+                core::ToolchainSources::Instance ()->GetSourceToolchainVersions (
+                    Options::Instance ()->organization,
+                    Options::Instance ()->project,
+                    versions);
+                for (std::set<std::string>::const_iterator
+                         it = versions.begin (),
+                         end = versions.end (); it != end; ++it) {
+                    std::cout << *it << std::endl;
+                }
+                std::cout.flush ();
+            }
+
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

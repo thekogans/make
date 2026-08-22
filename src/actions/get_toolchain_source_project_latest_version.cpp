@@ -23,30 +23,32 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_project_latest_version, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_project_latest_version, Action::TYPE)
 
-        void get_toolchain_source_project_latest_version::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
-                "a - Return the latest version of a specified project.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "b - Project branch.\n";
-        }
-
-        void get_toolchain_source_project_latest_version::Execute () {
-            if (Options::Instance ()->branch.empty ()) {
-                Options::Instance ()->branch = core::GetDefaultBranch (
-                    Options::Instance ()->organization,
-                    Options::Instance ()->project);
+            void get_toolchain_source_project_latest_version::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
+                    "a - Return the latest version of a specified project.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "b - Project branch.\n";
             }
-            std::cout << core::ToolchainSources::Instance ()->GetSourceProjectLatestVersion (
-                Options::Instance ()->organization,
-                Options::Instance ()->project,
-                Options::Instance ()->branch);
-            std::cout.flush ();
-        }
 
+            void get_toolchain_source_project_latest_version::Execute () {
+                if (Options::Instance ()->branch.empty ()) {
+                    Options::Instance ()->branch = core::GetDefaultBranch (
+                        Options::Instance ()->organization,
+                        Options::Instance ()->project);
+                }
+                std::cout << core::ToolchainSources::Instance ()->GetSourceProjectLatestVersion (
+                    Options::Instance ()->organization,
+                    Options::Instance ()->project,
+                    Options::Instance ()->branch);
+                std::cout.flush ();
+            }
+
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

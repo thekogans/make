@@ -21,22 +21,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_toolchain_source, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_toolchain_source, Action::TYPE)
 
-        void add_toolchain_source::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -u:url\n\n"
-                "a - Add a new organization to the $TOOLCHAIN_ROOT/Sources.xml file.\n"
-                "o - Name of organization to add as source.\n"
-                "u - Organization URL.\n";
-        }
+            void add_toolchain_source::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -u:url\n\n"
+                    "a - Add a new organization to the $TOOLCHAIN_ROOT/Sources.xml file.\n"
+                    "o - Name of organization to add as source.\n"
+                    "u - Organization URL.\n";
+            }
 
-        void add_toolchain_source::Execute  () {
-            core::ToolchainSources::Instance ()->AddSource (
-                Options::Instance ()->organization,
-                Options::Instance ()->url);
-        }
+            void add_toolchain_source::Execute  () {
+                core::ToolchainSources::Instance ()->AddSource (
+                    Options::Instance ()->organization,
+                    Options::Instance ()->url);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

@@ -22,26 +22,28 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (make_path, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (make_path, Function::TYPE)
 
-        core::Value make_path::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            std::string path1;
-            std::string path2;
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "p1" || (*it).first == "path1") {
-                    path1 = (*it).second;
+            core::Value make_path::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                std::string path1;
+                std::string path2;
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "p1" || (*it).first == "path1") {
+                        path1 = (*it).second;
+                    }
+                    else if ((*it).first == "p2" || (*it).first == "path2") {
+                        path2 = (*it).second;
+                    }
                 }
-                else if ((*it).first == "p2" || (*it).first == "path2") {
-                    path2 = (*it).second;
-                }
+                return core::Value (core::MakePath (path1, path2));
             }
-            return core::Value (core::MakePath (path1, path2));
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

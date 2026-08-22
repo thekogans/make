@@ -22,38 +22,40 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_project_sha2_256, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_project_sha2_256, Action::TYPE)
 
-        void get_source_project_sha2_256::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
-                "a - Return the SHA2-256 hash of a specified project.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "b - Project branch. (Empty = Use default branch)\n"
-                "v - Project version. (Empty = Use latest version)\n";
-        }
-
-        void get_source_project_sha2_256::Execute () {
-            if (Options::Instance ()->branch.empty ()) {
-                Options::Instance ()->branch = core::GetDefaultBranch (
-                    Options::Instance ()->organization,
-                    Options::Instance ()->project);
+            void get_source_project_sha2_256::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
+                    "a - Return the SHA2-256 hash of a specified project.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "b - Project branch. (Empty = Use default branch)\n"
+                    "v - Project version. (Empty = Use latest version)\n";
             }
-            core::Source source (Options::Instance ()->organization);
-            if (Options::Instance ()->version.empty ()) {
-                Options::Instance ()->version =
-                    source.GetProjectLatestVersion (
-                        Options::Instance ()->project,
-                        Options::Instance ()->branch);
-            }
-            std::cout << source.GetProjectSHA2_256 (
-                Options::Instance ()->project,
-                Options::Instance ()->branch,
-                Options::Instance ()->version);
-            std::cout.flush ();
-        }
 
+            void get_source_project_sha2_256::Execute () {
+                if (Options::Instance ()->branch.empty ()) {
+                    Options::Instance ()->branch = core::GetDefaultBranch (
+                        Options::Instance ()->organization,
+                        Options::Instance ()->project);
+                }
+                core::Source source (Options::Instance ()->organization);
+                if (Options::Instance ()->version.empty ()) {
+                    Options::Instance ()->version =
+                        source.GetProjectLatestVersion (
+                            Options::Instance ()->project,
+                            Options::Instance ()->branch);
+                }
+                std::cout << source.GetProjectSHA2_256 (
+                    Options::Instance ()->project,
+                    Options::Instance ()->branch,
+                    Options::Instance ()->version);
+                std::cout.flush ();
+            }
+
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

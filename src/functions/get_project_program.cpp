@@ -22,61 +22,63 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_program, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_program, Function::TYPE)
 
-        core::Value get_project_program::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            std::string organization = core::_TOOLCHAIN_DEFAULT_ORGANIZATION;
-            std::string project = core::_TOOLCHAIN_DEFAULT_PROJECT;
-            std::string branch;
-            std::string version;
-            std::string example;
-            std::string config = CONFIG_RELEASE;
-            std::string type = TYPE_STATIC;
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "o" || (*it).first == "organization") {
-                    organization = (*it).second;
+            core::Value get_project_program::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                std::string organization = core::_TOOLCHAIN_DEFAULT_ORGANIZATION;
+                std::string project = core::_TOOLCHAIN_DEFAULT_PROJECT;
+                std::string branch;
+                std::string version;
+                std::string example;
+                std::string config = CONFIG_RELEASE;
+                std::string type = TYPE_STATIC;
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "o" || (*it).first == "organization") {
+                        organization = (*it).second;
+                    }
+                    else if ((*it).first == "p" || (*it).first == "project") {
+                        project = (*it).second;
+                    }
+                    else if ((*it).first == "b" || (*it).first == "branch") {
+                        branch = (*it).second;
+                    }
+                    else if ((*it).first == "v" || (*it).first == "version") {
+                        version = (*it).second;
+                    }
+                    else if ((*it).first == "e" || (*it).first == "example") {
+                        example = (*it).second;
+                    }
+                    else if ((*it).first == "c" || (*it).first == "config") {
+                        config = (*it).second;
+                    }
+                    else if ((*it).first == "t" || (*it).first == "type") {
+                        type = (*it).second;
+                    }
                 }
-                else if ((*it).first == "p" || (*it).first == "project") {
-                    project = (*it).second;
+                if (core::Project::Find (organization, project, branch, version, example)) {
+                    return core::Value (
+                        core::Project::GetProgram (
+                            organization,
+                            project,
+                            branch,
+                            version,
+                            example,
+                            config,
+                            type));
                 }
-                else if ((*it).first == "b" || (*it).first == "branch") {
-                    branch = (*it).second;
-                }
-                else if ((*it).first == "v" || (*it).first == "version") {
-                    version = (*it).second;
-                }
-                else if ((*it).first == "e" || (*it).first == "example") {
-                    example = (*it).second;
-                }
-                else if ((*it).first == "c" || (*it).first == "config") {
-                    config = (*it).second;
-                }
-                else if ((*it).first == "t" || (*it).first == "type") {
-                    type = (*it).second;
+                else {
+                    THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                        "Unable to find: %s",
+                        core::Project::GetConfig (organization, project, branch, version, example).c_str ());
                 }
             }
-            if (core::Project::Find (organization, project, branch, version, example)) {
-                return core::Value (
-                    core::Project::GetProgram (
-                        organization,
-                        project,
-                        branch,
-                        version,
-                        example,
-                        config,
-                        type));
-            }
-            else {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "Unable to find: %s",
-                    core::Project::GetConfig (organization, project, branch, version, example).c_str ());
-            }
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

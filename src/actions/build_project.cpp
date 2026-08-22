@@ -21,35 +21,37 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (build_project, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (build_project, Action::TYPE)
 
-        void build_project::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                "-t:[" TYPE_STATIC " | " TYPE_SHARED "] [-m:[" MODE_DEVELOPMENT " | " MODE_INSTALL "]] "
-                "[-w:[yes | no]] [-x:[yes | no]] [-z:[" TARGET_ALL " | " TARGET_TESTS " | " TARGET_TESTS_SELF " | "
-                TARGET_CLEAN " | " TARGET_CLEAN_SELF " | " TARGET_TAGS " | " TARGET_TAGS_SELF "]] path\n\n"
-                "a - Build a given project.\n"
-                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                "m - Build mode [" MODE_DEVELOPMENT " | " MODE_INSTALL "].\n"
-                "w - Hide commands [yes | no].\n"
-                "x - Parallel build [yes | no].\n"
-                "z - Build target.\n"
-                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-        }
+            void build_project::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                    "-t:[" TYPE_STATIC " | " TYPE_SHARED "] [-m:[" MODE_DEVELOPMENT " | " MODE_INSTALL "]] "
+                    "[-w:[yes | no]] [-x:[yes | no]] [-z:[" TARGET_ALL " | " TARGET_TESTS " | " TARGET_TESTS_SELF " | "
+                    TARGET_CLEAN " | " TARGET_CLEAN_SELF " | " TARGET_TAGS " | " TARGET_TAGS_SELF "]] path\n\n"
+                    "a - Build a given project.\n"
+                    "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                    "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                    "m - Build mode [" MODE_DEVELOPMENT " | " MODE_INSTALL "].\n"
+                    "w - Hide commands [yes | no].\n"
+                    "x - Parallel build [yes | no].\n"
+                    "z - Build target.\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+            }
 
-        void build_project::Execute () {
-            core::BuildProject (
-                Options::Instance ()->path,
-                Options::Instance ()->config,
-                Options::Instance ()->type,
-                Options::Instance ()->mode,
-                Options::Instance ()->hide_commands,
-                Options::Instance ()->parallel_build,
-                Options::Instance ()->target);
-        }
+            void build_project::Execute () {
+                core::BuildProject (
+                    Options::Instance ()->path,
+                    Options::Instance ()->config,
+                    Options::Instance ()->type,
+                    Options::Instance ()->mode,
+                    Options::Instance ()->hide_commands,
+                    Options::Instance ()->parallel_build,
+                    Options::Instance ()->target);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

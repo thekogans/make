@@ -20,28 +20,30 @@
 
 namespace thekogans {
     namespace make {
+        namespace generators {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (Xcode, Generator::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (Xcode, Generator::TYPE)
 
-        bool Xcode::Generate (
-                const std::string &project_root,
-                const std::string &config,
-                const std::string &type,
-                bool generateDependencies,
-                bool force) {
-            // FIXME: implement
-            assert (0);
-            return false;
-        }
+            bool Xcode::Generate (
+                    const std::string &project_root,
+                    const std::string &config,
+                    const std::string &type,
+                    bool generateDependencies,
+                    bool force) {
+                // FIXME: implement
+                assert (0);
+                return false;
+            }
 
-        void Xcode::Delete (
-                const std::string &project_root,
-                const std::string &config,
-                const std::string &type,
-                bool deleteDependencies) {
-            // FIXME: implement
-            assert (0);
-        }
+            void Xcode::Delete (
+                    const std::string &project_root,
+                    const std::string &config,
+                    const std::string &type,
+                    bool deleteDependencies) {
+                // FIXME: implement
+                assert (0);
+            }
 
+        } // namespace generators
     } // namespace make
 } // namespace thekogans

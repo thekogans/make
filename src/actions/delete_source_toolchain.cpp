@@ -22,34 +22,36 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_toolchain, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_toolchain, Action::TYPE)
 
-        void delete_source_toolchain::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project [-v:version]\n\n"
-                "a - Delete a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "v - Project version. Empty = Delete all versions.\n";
-        }
-
-        void delete_source_toolchain::Execute () {
-            core::Source source (Options::Instance ()->organization);
-            std::set<std::string> versions;
-            if (!Options::Instance ()->version.empty ()) {
-                versions.insert (Options::Instance ()->version);
+            void delete_source_toolchain::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project [-v:version]\n\n"
+                    "a - Delete a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "v - Project version. Empty = Delete all versions.\n";
             }
-            else {
-                source.GetToolchainVersions (Options::Instance ()->project, versions);
-            }
-            for (std::set<std::string>::const_iterator
-                     it = versions.begin (),
-                     end = versions.end (); it != end; ++it) {
-                source.DeleteToolchain (Options::Instance ()->project, *it);
-            }
-            source.Save ();
-        }
 
+            void delete_source_toolchain::Execute () {
+                core::Source source (Options::Instance ()->organization);
+                std::set<std::string> versions;
+                if (!Options::Instance ()->version.empty ()) {
+                    versions.insert (Options::Instance ()->version);
+                }
+                else {
+                    source.GetToolchainVersions (Options::Instance ()->project, versions);
+                }
+                for (std::set<std::string>::const_iterator
+                         it = versions.begin (),
+                         end = versions.end (); it != end; ++it) {
+                    source.DeleteToolchain (Options::Instance ()->project, *it);
+                }
+                source.Save ();
+            }
+
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

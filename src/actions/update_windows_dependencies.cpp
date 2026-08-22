@@ -23,85 +23,87 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (update_windows_dependencies, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (update_windows_dependencies, Action::TYPE)
 
-        void update_windows_dependencies::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " path\n\n"
-                "a - Convert windows dependency list to cygwin path.\n"
-                "path - Path to windows dependency output.\n";
-        }
+            void update_windows_dependencies::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " path\n\n"
+                    "a - Convert windows dependency list to cygwin path.\n"
+                    "path - Path to windows dependency output.\n";
+            }
 
-        void update_windows_dependencies::Execute () {
-            std::string dependent;
-            std::string dependency;
-            std::set<std::string> dependencies;
-            {
-                std::fstream file (Options::Instance ()->path.c_str (), std::fstream::in);
-                if (file.is_open ()) {
-                    if (std::getline (file, dependent)) {
-                        dependent = util::TrimSpaces (dependent.c_str ());
-                        std::size_t index = dependent.size ();
-                        while (index > 0 &&
-                            (dependent[index - 1] == '\\' ||
-                                isspace (dependent[index - 1]) ||
-                                dependent[index - 1] == ':')) {
-                            --index;
-                        }
-                        dependent = dependent.substr (0, index);
-                        for (std::string line; std::getline (file, line);) {
-                            line = util::TrimSpaces (line.c_str ());
-                            std::size_t index = line.size ();
-                            while (index > 0 && (line[index - 1] == '\\' || isspace (line[index - 1]))) {
+            void update_windows_dependencies::Execute () {
+                std::string dependent;
+                std::string dependency;
+                std::set<std::string> dependencies;
+                {
+                    std::fstream file (Options::Instance ()->path.c_str (), std::fstream::in);
+                    if (file.is_open ()) {
+                        if (std::getline (file, dependent)) {
+                            dependent = util::TrimSpaces (dependent.c_str ());
+                            std::size_t index = dependent.size ();
+                            while (index > 0 &&
+                                (dependent[index - 1] == '\\' ||
+                                    isspace (dependent[index - 1]) ||
+                                    dependent[index - 1] == ':')) {
                                 --index;
                             }
-                            line = line.substr (0, index);
-                            if (!line.empty ()) {
-                                if (dependency.empty ()) {
-                                    dependency = line;
+                            dependent = dependent.substr (0, index);
+                            for (std::string line; std::getline (file, line);) {
+                                line = util::TrimSpaces (line.c_str ());
+                                std::size_t index = line.size ();
+                                while (index > 0 && (line[index - 1] == '\\' || isspace (line[index - 1]))) {
+                                    --index;
                                 }
-                                else {
-                                    dependencies.insert (
-                                        core::CygwinMountTable::Instance ()->ToCygwinPath (line));
+                                line = line.substr (0, index);
+                                if (!line.empty ()) {
+                                    if (dependency.empty ()) {
+                                        dependency = line;
+                                    }
+                                    else {
+                                        dependencies.insert (
+                                            core::CygwinMountTable::Instance ()->ToCygwinPath (line));
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                WriteDependencies (
+                    dependent,
+                    dependency,
+                    dependencies,
+                    Options::Instance ()->path);
             }
-            WriteDependencies (
-                dependent,
-                dependency,
-                dependencies,
-                Options::Instance ()->path);
-        }
 
-        void update_windows_dependencies::WriteDependencies (
+            void update_windows_dependencies::WriteDependencies (
                 const std::string &dependent,
                 const std::string &dependency,
                 const std::set<std::string> &dependencies,
                 const std::string &path) {
-            std::fstream file (path.c_str (), std::fstream::out | std::fstream::trunc);
-            if (file.is_open ()) {
-                file << dependent.c_str () << ": \\\n " << dependency;
-                for (std::set<std::string>::const_iterator
-                         it = dependencies.begin (),
-                         end = dependencies.end (); it != end; ++it) {
-                    file << " \\\n " << *it;
+                std::fstream file (path.c_str (), std::fstream::out | std::fstream::trunc);
+                if (file.is_open ()) {
+                    file << dependent.c_str () << ": \\\n " << dependency;
+                    for (std::set<std::string>::const_iterator
+                             it = dependencies.begin (),
+                             end = dependencies.end (); it != end; ++it) {
+                        file << " \\\n " << *it;
+                    }
+                    file << "\n";
+                    for (std::set<std::string>::const_iterator
+                             it = dependencies.begin (),
+                             end = dependencies.end (); it != end; ++it) {
+                        file << *it << ":\n";
+                    }
                 }
-                file << "\n";
-                for (std::set<std::string>::const_iterator
-                         it = dependencies.begin (),
-                         end = dependencies.end (); it != end; ++it) {
-                    file << *it << ":\n";
+                else {
+                    THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                        "Unable to open %s.", path.c_str ());
                 }
             }
-            else {
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "Unable to open %s.", path.c_str ());
-            }
-        }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

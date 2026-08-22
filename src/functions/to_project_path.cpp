@@ -22,28 +22,30 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (to_project_path, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (to_project_path, Function::TYPE)
 
-        core::Value to_project_path::Exec (
-                const core::thekogans_make &thekogans_make,
-                const Parameters &parameters) const {
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "p" || (*it).first == "path") {
-                    core::Value project_root =
-                        thekogans_make.LookupSymbol (core::thekogans_make::VAR_PROJECT_ROOT);
-                    return core::Value (
-                        core::MakePath (
-                            project_root.ToString (),
-                            (*it).second));
+            core::Value to_project_path::Exec (
+                    const core::thekogans_make &thekogans_make,
+                    const Parameters &parameters) const {
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "p" || (*it).first == "path") {
+                        core::Value project_root =
+                            thekogans_make.LookupSymbol (core::thekogans_make::VAR_PROJECT_ROOT);
+                        return core::Value (
+                            core::MakePath (
+                                project_root.ToString (),
+                                (*it).second));
+                    }
                 }
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
+                    "to_project_path: missing parameter [%s]",
+                    "-p | --path");
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "to_project_path: missing parameter [%s]",
-                "-p | --path");
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

@@ -20,22 +20,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace functions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_minor_version, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_minor_version, Function::TYPE)
 
-        core::Value get_minor_version::Exec (
-                const core::thekogans_make & /*thekogans_make*/,
-                const Parameters &parameters) const {
-            std::string version;
-            for (Parameters::const_iterator
-                    it = parameters.begin (),
-                    end = parameters.end (); it != end; ++it) {
-                if ((*it).first == "v" || (*it).first == "version") {
-                    version = (*it).second;
+            core::Value get_minor_version::Exec (
+                    const core::thekogans_make & /*thekogans_make*/,
+                    const Parameters &parameters) const {
+                std::string version;
+                for (Parameters::const_iterator
+                        it = parameters.begin (),
+                        end = parameters.end (); it != end; ++it) {
+                    if ((*it).first == "v" || (*it).first == "version") {
+                        version = (*it).second;
+                    }
                 }
+                return core::Value (util::ui32Tostring (util::Version (version).minorVersion));
             }
-            return core::Value (util::ui32Tostring (util::Version (version).minorVersion));
-        }
 
+        } // namespace functions
     } // namespace make
 } // namespace thekogans

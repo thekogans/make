@@ -23,42 +23,44 @@
 
 namespace thekogans {
     namespace make {
+        namespace generators {
 
-        struct make : public core::Generator {
-            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (make)
+            struct make : public core::Generator {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (make)
 
-        public:
-            make (bool rootProject = true) :
-                core::Generator (rootProject) {}
+            public:
+                make (bool rootProject = true) :
+                    core::Generator (rootProject) {}
 
-            /// \brief
-            /// Generate a build system.
-            /// \param[in] project_root Project root directory (where thekogans_make.xml resides).
-            /// \param[in] config Debug or Release.
-            /// \param[in] type Static or Shared.
-            /// \param[in] generateDependencies true = Generate Dependencies.
-            /// \param[in] force true = Don't bother checking the timestamps and force generation.
-            /// \return true = Generated the build system, false = The build system was up to date.
-            virtual bool Generate (
-                const std::string &project_root,
-                const std::string &config,
-                const std::string &type,
-                bool generateDependencies,
-                bool force) override;
+                /// \brief
+                /// Generate a build system.
+                /// \param[in] project_root Project root directory (where thekogans_make.xml resides).
+                /// \param[in] config Debug or Release.
+                /// \param[in] type Static or Shared.
+                /// \param[in] generateDependencies true = Generate Dependencies.
+                /// \param[in] force true = Don't bother checking the timestamps and force generation.
+                /// \return true = Generated the build system, false = The build system was up to date.
+                virtual bool Generate (
+                    const std::string &project_root,
+                    const std::string &config,
+                    const std::string &type,
+                    bool generateDependencies,
+                    bool force) override;
 
-            /// \brief
-            /// Delete a build system.
-            /// \param[in] project_root Project root directory (where thekogans_make.xml resides).
-            /// \param[in] config Debug or Release.
-            /// \param[in] type Static or Shared.
-            /// \param[in] deleteDependencies true = Delete Dependencies.
-            virtual void Delete (
-                const std::string &project_root,
-                const std::string &config,
-                const std::string &type,
-                bool deleteDependencies) override;
-        };
+                /// \brief
+                /// Delete a build system.
+                /// \param[in] project_root Project root directory (where thekogans_make.xml resides).
+                /// \param[in] config Debug or Release.
+                /// \param[in] type Static or Shared.
+                /// \param[in] deleteDependencies true = Delete Dependencies.
+                virtual void Delete (
+                    const std::string &project_root,
+                    const std::string &config,
+                    const std::string &type,
+                    bool deleteDependencies) override;
+            };
 
+        } // namespace generators
     } // namespace make
 } // namespace thekogans
 

@@ -22,22 +22,24 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_plugin, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_plugin, Action::TYPE)
 
-        void copy_plugin::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] path\n\n"
-                "a - Copy plugin to hosts' bin/lib directory.\n"
-                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-        }
+            void copy_plugin::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] path\n\n"
+                    "a - Copy plugin to hosts' bin/lib directory.\n"
+                    "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                    "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+            }
 
-        void copy_plugin::Execute  () {
-            core::CopyPlugin (
-                Options::Instance ()->path,
-                Options::Instance ()->config);
-        }
+            void copy_plugin::Execute  () {
+                core::CopyPlugin (
+                    Options::Instance ()->path,
+                    Options::Instance ()->config);
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

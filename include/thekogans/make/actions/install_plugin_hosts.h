@@ -22,18 +22,20 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        struct install_plugin_hosts : public Action {
-            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (install_plugin_hosts)
+            struct install_plugin_hosts : public Action {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (install_plugin_hosts)
 
-            virtual std::string GetGroup () const override {
-                return GROUP_INSTALL;
-            }
+                virtual std::string GetGroup () const override {
+                    return GROUP_INSTALL;
+                }
 
-            virtual void PrintHelp (std::ostream &stream) const override;
-            virtual void Execute () override;
-        };
+                virtual void PrintHelp (std::ostream &stream) const override;
+                virtual void Execute () override;
+            };
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans
 

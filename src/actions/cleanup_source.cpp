@@ -22,56 +22,58 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source, Action::TYPE)
 
-        void cleanup_source::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " [-o:organization]\n\n"
-                "a - Remove old project and toolchain versions form a given "
-                "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                "o - Optional organization name.\n";
-        }
-
-        void cleanup_source::Execute () {
-            std::set<std::string> sources;
-            if (!Options::Instance ()->organization.empty ()) {
-                sources.insert (Options::Instance ()->organization);
+            void cleanup_source::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " [-o:organization]\n\n"
+                    "a - Remove old project and toolchain versions form a given "
+                    "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "o - Optional organization name.\n";
             }
-            else {
-                core::Source::GetSources (sources);
-            }
-            for (std::set<std::string>::const_iterator
-                     it = sources.begin (),
-                     end = sources.end (); it != end; ++it) {
-                core::Source source (*it);
-                {
-                    std::set<std::string> projects;
-                    source.GetProjectNames (projects);
-                    for (std::set<std::string>::const_iterator
-                             jt = projects.begin (),
-                             end = projects.end (); jt != end; ++jt) {
-                        std::set<std::string> branches;
-                        source.GetProjectBranches (*jt, branches);
+
+            void cleanup_source::Execute () {
+                std::set<std::string> sources;
+                if (!Options::Instance ()->organization.empty ()) {
+                    sources.insert (Options::Instance ()->organization);
+                }
+                else {
+                    core::Source::GetSources (sources);
+                }
+                for (std::set<std::string>::const_iterator
+                         it = sources.begin (),
+                         end = sources.end (); it != end; ++it) {
+                    core::Source source (*it);
+                    {
+                        std::set<std::string> projects;
+                        source.GetProjectNames (projects);
                         for (std::set<std::string>::const_iterator
-                                 kt = branches.begin (),
-                                 end = branches.end (); kt != end; ++kt) {
-                            source.CleanupProject (*jt, *kt);
+                                 jt = projects.begin (),
+                                 end = projects.end (); jt != end; ++jt) {
+                            std::set<std::string> branches;
+                            source.GetProjectBranches (*jt, branches);
+                            for (std::set<std::string>::const_iterator
+                                     kt = branches.begin (),
+                                     end = branches.end (); kt != end; ++kt) {
+                                source.CleanupProject (*jt, *kt);
+                            }
                         }
                     }
-                }
-                {
-                    std::set<std::string> toolchain;
-                    source.GetToolchainNames (toolchain);
-                    for (std::set<std::string>::const_iterator
-                             jt = toolchain.begin (),
-                             end = toolchain.end (); jt != end; ++jt) {
-                        source.CleanupToolchain (*jt);
+                    {
+                        std::set<std::string> toolchain;
+                        source.GetToolchainNames (toolchain);
+                        for (std::set<std::string>::const_iterator
+                                 jt = toolchain.begin (),
+                                 end = toolchain.end (); jt != end; ++jt) {
+                            source.CleanupToolchain (*jt);
+                        }
                     }
+                    source.Save ();
                 }
-                source.Save ();
             }
-        }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

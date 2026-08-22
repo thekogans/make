@@ -21,29 +21,31 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_source_project, Action::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_source_project, Action::TYPE)
 
-        void add_source_project::PrintHelp (std::ostream &stream) const {
-            stream <<
-                "-a:" << Type () << " -o:organization -p:project [-b:branch] -v:version -s:SHA2_256\n\n"
-                "a - Add a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                "o - Organization name.\n"
-                "p - Project name.\n"
-                "b - Project branch.\n"
-                "v - Project version.\n"
-                "s - Project SHA2-256 hash.\n";
-        }
+            void add_source_project::PrintHelp (std::ostream &stream) const {
+                stream <<
+                    "-a:" << Type () << " -o:organization -p:project [-b:branch] -v:version -s:SHA2_256\n\n"
+                    "a - Add a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "o - Organization name.\n"
+                    "p - Project name.\n"
+                    "b - Project branch.\n"
+                    "v - Project version.\n"
+                    "s - Project SHA2-256 hash.\n";
+            }
 
-        void add_source_project::Execute  () {
-            core::Source source (Options::Instance ()->organization);
-            source.AddProject (
-                Options::Instance ()->project,
-                Options::Instance ()->branch,
-                Options::Instance ()->version,
-                Options::Instance ()->SHA2_256);
-            source.Save ();
-        }
+            void add_source_project::Execute  () {
+                core::Source source (Options::Instance ()->organization);
+                source.AddProject (
+                    Options::Instance ()->project,
+                    Options::Instance ()->branch,
+                    Options::Instance ()->version,
+                    Options::Instance ()->SHA2_256);
+                source.Save ();
+            }
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans

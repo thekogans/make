@@ -22,25 +22,27 @@
 
 namespace thekogans {
     namespace make {
+        namespace actions {
 
-        struct update_windows_dependencies : public Action {
-            THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (update_windows_dependencies)
+            struct update_windows_dependencies : public Action {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (update_windows_dependencies)
 
-            virtual std::string GetGroup () const override {
-                return GROUP_WINDOWS;
-            }
+                virtual std::string GetGroup () const override {
+                    return GROUP_WINDOWS;
+                }
 
-            virtual void PrintHelp (std::ostream &stream) const override;
-            virtual void Execute () override;
+                virtual void PrintHelp (std::ostream &stream) const override;
+                virtual void Execute () override;
 
-        private:
-            void WriteDependencies (
-                const std::string &dependent,
-                const std::string &dependency,
-                const std::set<std::string> &dependencies,
-                const std::string &path);
-        };
+            private:
+                void WriteDependencies (
+                    const std::string &dependent,
+                    const std::string &dependency,
+                    const std::set<std::string> &dependencies,
+                    const std::string &path);
+            };
 
+        } // namespace actions
     } // namespace make
 } // namespace thekogans
 

@@ -31,20 +31,22 @@
 
 namespace thekogans {
     namespace make {
+        namespace generators {
 
-    #if defined (THEKOGANS_MAKE_TYPE_Static)
-        static void Actions::StaticInit () {
-            make::StaticInit ();
-        #if defined (TOOLCHAIN_OS_Windows)
-            vs2013::StaticInit ();
-            vs2015::StaticInit ();
-            vs2017::StaticInit ();
-            vs2019::StaticInit ();
-        #elif defined (TOOLCHAIN_OS_OSX)
-            Xcode::StaticInit ();
-        #endif // defined (TOOLCHAIN_OS_Windows)
-        }
-    #endif // defined (THEKOGANS_MAKE_TYPE_Static)
+        #if defined (THEKOGANS_MAKE_TYPE_Static)
+            void Generators::StaticInit () {
+                make::StaticInit ();
+            #if defined (TOOLCHAIN_OS_Windows)
+                vs2013::StaticInit ();
+                vs2015::StaticInit ();
+                vs2017::StaticInit ();
+                vs2019::StaticInit ();
+            #elif defined (TOOLCHAIN_OS_OSX)
+                Xcode::StaticInit ();
+            #endif // defined (TOOLCHAIN_OS_Windows)
+            }
+        #endif // defined (THEKOGANS_MAKE_TYPE_Static)
 
+        } // namespace generators
     } // namespace make
 } // namespace thekogans
