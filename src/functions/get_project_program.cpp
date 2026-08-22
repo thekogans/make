@@ -18,7 +18,6 @@
 #include "thekogans/util/Exception.h"
 #include "thekogans/make/core/Project.h"
 #include "thekogans/make/core/Utils.h"
-#include "thekogans/make/functions/get_project_version.h"
 #include "thekogans/make/functions/get_project_program.h"
 
 namespace thekogans {

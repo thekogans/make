@@ -15,45 +15,34 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/add_source_toolchain.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct add_source_toolchain : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (add_source_toolchain)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_source_toolchain, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
-                }
+        void add_source_toolchain::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project -v:version [-f:file] -s:SHA2_256\n\n"
+                "a - Add a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "v - Project version.\n"
+                "f - Project tarball file name.\n"
+                "s - Project SHA2-256 hash.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project -v:version [-f:file] -s:SHA2_256\n\n"
-                        "a - Add a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "v - Project version.\n"
-                        "f - Project tarball file name.\n"
-                        "s - Project SHA2-256 hash.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::Source source (Options::Instance ()->organization);
-                    source.AddToolchain (
-                        Options::Instance ()->project,
-                        Options::Instance ()->version,
-                        Options::Instance ()->file,
-                        Options::Instance ()->SHA2_256);
-                    source.Save ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_source_toolchain, Action::TYPE)
+        void add_source_toolchain::Execute  () {
+            core::Source source (Options::Instance ()->organization);
+            source.AddToolchain (
+                Options::Instance ()->project,
+                Options::Instance ()->version,
+                Options::Instance ()->file,
+                Options::Instance ()->SHA2_256);
+            source.Save ();
         }
 
     } // namespace make

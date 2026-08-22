@@ -20,47 +20,37 @@
 #include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/cleanup_source_toolchain.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct cleanup_source_toolchain : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (cleanup_source_toolchain)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source_toolchain, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
-                }
+        void cleanup_source_toolchain::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
+                "a - Remove old versions associated with the given toolchain in "
+                "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
-                        "a - Remove old versions associated with the given toolchain in "
-                        "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::Source source (Options::Instance ()->organization);
-                    std::set<std::string> toolchain;
-                    if (!Options::Instance ()->project.empty ()) {
-                        toolchain.insert (Options::Instance ()->project);
-                    }
-                    else {
-                        source.GetToolchainNames (toolchain);
-                    }
-                    for (std::set<std::string>::const_iterator
-                            it = toolchain.begin (),
-                            end = toolchain.end (); it != end; ++it) {
-                        source.CleanupToolchain (*it);
-                    }
-                    source.Save ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source_toolchain, Action::TYPE)
+        void cleanup_source_toolchain::Execute  () {
+            core::Source source (Options::Instance ()->organization);
+            std::set<std::string> toolchain;
+            if (!Options::Instance ()->project.empty ()) {
+                toolchain.insert (Options::Instance ()->project);
+            }
+            else {
+                source.GetToolchainNames (toolchain);
+            }
+            for (std::set<std::string>::const_iterator
+                     it = toolchain.begin (),
+                     end = toolchain.end (); it != end; ++it) {
+                source.CleanupToolchain (*it);
+            }
+            source.Save ();
         }
 
     } // namespace make

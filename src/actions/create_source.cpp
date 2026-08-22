@@ -18,35 +18,25 @@
 #include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/create_source.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct create_source : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (create_source)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (create_source, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
-                }
+        void create_source::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -u:url\n\n"
+                "a - Create a new source in $DEVELOPMENT_ROOT/sources.\n"
+                "o - Organization name.\n"
+                "u - Organization URL.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -u:url\n\n"
-                        "a - Create a new source in $DEVELOPMENT_ROOT/sources.\n"
-                        "o - Organization name.\n"
-                        "u - Organization URL.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::Source::Create (
-                        Options::Instance ()->organization,
-                        Options::Instance ()->url);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (create_source, Action::TYPE)
+        void create_source::Execute () {
+            core::Source::Create (
+                Options::Instance ()->organization,
+                Options::Instance ()->url);
         }
 
     } // namespace make

@@ -15,38 +15,27 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/add_toolchain_source.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct add_toolchain_source : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (add_toolchain_source)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_toolchain_source, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void add_toolchain_source::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -u:url\n\n"
+                "a - Add a new organization to the $TOOLCHAIN_ROOT/Sources.xml file.\n"
+                "o - Name of organization to add as source.\n"
+                "u - Organization URL.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -u:url\n\n"
-                        "a - Add a new organization to the $TOOLCHAIN_ROOT/Sources.xml file.\n"
-                        "o - Name of organization to add as source.\n"
-                        "u - Organization URL.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::ToolchainSources::Instance ()->AddSource (
-                        Options::Instance ()->organization,
-                        Options::Instance ()->url);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (add_toolchain_source, Action::TYPE)
+        void add_toolchain_source::Execute  () {
+            core::ToolchainSources::Instance ()->AddSource (
+                Options::Instance ()->organization,
+                Options::Instance ()->url);
         }
 
     } // namespace make

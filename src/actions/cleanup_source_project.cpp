@@ -17,63 +17,52 @@
 
 #include <string>
 #include <set>
-#include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/cleanup_source_project.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct cleanup_source_project : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (cleanup_source_project)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source_project, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
-                }
-
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
-                        "a - Remove old versions associated with the given project in "
-                        "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "b - Project branch.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::Source source (Options::Instance ()->organization);
-                    std::set<std::string> projects;
-                    if (!Options::Instance ()->project.empty ()) {
-                        projects.insert (Options::Instance ()->project);
-                    }
-                    else {
-                        source.GetProjectNames (projects);
-                    }
-                    for (std::set<std::string>::const_iterator
-                            it = projects.begin (),
-                            end = projects.end (); it != end; ++it) {
-                        std::set<std::string> branches;
-                        if (!Options::Instance ()->branch.empty ()) {
-                            branches.insert (Options::Instance ()->branch);
-                        }
-                        else {
-                            source.GetProjectBranches (*it, branches);
-                        }
-                        for (std::set<std::string>::const_iterator
-                                jt = branches.begin (),
-                                end = branches.end (); jt != end; ++jt) {
-                            source.CleanupProject (*it, *jt);
-                        }
-                    }
-                    source.Save ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (cleanup_source_project, Action::TYPE)
+        void cleanup_source_project::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project -b:branch\n\n"
+                "a - Remove old versions associated with the given project in "
+                "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "b - Project branch.\n";
         }
+
+        void cleanup_source_project::Execute  () {
+             core::Source source (Options::Instance ()->organization);
+             std::set<std::string> projects;
+             if (!Options::Instance ()->project.empty ()) {
+                 projects.insert (Options::Instance ()->project);
+             }
+             else {
+                 source.GetProjectNames (projects);
+             }
+             for (std::set<std::string>::const_iterator
+                      it = projects.begin (),
+                      end = projects.end (); it != end; ++it) {
+                 std::set<std::string> branches;
+                 if (!Options::Instance ()->branch.empty ()) {
+                     branches.insert (Options::Instance ()->branch);
+                 }
+                 else {
+                     source.GetProjectBranches (*it, branches);
+                 }
+                 for (std::set<std::string>::const_iterator
+                          jt = branches.begin (),
+                          end = branches.end (); jt != end; ++jt) {
+                     source.CleanupProject (*it, *jt);
+                 }
+             }
+             source.Save ();
+         }
 
     } // namespace make
 } // namespace thekogans

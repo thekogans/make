@@ -18,59 +18,49 @@
 #include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/delete_source_project.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct delete_source_project : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (delete_source_project)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_project, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
+        void delete_source_project::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
+                "a - Delete a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "b - Project branch.\n"
+                "v - Project version. Empty = Delete all versions.\n";
+        }
+
+        void delete_source_project::Execute () {
+            core::Source source (Options::Instance ()->organization);
+            std::set<std::string> branches;
+            if (!Options::Instance ()->branch.empty ()) {
+                branches.insert (Options::Instance ()->branch);
+            }
+            else {
+                source.GetProjectBranches (Options::Instance ()->project, branches);
+            }
+            for (std::set<std::string>::const_iterator
+                     it = branches.begin (),
+                     end = branches.end (); it != end; ++it) {
+                std::set<std::string> versions;
+                if (!Options::Instance ()->version.empty ()) {
+                    versions.insert (Options::Instance ()->version);
                 }
-
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
-                        "a - Delete a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "b - Project branch.\n"
-                        "v - Project version. Empty = Delete all versions.\n";
+                else {
+                    source.GetProjectVersions (Options::Instance ()->project, *it, versions);
                 }
-
-                virtual void Execute  () override {
-                    core::Source source (Options::Instance ()->organization);
-                    std::set<std::string> branches;
-                    if (!Options::Instance ()->branch.empty ()) {
-                        branches.insert (Options::Instance ()->branch);
-                    }
-                    else {
-                        source.GetProjectBranches (Options::Instance ()->project, branches);
-                    }
-                    for (std::set<std::string>::const_iterator
-                            it = branches.begin (),
-                            end = branches.end (); it != end; ++it) {
-                        std::set<std::string> versions;
-                        if (!Options::Instance ()->version.empty ()) {
-                            versions.insert (Options::Instance ()->version);
-                        }
-                        else {
-                            source.GetProjectVersions (Options::Instance ()->project, *it, versions);
-                        }
-                        for (std::set<std::string>::const_iterator
-                                jt = versions.begin (),
-                                end = versions.end (); jt != end; ++jt) {
-                            source.DeleteProject (Options::Instance ()->project, *it, *jt);
-                        }
-                    }
-                    source.Save ();
+                for (std::set<std::string>::const_iterator
+                         jt = versions.begin (),
+                         end = versions.end (); jt != end; ++jt) {
+                    source.DeleteProject (Options::Instance ()->project, *it, *jt);
                 }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_project, Action::TYPE)
+            }
+            source.Save ();
         }
 
     } // namespace make

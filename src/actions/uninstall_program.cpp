@@ -18,39 +18,29 @@
 #include <iostream>
 #include "thekogans/make/core/Utils.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/uninstall_program.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct uninstall_program : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (uninstall_program)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (uninstall_program, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_INSTALL;
-                }
+        void uninstall_program::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project [-v:version] [-d]\n\n"
+                "a - Uninstall a toolchain program.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "v - Project version.\n"
+                "d - Delete dependencies.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project [-v:version] [-d]\n\n"
-                        "a - Uninstall a toolchain program.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "v - Project version.\n"
-                        "d - Delete dependencies.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::UninstallProgram (
-                        Options::Instance ()->organization,
-                        Options::Instance ()->project,
-                        Options::Instance ()->version,
-                        Options::Instance ()->dependencies);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (uninstall_program, Action::TYPE)
+        void uninstall_program::Execute () {
+            core::UninstallProgram (
+                Options::Instance ()->organization,
+                Options::Instance ()->project,
+                Options::Instance ()->version,
+                Options::Instance ()->dependencies);
         }
 
     } // namespace make

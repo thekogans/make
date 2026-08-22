@@ -18,42 +18,32 @@
 #include <iostream>
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/list_dependencies.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct list_dependencies : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (list_dependencies)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_dependencies, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_THEKOGANS_MAKE_XML;
-                }
+        void list_dependencies::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                "a - List project/toolchain dependencies hierarchically.\n"
+                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                "path - Path to configuration file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
-                        "a - List project/toolchain dependencies hierarchically.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "path - Path to configuration file.\n";
-                }
-
-                virtual void Execute  () override {
-                    const core::thekogans_make &thekogans_make =
-                        core::thekogans_make::GetConfig (
-                            std::string (),
-                            Options::Instance ()->path,
-                            Options::Instance ()->generator,
-                            Options::Instance ()->config,
-                            Options::Instance ()->type);
-                    thekogans_make.ListDependencies (0);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_dependencies, Action::TYPE)
+        void list_dependencies::Execute () {
+            const core::thekogans_make &thekogans_make =
+                core::thekogans_make::GetConfig (
+                    std::string (),
+                    Options::Instance ()->path,
+                    Options::Instance ()->generator,
+                    Options::Instance ()->config,
+                    Options::Instance ()->type);
+            thekogans_make.ListDependencies (0);
         }
 
     } // namespace make

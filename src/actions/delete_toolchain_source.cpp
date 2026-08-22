@@ -18,33 +18,23 @@
 #include <iostream>
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/delete_toolchain_source.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct delete_toolchain_source : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (delete_toolchain_source)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_toolchain_source, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void delete_toolchain_source::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization\n\n"
+                "a - Delete the given organization from the $TOOLCHAIN_ROOT/Sources.xml file.\n"
+                "o - Name of organization to delete as source.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization\n\n"
-                        "a - Delete the given organization from the $TOOLCHAIN_ROOT/Sources.xml file.\n"
-                        "o - Name of organization to delete as source.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::ToolchainSources::Instance ()->DeleteSource (
-                        Options::Instance ()->organization);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_toolchain_source, Action::TYPE)
+        void delete_toolchain_source::Execute () {
+            core::ToolchainSources::Instance ()->DeleteSource (
+                Options::Instance ()->organization);
         }
 
     } // namespace make

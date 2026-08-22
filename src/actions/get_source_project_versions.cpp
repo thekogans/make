@@ -18,51 +18,41 @@
 #include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_source_project_versions.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_source_project_versions : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_source_project_versions)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_project_versions, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
-                }
+        void get_source_project_versions::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
+                "a - Return all versions of a specified project from source "
+                "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "b - Project branch.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
-                        "a - Return all versions of a specified project from source "
-                        "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "b - Project branch.\n";
-                }
-
-                virtual void Execute  () override {
-                    if (Options::Instance ()->branch.empty ()) {
-                        Options::Instance ()->branch = core::GetDefaultBranch (
-                            Options::Instance ()->organization,
-                            Options::Instance ()->project);
-                    }
-                    core::Source source (Options::Instance ()->organization);
-                    std::set<std::string> versions;
-                    source.GetProjectVersions (
-                        Options::Instance ()->project,
-                        Options::Instance ()->branch,
-                        versions);
-                    for (std::set<std::string>::const_iterator
-                            it = versions.begin (),
-                            end = versions.end (); it != end; ++it) {
-                        std::cout << *it << std::endl;
-                    }
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_project_versions, Action::TYPE)
+        void get_source_project_versions::Execute () {
+            if (Options::Instance ()->branch.empty ()) {
+                Options::Instance ()->branch = core::GetDefaultBranch (
+                    Options::Instance ()->organization,
+                    Options::Instance ()->project);
+            }
+            core::Source source (Options::Instance ()->organization);
+            std::set<std::string> versions;
+            source.GetProjectVersions (
+                Options::Instance ()->project,
+                Options::Instance ()->branch,
+                versions);
+            for (std::set<std::string>::const_iterator
+                     it = versions.begin (),
+                     end = versions.end (); it != end; ++it) {
+                std::cout << *it << std::endl;
+            }
+            std::cout.flush ();
         }
 
     } // namespace make

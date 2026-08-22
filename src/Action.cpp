@@ -15,8 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make_core. If not, see <http://www.gnu.org/licenses/>.
 
+#include "thekogans/util/Environment.h"
 #include <cassert>
-#include <set>
+#include <unordered_set>
 #include "thekogans/util/Exception.h"
 #include "thekogans/util/LoggerMgr.h"
 #include "thekogans/make/Action.h"
@@ -28,7 +29,7 @@ namespace thekogans {
 
         std::list<std::string> Action::GetGroups () {
             std::list<std::string> groupList;
-            std::set<std::string> groupSet;
+            std::unordered_set<std::string> groupSet;
             for (TypeMapType::const_iterator
                     it = GetTypes ().begin (),
                     end = GetTypes ().end (); it != end; ++it) {
@@ -45,7 +46,7 @@ namespace thekogans {
         util::DynamicCreatable::TypeMapType Action::GetGroupActions (
                 const std::string &group) {
             TypeMapType actions;
-            std::set<std::string> groups;
+            std::unordered_set<std::string> groups;
             for (TypeMapType::const_iterator
                     it = GetTypes ().begin (),
                     end = GetTypes ().end (); it != end; ++it) {

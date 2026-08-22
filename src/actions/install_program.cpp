@@ -18,42 +18,32 @@
 #include <iostream>
 #include "thekogans/make/core/Installer.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/install_program.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct install_program : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (install_program)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_program, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_INSTALL;
-                }
+        void install_program::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                "-t:[" TYPE_STATIC " | " TYPE_SHARED "] [-w:[yes | no]] [-x:[yes | no]] path\n\n"
+                "a - Install the given program in to the toolchain.\n"
+                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                "w - Hide commands [yes | no].\n"
+                "x - Parallel build [yes | no].\n"
+                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] [-w:[yes | no]] [-x:[yes | no]] path\n\n"
-                        "a - Install the given program in to the toolchain.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "w - Hide commands [yes | no].\n"
-                        "x - Parallel build [yes | no].\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::Installer installer (
-                        Options::Instance ()->config,
-                        Options::Instance ()->type,
-                        Options::Instance ()->hide_commands,
-                        Options::Instance ()->parallel_build);
-                    installer.InstallProgram (Options::Instance ()->path);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_program, Action::TYPE)
+        void install_program::Execute () {
+            core::Installer installer (
+                Options::Instance ()->config,
+                Options::Instance ()->type,
+                Options::Instance ()->hide_commands,
+                Options::Instance ()->parallel_build);
+            installer.InstallProgram (Options::Instance ()->path);
         }
 
     } // namespace make

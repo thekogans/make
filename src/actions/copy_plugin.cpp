@@ -18,35 +18,25 @@
 #include <iostream>
 #include "thekogans/make/core/Utils.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/copy_plugin.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct copy_plugin : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (copy_plugin)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_plugin, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_INSTALL;
-                }
+        void copy_plugin::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] path\n\n"
+                "a - Copy plugin to hosts' bin/lib directory.\n"
+                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] path\n\n"
-                        "a - Copy plugin to hosts' bin/lib directory.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::CopyPlugin (
-                        Options::Instance ()->path,
-                        Options::Instance ()->config);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_plugin, Action::TYPE)
+        void copy_plugin::Execute  () {
+            core::CopyPlugin (
+                Options::Instance ()->path,
+                Options::Instance ()->config);
         }
 
     } // namespace make

@@ -18,44 +18,34 @@
 #include <iostream>
 #include "thekogans/make/core/Utils.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/create_build_system.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct create_build_system : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (create_build_system)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (create_build_system, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_BUILD;
-                }
+        void create_build_system::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -g:[" << make::core::GetGeneratorList (" | ") << "] "
+                "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] [-f] path\n\n"
+                "a - Create a build system.\n"
+                "g - Build system generator.\n"
+                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                "d - Follow dependencies.\n"
+                "f - Don't bother checking the timestamps and force generation.\n"
+                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -g:[" << make::core::GetGeneratorList (" | ") << "] "
-                        "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] [-f] path\n\n"
-                        "a - Create a build system.\n"
-                        "g - Build system generator.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "d - Follow dependencies.\n"
-                        "f - Don't bother checking the timestamps and force generation.\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::CreateBuildSystem (
-                        Options::Instance ()->path,
-                        Options::Instance ()->generator,
-                        Options::Instance ()->config,
-                        Options::Instance ()->type,
-                        Options::Instance ()->dependencies,
-                        Options::Instance ()->force);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (create_build_system, Action::TYPE)
+        void create_build_system::Execute () {
+            core::CreateBuildSystem (
+                Options::Instance ()->path,
+                Options::Instance ()->generator,
+                Options::Instance ()->config,
+                Options::Instance ()->type,
+                Options::Instance ()->dependencies,
+                Options::Instance ()->force);
         }
 
     } // namespace make

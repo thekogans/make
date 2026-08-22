@@ -35,9 +35,7 @@ namespace thekogans {
                     return core::Value (util::Path ((*it).second).GetExtension ());
                 }
             }
-            THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                "get_extension: missing parameter [%s]",
-                "-p | --path");
+            THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("get_extension: missing parameter [-p | --path]");
         }
 
     } // namespace make

@@ -18,34 +18,24 @@
 #include <iostream>
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_toolchain_source_url.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_toolchain_source_url : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_source_url)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_url, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void get_toolchain_source_url::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization\n\n"
+                "a - Return the URL associated with the given source.\n"
+                "o - Source organization name.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization\n\n"
-                        "a - Return the URL associated with the given source.\n"
-                        "o - Source organization name.\n";
-                }
-
-                virtual void Execute  () override {
-                    std::cout << core::ToolchainSources::Instance ()->GetSourceURL (
-                        Options::Instance ()->organization);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_url, Action::TYPE)
+        void get_toolchain_source_url::Execute () {
+            std::cout << core::ToolchainSources::Instance ()->GetSourceURL (
+                Options::Instance ()->organization);
+            std::cout.flush ();
         }
 
     } // namespace make

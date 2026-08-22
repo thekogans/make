@@ -18,43 +18,33 @@
 #include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_source_project_latest_version.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_source_project_latest_version : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_source_project_latest_version)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_project_latest_version, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
-                }
+        void get_source_project_latest_version::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
+                "a - Return the latest version of a specified project.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "b - Project branch.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project [-b:branch]\n\n"
-                        "a - Return the latest version of a specified project.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "b - Project branch.\n";
-                }
-
-                virtual void Execute  () override {
-                    if (Options::Instance ()->branch.empty ()) {
-                        Options::Instance ()->branch = core::GetDefaultBranch (
-                            Options::Instance ()->organization,
-                            Options::Instance ()->project);
-                    }
-                    core::Source source (Options::Instance ()->organization);
-                    std::cout << source.GetProjectLatestVersion (
-                        Options::Instance ()->project,
-                        Options::Instance ()->branch);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_project_latest_version, Action::TYPE)
+        void get_source_project_latest_version::Execute () {
+            if (Options::Instance ()->branch.empty ()) {
+                Options::Instance ()->branch = core::GetDefaultBranch (
+                    Options::Instance ()->organization,
+                    Options::Instance ()->project);
+            }
+            core::Source source (Options::Instance ()->organization);
+            std::cout << source.GetProjectLatestVersion (
+                Options::Instance ()->project,
+                Options::Instance ()->branch);
+            std::cout.flush ();
         }
 
     } // namespace make

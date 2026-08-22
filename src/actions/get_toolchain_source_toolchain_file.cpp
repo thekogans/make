@@ -18,44 +18,34 @@
 #include <iostream>
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_toolchain_source_toolchain_file.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_toolchain_source_toolchain_file : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_file)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_file, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void get_toolchain_source_toolchain_file::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
+                "a - Return the file of a specified toolchain library/program/plugin.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "v - Project version.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
-                        "a - Return the file of a specified toolchain library/program/plugin.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "v - Project version.\n";
-                }
-
-                virtual void Execute  () override {
-                    if (Options::Instance ()->version.empty ()) {
-                        Options::Instance ()->version =
-                            core::ToolchainSources::Instance ()->GetSourceToolchainLatestVersion (
-                                Options::Instance ()->organization,
-                                Options::Instance ()->project);
-                    }
-                    std::cout << core::ToolchainSources::Instance ()->GetSourceToolchainFile (
+        void get_toolchain_source_toolchain_file::Execute () {
+            if (Options::Instance ()->version.empty ()) {
+                Options::Instance ()->version =
+                    core::ToolchainSources::Instance ()->GetSourceToolchainLatestVersion (
                         Options::Instance ()->organization,
-                        Options::Instance ()->project,
-                        Options::Instance ()->version);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_file, Action::TYPE)
+                        Options::Instance ()->project);
+            }
+            std::cout << core::ToolchainSources::Instance ()->GetSourceToolchainFile (
+                Options::Instance ()->organization,
+                Options::Instance ()->project,
+                Options::Instance ()->version);
+            std::cout.flush ();
         }
 
     } // namespace make

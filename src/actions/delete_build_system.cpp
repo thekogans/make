@@ -18,42 +18,32 @@
 #include <iostream>
 #include "thekogans/make/core/Utils.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/delete_build_system.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct delete_build_system : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (delete_build_system)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_build_system, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_BUILD;
-                }
+        void delete_build_system::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -g:[" << core::GetGeneratorList (" | ") << "] "
+                "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] path\n\n"
+                "a - Delete a build system.\n"
+                "g - Build system generator.\n"
+                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                "d - Follow dependencies.\n"
+                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -g:[" << core::GetGeneratorList (" | ") << "] "
-                        "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] [-d] path\n\n"
-                        "a - Delete a build system.\n"
-                        "g - Build system generator.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "t - Program = Link type, Library = Library type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "d - Follow dependencies.\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::DeleteBuildSystem (
-                        Options::Instance ()->path,
-                        Options::Instance ()->generator,
-                        Options::Instance ()->config,
-                        Options::Instance ()->type,
-                        Options::Instance ()->dependencies);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_build_system, Action::TYPE)
+        void delete_build_system::Execute () {
+            core::DeleteBuildSystem (
+                Options::Instance ()->path,
+                Options::Instance ()->generator,
+                Options::Instance ()->config,
+                Options::Instance ()->type,
+                Options::Instance ()->dependencies);
         }
 
     } // namespace make

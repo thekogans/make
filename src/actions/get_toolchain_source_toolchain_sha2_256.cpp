@@ -18,44 +18,34 @@
 #include <iostream>
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_toolchain_source_toolchain_sha2_256.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_toolchain_source_toolchain_sha2_256 : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_sha2_256)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_sha2_256, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void get_toolchain_source_toolchain_sha2_256::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
+                "a - Return the SHA2-256 hash of a specified toolchain library/program/plugin.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "v - Project version.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project -v:version\n\n"
-                        "a - Return the SHA2-256 hash of a specified toolchain library/program/plugin.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "v - Project version.\n";
-                }
-
-                virtual void Execute  () override {
-                    if (Options::Instance ()->version.empty ()) {
-                        Options::Instance ()->version =
-                            core::ToolchainSources::Instance ()->GetSourceToolchainLatestVersion (
-                                Options::Instance ()->organization,
-                                Options::Instance ()->project);
-                    }
-                    std::cout << core::ToolchainSources::Instance ()->GetSourceToolchainSHA2_256 (
+        void get_toolchain_source_toolchain_sha2_256::Execute () {
+            if (Options::Instance ()->version.empty ()) {
+                Options::Instance ()->version =
+                    core::ToolchainSources::Instance ()->GetSourceToolchainLatestVersion (
                         Options::Instance ()->organization,
-                        Options::Instance ()->project,
-                        Options::Instance ()->version);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_sha2_256, Action::TYPE)
+                        Options::Instance ()->project);
+            }
+            std::cout << core::ToolchainSources::Instance ()->GetSourceToolchainSHA2_256 (
+                Options::Instance ()->organization,
+                Options::Instance ()->project,
+                Options::Instance ()->version);
+            std::cout.flush ();
         }
 
     } // namespace make

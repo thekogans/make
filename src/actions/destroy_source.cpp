@@ -18,32 +18,22 @@
 #include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/destroy_source.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct destroy_source : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (destroy_source)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (destroy_source, Action::TYPE)
 
-                virtual const char *GetGroup () const {
-                    return GROUP_SOURCES;
-                }
+        void destroy_source::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization\n\n"
+                "a - Destroy the given source in $DEVELOPMENT_ROOT/sources.\n"
+                "o - Organization name.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const {
-                    stream <<
-                        "-a:" << Type () << " -o:organization\n\n"
-                        "a - Destroy the given source in $DEVELOPMENT_ROOT/sources.\n"
-                        "o - Organization name.\n";
-                }
-
-                virtual void Execute  () {
-                    core::Source::Destroy (Options::Instance ()->organization);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (destroy_source, Action)
+        void destroy_source::Execute () {
+            core::Source::Destroy (Options::Instance ()->organization);
         }
 
     } // namespace make

@@ -18,35 +18,25 @@
 #include <iostream>
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_naming_convention.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_naming_convention : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_naming_convention)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_naming_convention, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_THEKOGANS_MAKE_XML;
-                }
+        void get_naming_convention::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " path\n\n"
+                "a - Get the naming convention (" NAMING_CONVENTION_FLAT " | " NAMING_CONVENTION_HIERARCHICAL ") from a project or toolchain config file.\n"
+                "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " path\n\n"
-                        "a - Get the naming convention (" NAMING_CONVENTION_FLAT " | " NAMING_CONVENTION_HIERARCHICAL ") from a project or toolchain config file.\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
-                }
-
-                virtual void Execute  () override {
-                    std::cout << core::thekogans_make::GetNamingConvention (
-                        std::string (),
-                        Options::Instance ()->path);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_naming_convention, Action::TYPE)
+        void get_naming_convention::Execute () {
+            std::cout << core::thekogans_make::GetNamingConvention (
+                std::string (),
+                Options::Instance ()->path);
+            std::cout.flush ();
         }
 
     } // namespace make

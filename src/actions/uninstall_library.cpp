@@ -18,39 +18,29 @@
 #include <iostream>
 #include "thekogans/make/core/Utils.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/uninstall_library.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct uninstall_library : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (uninstall_library)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (uninstall_library, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_INSTALL;
-                }
+        void uninstall_library::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project [-v:version] [-d]\n\n"
+                "a - Uninstall a toolchain library.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "v - Project version.\n"
+                "d - Delete dependencies.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project [-v:version] [-d]\n\n"
-                        "a - Uninstall a toolchain library.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "v - Project version.\n"
-                        "d - Delete dependencies.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::UninstallLibrary (
-                        Options::Instance ()->organization,
-                        Options::Instance ()->project,
-                        Options::Instance ()->version,
-                        Options::Instance ()->dependencies);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (uninstall_library, Action::TYPE)
+        void uninstall_library::Execute () {
+            core::UninstallLibrary (
+                Options::Instance ()->organization,
+                Options::Instance ()->project,
+                Options::Instance ()->version,
+                Options::Instance ()->dependencies);
         }
 
     } // namespace make

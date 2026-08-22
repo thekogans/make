@@ -18,33 +18,23 @@
 #include <iostream>
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/update_toolchain_sources.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct update_toolchain_sources : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (update_toolchain_sources)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (update_toolchain_sources, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void update_toolchain_sources::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " [-o:organization]\n\n"
+                "a - Update the $TOOLCHAIN_ROOT/Sources.xml file.\n"
+                "o - Organization name.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " [-o:organization]\n\n"
-                        "a - Update the $TOOLCHAIN_ROOT/Sources.xml file.\n"
-                        "o - Organization name.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::ToolchainSources::Instance ()->UpdateSources (
-                        Options::Instance ()->organization);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (update_toolchain_sources, Action::TYPE)
+        void update_toolchain_sources::Execute () {
+            core::ToolchainSources::Instance ()->UpdateSources (
+                Options::Instance ()->organization);
         }
 
     } // namespace make

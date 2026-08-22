@@ -15,45 +15,34 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/check_dependencies.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct check_dependencies : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (check_dependencies)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (check_dependencies, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_THEKOGANS_MAKE_XML;
-                }
+        void check_dependencies::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                "a - Check project/toolchain dependency hierarchy for multiple versions.\n"
+                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                "path - Path to configuration file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
-                        "a - Check project/toolchain dependency hierarchy for multiple versions.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "path - Path to configuration file.\n";
-                }
-
-                virtual void Execute  () override {
-                    const core::thekogans_make &thekogans_make =
-                        core::thekogans_make::GetConfig (
-                            std::string (),
-                            Options::Instance ()->path,
-                            Options::Instance ()->generator,
-                            Options::Instance ()->config,
-                            Options::Instance ()->type);
-                    thekogans_make.CheckDependencies ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (check_dependencies, Action::TYPE)
+        void check_dependencies::Execute () {
+            const core::thekogans_make &thekogans_make =
+                core::thekogans_make::GetConfig (
+                    std::string (),
+                    Options::Instance ()->path,
+                    Options::Instance ()->generator,
+                    Options::Instance ()->config,
+                    Options::Instance ()->type);
+            thekogans_make.CheckDependencies ();
         }
 
     } // namespace make

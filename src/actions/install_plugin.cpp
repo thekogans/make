@@ -18,41 +18,31 @@
 #include <iostream>
 #include "thekogans/make/core/Installer.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/install_plugin.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct install_plugin : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (install_plugin)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_plugin, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_INSTALL;
-                }
+        void install_plugin::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
+                "[-w:[yes | no]] [-x:[yes | no]] path\n\n"
+                "a - Install the given plugin in to it's toolchain hosts.\n"
+                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "w - Hide commands [yes | no].\n"
+                "x - Parallel build [yes | no].\n"
+                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " [-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "]] "
-                        "[-w:[yes | no]] [-x:[yes | no]] path\n\n"
-                        "a - Install the given plugin in to it's toolchain hosts.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "w - Hide commands [yes | no].\n"
-                        "x - Parallel build [yes | no].\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::Installer installer (
-                        Options::Instance ()->config,
-                        Options::Instance ()->type,
-                        Options::Instance ()->hide_commands,
-                        Options::Instance ()->parallel_build);
-                    installer.InstallPlugin (Options::Instance ()->path);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (install_plugin, Action::TYPE)
+        void install_plugin::Execute () {
+            core::Installer installer (
+                Options::Instance ()->config,
+                Options::Instance ()->type,
+                Options::Instance ()->hide_commands,
+                Options::Instance ()->parallel_build);
+            installer.InstallPlugin (Options::Instance ()->path);
         }
 
     } // namespace make

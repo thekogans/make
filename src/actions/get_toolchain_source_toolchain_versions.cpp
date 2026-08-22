@@ -18,43 +18,33 @@
 #include <iostream>
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_toolchain_source_toolchain_versions.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_toolchain_source_toolchain_versions : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_versions)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_versions, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void get_toolchain_source_toolchain_versions::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project\n\n"
+                "a - Return all version of a specified toolchain library/program/plugin.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project\n\n"
-                        "a - Return all version of a specified toolchain library/program/plugin.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n";
-                }
-
-                virtual void Execute  () override {
-                    std::set<std::string> versions;
-                    core::ToolchainSources::Instance ()->GetSourceToolchainVersions (
-                        Options::Instance ()->organization,
-                        Options::Instance ()->project,
-                        versions);
-                    for (std::set<std::string>::const_iterator
-                            it = versions.begin (),
-                            end = versions.end (); it != end; ++it) {
-                        std::cout << *it << std::endl;
-                    }
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_source_toolchain_versions, Action::TYPE)
+        void get_toolchain_source_toolchain_versions::Execute () {
+            std::set<std::string> versions;
+            core::ToolchainSources::Instance ()->GetSourceToolchainVersions (
+                Options::Instance ()->organization,
+                Options::Instance ()->project,
+                versions);
+            for (std::set<std::string>::const_iterator
+                     it = versions.begin (),
+                     end = versions.end (); it != end; ++it) {
+                std::cout << *it << std::endl;
+            }
+            std::cout.flush ();
         }
 
     } // namespace make

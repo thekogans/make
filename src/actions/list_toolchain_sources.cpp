@@ -18,31 +18,21 @@
 #include <iostream>
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/list_toolchain_sources.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct list_toolchain_sources : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (list_toolchain_sources)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_toolchain_sources, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void list_toolchain_sources::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << "\n\n"
+                "a - List all projects and toolchain from the $TOOLCHAIN_ROOT/Sources.xml file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << "\n\n"
-                        "a - List all projects and toolchain from the $TOOLCHAIN_ROOT/Sources.xml file.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::ToolchainSources::Instance ()->ListSources ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_toolchain_sources, Action::TYPE)
+        void list_toolchain_sources::Execute () {
+            core::ToolchainSources::Instance ()->ListSources ();
         }
 
     } // namespace make

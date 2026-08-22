@@ -18,35 +18,25 @@
 #include <iostream>
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_build_config.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_build_config : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_build_config)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_build_config, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_THEKOGANS_MAKE_XML;
-                }
+        void get_build_config::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " path\n\n"
+                "a - Get the build config (" CONFIG_DEBUG " | " CONFIG_RELEASE ") from a project or toolchain config file.\n"
+                "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " path\n\n"
-                        "a - Get the build config (" CONFIG_DEBUG " | " CONFIG_RELEASE ") from a project or toolchain config file.\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
-                }
-
-                virtual void Execute  () override {
-                    std::cout << core::thekogans_make::GetBuildConfig (
-                        std::string (),
-                        Options::Instance ()->path);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_build_config, Action::TYPE)
+        void get_build_config::Execute () {
+            std::cout << core::thekogans_make::GetBuildConfig (
+                std::string (),
+                Options::Instance ()->path);
+            std::cout.flush ();
         }
 
     } // namespace make

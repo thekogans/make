@@ -18,36 +18,26 @@
 #include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_source_toolchain_latest_version.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_source_toolchain_latest_version : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_source_toolchain_latest_version)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_latest_version, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
-                }
+        void get_source_toolchain_latest_version::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project\n\n"
+                "a - Return the latest version of a specified toolchain library/program/plugin.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project\n\n"
-                        "a - Return the latest version of a specified toolchain library/program/plugin.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::Source source (Options::Instance ()->organization);
-                    std::cout <<
-                        source.GetToolchainLatestVersion (Options::Instance ()->project);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_source_toolchain_latest_version, Action::TYPE)
+        void get_source_toolchain_latest_version::Execute () {
+            core::Source source (Options::Instance ()->organization);
+            std::cout <<
+                source.GetToolchainLatestVersion (Options::Instance ()->project);
+            std::cout.flush ();
         }
 
     } // namespace make

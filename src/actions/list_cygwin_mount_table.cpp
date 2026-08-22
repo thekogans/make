@@ -18,31 +18,21 @@
 #include <iostream>
 #include "thekogans/util/StringUtils.h"
 #include "thekogans/make/core/CygwinMountTable.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/list_cygwin_mount_table.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct list_cygwin_mount_table : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (list_cygwin_mount_table)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_cygwin_mount_table, Action::TYPE)
 
-                virtual std::string GetGroup () const {
-                    return GROUP_WINDOWS;
-                }
+        void list_cygwin_mount_table::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << "\n\n"
+                "a - Dump " << util::GetEnvironmentVariable ("TOOLCHAIN_CYGWIN_MOUNT_TABLE") << " maps.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const {
-                    stream <<
-                        "-a:" << Type () << "\n\n"
-                        "a - Dump " << util::GetEnvironmentVariable ("TOOLCHAIN_CYGWIN_MOUNT_TABLE") << " maps.\n";
-                }
-
-                virtual void Execute  () {
-                    core::CygwinMountTable::Instance ()->DumpEntries ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (list_cygwin_mount_table, Action::TYPE)
+        void list_cygwin_mount_table::Execute () {
+            core::CygwinMountTable::Instance ()->DumpEntries ();
         }
 
     } // namespace make

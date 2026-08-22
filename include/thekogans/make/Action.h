@@ -20,7 +20,6 @@
 
 #include <memory>
 #include <string>
-#include <map>
 #include <iostream>
 #include <list>
 #include "thekogans/util/DynamicCreatable.h"

@@ -18,38 +18,28 @@
 #include <iostream>
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/copy_dependencies.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct copy_dependencies : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (copy_dependencies)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_dependencies, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_INSTALL;
-                }
+        void copy_dependencies::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
+                "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                "a - Copy shared libraries to program's bin directory.\n"
+                "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] "
-                        "-t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
-                        "a - Copy shared libraries to program's bin directory.\n"
-                        "c - Build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "t - Link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::CopyDependencies (
-                        Options::Instance ()->path,
-                        Options::Instance ()->config,
-                        Options::Instance ()->type);
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (copy_dependencies, Action::TYPE)
+        void copy_dependencies::Execute  () {
+            core::CopyDependencies (
+                Options::Instance ()->path,
+                Options::Instance ()->config,
+                Options::Instance ()->type);
         }
 
     } // namespace make

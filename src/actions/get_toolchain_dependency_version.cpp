@@ -18,47 +18,37 @@
 #include <iostream>
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_toolchain_dependency_version.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_toolchain_dependency_version : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_dependency_version)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_dependency_version, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_TOOLCHAIN_SOURCES_XML;
-                }
+        void get_toolchain_dependency_version::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project "
+                "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
+                "a - Get the toolchain dependency version.\n"
+                "o - Dependency organization name.\n"
+                "p - Dependency project name.\n"
+                "c - Project build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
+                "t - Project link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
+                "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project "
-                        "-c:[" CONFIG_DEBUG " | " CONFIG_RELEASE "] -t:[" TYPE_STATIC " | " TYPE_SHARED "] path\n\n"
-                        "a - Get the toolchain dependency version.\n"
-                        "o - Dependency organization name.\n"
-                        "p - Dependency project name.\n"
-                        "c - Project build configuration [" CONFIG_DEBUG " | " CONFIG_RELEASE "].\n"
-                        "t - Project link type [" TYPE_STATIC " | " TYPE_SHARED "].\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " or toolchain configfile.\n";
-                }
-
-                virtual void Execute  () override {
-                    const core::thekogans_make &thekogans_make =
-                        core::thekogans_make::GetConfig (
-                            std::string (),
-                            Options::Instance ()->path,
-                            Options::Instance ()->generator,
-                            Options::Instance ()->config,
-                            Options::Instance ()->type);
-                    std::cout << thekogans_make.GetToolchainDependencyVersion (
-                        Options::Instance ()->organization,
-                        Options::Instance ()->project);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_toolchain_dependency_version, Action::TYPE)
+        void get_toolchain_dependency_version::Execute () {
+            const core::thekogans_make &thekogans_make =
+                core::thekogans_make::GetConfig (
+                    std::string (),
+                    Options::Instance ()->path,
+                    Options::Instance ()->generator,
+                    Options::Instance ()->config,
+                    Options::Instance ()->type);
+            std::cout << thekogans_make.GetToolchainDependencyVersion (
+                Options::Instance ()->organization,
+                Options::Instance ()->project);
+            std::cout.flush ();
         }
 
     } // namespace make

@@ -18,47 +18,37 @@
 #include <iostream>
 #include "thekogans/make/core/Source.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/delete_source_toolchain.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct delete_source_toolchain : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (delete_source_toolchain)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_toolchain, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_SOURCES;
-                }
+        void delete_source_toolchain::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " -o:organization -p:project [-v:version]\n\n"
+                "a - Delete a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                "o - Organization name.\n"
+                "p - Project name.\n"
+                "v - Project version. Empty = Delete all versions.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " -o:organization -p:project [-v:version]\n\n"
-                        "a - Delete a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
-                        "o - Organization name.\n"
-                        "p - Project name.\n"
-                        "v - Project version. Empty = Delete all versions.\n";
-                }
-
-                virtual void Execute  () override {
-                    core::Source source (Options::Instance ()->organization);
-                    std::set<std::string> versions;
-                    if (!Options::Instance ()->version.empty ()) {
-                        versions.insert (Options::Instance ()->version);
-                    }
-                    else {
-                        source.GetToolchainVersions (Options::Instance ()->project, versions);
-                    }
-                    for (std::set<std::string>::const_iterator
-                            it = versions.begin (),
-                            end = versions.end (); it != end; ++it) {
-                        source.DeleteToolchain (Options::Instance ()->project, *it);
-                    }
-                    source.Save ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (delete_source_toolchain, Action::TYPE)
+        void delete_source_toolchain::Execute () {
+            core::Source source (Options::Instance ()->organization);
+            std::set<std::string> versions;
+            if (!Options::Instance ()->version.empty ()) {
+                versions.insert (Options::Instance ()->version);
+            }
+            else {
+                source.GetToolchainVersions (Options::Instance ()->project, versions);
+            }
+            for (std::set<std::string>::const_iterator
+                     it = versions.begin (),
+                     end = versions.end (); it != end; ++it) {
+                source.DeleteToolchain (Options::Instance ()->project, *it);
+            }
+            source.Save ();
         }
 
     } // namespace make

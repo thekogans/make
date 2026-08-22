@@ -18,35 +18,25 @@
 #include <iostream>
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/Options.h"
-#include "thekogans/make/Action.h"
+#include "thekogans/make/actions/get_project_version.h"
 
 namespace thekogans {
     namespace make {
 
-        namespace {
-            struct get_project_version : public Action {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_project_version)
+        THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_version, Action::TYPE)
 
-                virtual std::string GetGroup () const override {
-                    return GROUP_THEKOGANS_MAKE_XML;
-                }
+        void get_project_version::PrintHelp (std::ostream &stream) const {
+            stream <<
+                "-a:" << Type () << " path\n\n"
+                "a - Get the version (major.minor.patch) from a " THEKOGANS_MAKE_XML " file.\n"
+                "path - Path to " THEKOGANS_MAKE_XML " file.\n";
+        }
 
-                virtual void PrintHelp (std::ostream &stream) const override {
-                    stream <<
-                        "-a:" << Type () << " path\n\n"
-                        "a - Get the version (major.minor.patch) from a " THEKOGANS_MAKE_XML " file.\n"
-                        "path - Path to " THEKOGANS_MAKE_XML " file.\n";
-                }
-
-                virtual void Execute  () override {
-                    std::cout << core::thekogans_make::GetVersion (
-                        std::string (),
-                        Options::Instance ()->path);
-                    std::cout.flush ();
-                }
-            };
-
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (get_project_version, Action::TYPE)
+        void get_project_version::Execute () {
+            std::cout << core::thekogans_make::GetVersion (
+                std::string (),
+                Options::Instance ()->path);
+            std::cout.flush ();
         }
 
     } // namespace make
