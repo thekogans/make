@@ -94,68 +94,68 @@ cpp_headers :=\
   $(project_root)/include/$(organization)/$(project)/Action.h\
   $(project_root)/include/$(organization)/$(project)/Options.h\
   $(project_root)/include/$(organization)/$(project)/Version.h
-    <!-- actions -->
-    <cpp_header>$(organization)/$(project_directory)/actions/Actions.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/add_source_project.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/add_source_toolchain.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/build_project.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/check_dependencies.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source_project.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source_toolchain.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/cleanup_toolchain.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/copy_dependencies.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/copy_plugin.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/create_build_system.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/create_source.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/delete_build_system.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/delete_source_project.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/delete_source_toolchain.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/delete_toolchain_source.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/destroy_source.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_build_config.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_build_type.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_naming_convention.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_project_dependency_version.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_project_type.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_project_version.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_schema_version.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_latest_version.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_sha2_256.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_versions.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_file.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_latest_version.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_sha2_256.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_versions.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_source_url.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_dependency_version.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_latest_version.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_sha2_256.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_versions.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_file.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_latest_version.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_sha2_256.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_versions.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_url.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_versions.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/install_library.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/install_plugin_hosts.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/install_plugin.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/install_program.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/list_dependencies.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/list_toolchain_sources.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/uninstall_library.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/uninstall_plugin.h</cpp_header>
-    <cpp_header>$(organization)/$(project_directory)/actions/uninstall_program.h</cpp_header>
-    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
-      <cpp_header>$(organization)/$(project_directory)/actions/add_toolchain_source.h</cpp_header>
-      <cpp_header>$(organization)/$(project_directory)/actions/update_toolchain_sources.h</cpp_header>
-    </if>
-    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
-      <cpp_header>$(organization)/$(project_directory)/actions/list_cygwin_mount_table.h</cpp_header>
-      <cpp_header>$(organization)/$(project_directory)/actions/update_cl_dependencies.h</cpp_header>
-      <cpp_header>$(organization)/$(project_directory)/actions/update_windows_dependencies.h</cpp_header>
-    </if>
+    # <!-- actions -->
+    # <cpp_header>$(organization)/$(project_directory)/actions/Actions.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/add_source_project.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/add_source_toolchain.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/build_project.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/check_dependencies.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source_project.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source_toolchain.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/cleanup_source.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/cleanup_toolchain.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/copy_dependencies.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/copy_plugin.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/create_build_system.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/create_source.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/delete_build_system.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/delete_source_project.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/delete_source_toolchain.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/delete_toolchain_source.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/destroy_source.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_build_config.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_build_type.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_naming_convention.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_project_dependency_version.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_project_type.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_project_version.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_schema_version.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_latest_version.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_sha2_256.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_source_project_versions.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_file.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_latest_version.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_sha2_256.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_source_toolchain_versions.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_source_url.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_dependency_version.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_latest_version.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_sha2_256.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_project_versions.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_file.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_latest_version.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_sha2_256.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_toolchain_versions.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_source_url.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/get_toolchain_versions.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/install_library.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/install_plugin_hosts.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/install_plugin.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/install_program.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/list_dependencies.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/list_toolchain_sources.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/uninstall_library.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/uninstall_plugin.h</cpp_header>
+    # <cpp_header>$(organization)/$(project_directory)/actions/uninstall_program.h</cpp_header>
+    # <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
+    #   <cpp_header>$(organization)/$(project_directory)/actions/add_toolchain_source.h</cpp_header>
+    #   <cpp_header>$(organization)/$(project_directory)/actions/update_toolchain_sources.h</cpp_header>
+    # </if>
+    # <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+    #   <cpp_header>$(organization)/$(project_directory)/actions/list_cygwin_mount_table.h</cpp_header>
+    #   <cpp_header>$(organization)/$(project_directory)/actions/update_cl_dependencies.h</cpp_header>
+    #   <cpp_header>$(organization)/$(project_directory)/actions/update_windows_dependencies.h</cpp_header>
+    # </if>
 # generators
 cpp_headers :=\
   $(project_root)/include/$(organization)/$(project)/generators/Generators.h\
