@@ -30,7 +30,7 @@ namespace thekogans {
                 stream <<
                     "-a:" << Type () << " -o:organization -p:project\n\n"
                     "a - Return all versions of a specified toolchain library/program/plugin "
-                    "from source $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "from source $SOURCES_ROOT/$organization/Source.xml.\n"
                     "o - Organization name.\n"
                     "p - Project name.\n";
             }

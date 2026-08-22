@@ -28,7 +28,7 @@ namespace thekogans {
             void add_source_project::PrintHelp (std::ostream &stream) const {
                 stream <<
                     "-a:" << Type () << " -o:organization -p:project [-b:branch] -v:version -s:SHA2_256\n\n"
-                    "a - Add a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "a - Add a project entry in $SOURCES_ROOT/$organization/Source.xml.\n"
                     "o - Organization name.\n"
                     "p - Project name.\n"
                     "b - Project branch.\n"

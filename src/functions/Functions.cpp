@@ -42,6 +42,7 @@
     #include "thekogans/make/functions/to_project_build_path.h"
     #include "thekogans/make/functions/to_project_path.h"
     #include "thekogans/make/functions/to_system_path.h"
+    #include "thekogans/make/functions/Functions.h"
 #endif // defined (THEKOGANS_MAKE_TYPE_Static)
 
 namespace thekogans {

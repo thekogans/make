@@ -29,7 +29,7 @@ namespace thekogans {
             void delete_source_toolchain::PrintHelp (std::ostream &stream) const {
                 stream <<
                     "-a:" << Type () << " -o:organization -p:project [-v:version]\n\n"
-                    "a - Delete a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "a - Delete a toolchain entry in $SOURCES_ROOT/$organization/Source.xml.\n"
                     "o - Organization name.\n"
                     "p - Project name.\n"
                     "v - Project version. Empty = Delete all versions.\n";

@@ -30,7 +30,7 @@ namespace thekogans {
                 stream <<
                     "-a:" << Type () << " [-o:organization]\n\n"
                     "a - Remove old project and toolchain versions form a given "
-                    "$DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "$SOURCES_ROOT/$organization/Source.xml.\n"
                     "o - Optional organization name.\n";
             }
 

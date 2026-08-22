@@ -17,16 +17,17 @@
 
 #if defined (THEKOGANS_MAKE_TYPE_Static)
     #include "thekogans/util/Environment.h"
-    #include "thekogans/make/generators/make.cpp
+    #include "thekogans/make/generators/make.h"
 #if defined (TOOLCHAIN_OS_Windows)
-    #include "thekogans/make/generators/vs2013.cpp
-    #include "thekogans/make/generators/vs2015.cpp
-    #include "thekogans/make/generators/vs2017.cpp
-    #include "thekogans/make/generators/vs2019.cpp
-    #include "thekogans/make/generators/vsBase.cpp
+    #include "thekogans/make/generators/vs2013.h"
+    #include "thekogans/make/generators/vs2015.h"
+    #include "thekogans/make/generators/vs2017.h"
+    #include "thekogans/make/generators/vs2019.h"
+    #include "thekogans/make/generators/vsBase.h"
 #elif defined (TOOLCHAIN_OS_OSX)
-    #include "thekogans/make/generators/Xcode.mm
+    #include "thekogans/make/generators/Xcode.h"
 #endif // defined (TOOLCHAIN_OS_Windows)
+    #include "thekogans/make/generators/Generators.h"
 #endif // defined (THEKOGANS_MAKE_TYPE_Static)
 
 namespace thekogans {

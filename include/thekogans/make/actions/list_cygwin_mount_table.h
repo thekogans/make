@@ -18,6 +18,10 @@
 #if !defined (__thekogans_make_actions_list_cygwin_mount_table_h)
 #define __thekogans_make_actions_list_cygwin_mount_table_h
 
+#include "thekogans/util/Environment.h"
+
+#if defined (TOOLCHAIN_OS_Windows)
+
 #include "thekogans/make/Action.h"
 
 namespace thekogans {
@@ -38,5 +42,7 @@ namespace thekogans {
         } // namespace actions
     } // namespace make
 } // namespace thekogans
+
+#endif // defined (TOOLCHAIN_OS_Windows)
 
 #endif // !defined (__thekogans_make_actions_list_cygwin_mount_table_h)

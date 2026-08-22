@@ -29,7 +29,7 @@ namespace thekogans {
             void delete_source_project::PrintHelp (std::ostream &stream) const {
                 stream <<
                     "-a:" << Type () << " -o:organization -p:project [-b:branch] [-v:version]\n\n"
-                    "a - Delete a project entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "a - Delete a project entry in $SOURCES_ROOT/$organization/Source.xml.\n"
                     "o - Organization name.\n"
                     "p - Project name.\n"
                     "b - Project branch.\n"

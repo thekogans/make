@@ -28,7 +28,7 @@ namespace thekogans {
             void add_source_toolchain::PrintHelp (std::ostream &stream) const {
                 stream <<
                     "-a:" << Type () << " -o:organization -p:project -v:version [-f:file] -s:SHA2_256\n\n"
-                    "a - Add a toolchain entry in $DEVELOPMENT_ROOT/sources/$organization/Source.xml.\n"
+                    "a - Add a toolchain entry in $SOURCES_ROOT/$organization/Source.xml.\n"
                     "o - Organization name.\n"
                     "p - Project name.\n"
                     "v - Project version.\n"

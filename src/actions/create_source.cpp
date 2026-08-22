@@ -29,7 +29,7 @@ namespace thekogans {
             void create_source::PrintHelp (std::ostream &stream) const {
                 stream <<
                     "-a:" << Type () << " -o:organization -u:url\n\n"
-                    "a - Create a new source in $DEVELOPMENT_ROOT/sources.\n"
+                    "a - Create a new source in $SOURCES_ROOT.\n"
                     "o - Organization name.\n"
                     "u - Organization URL.\n";
             }

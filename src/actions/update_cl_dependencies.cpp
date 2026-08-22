@@ -15,6 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
+#include "thekogans/util/Environment.h"
+
+#if defined (TOOLCHAIN_OS_Windows)
+
 #include <iostream>
 #include <fstream>
 #include "thekogans/util/os/windows/WindowsUtils.h"
@@ -113,3 +117,5 @@ namespace thekogans {
         } // namespace actions
     } // namespace make
 } // namespace thekogans
+
+#endif // defined (TOOLCHAIN_OS_Windows)

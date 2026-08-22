@@ -29,7 +29,7 @@ namespace thekogans {
             void destroy_source::PrintHelp (std::ostream &stream) const {
                 stream <<
                     "-a:" << Type () << " -o:organization\n\n"
-                    "a - Destroy the given source in $DEVELOPMENT_ROOT/sources.\n"
+                    "a - Destroy the given source in $SOURCES_ROOT.\n"
                     "o - Organization name.\n";
             }
 
