@@ -16,8 +16,9 @@
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
 #if defined (THEKOGANS_MAKE_TYPE_Static)
-    #include "thekogans/util/Environment.h"
-    #include "thekogans/make/generators/make.h"
+
+#include "thekogans/util/Environment.h"
+#include "thekogans/make/generators/make.h"
 #if defined (TOOLCHAIN_OS_Windows)
     #include "thekogans/make/generators/vs2013.h"
     #include "thekogans/make/generators/vs2015.h"
@@ -27,14 +28,12 @@
 #elif defined (TOOLCHAIN_OS_OSX)
     #include "thekogans/make/generators/Xcode.h"
 #endif // defined (TOOLCHAIN_OS_Windows)
-    #include "thekogans/make/generators/Generators.h"
-#endif // defined (THEKOGANS_MAKE_TYPE_Static)
+#include "thekogans/make/generators/Generators.h"
 
 namespace thekogans {
     namespace make {
         namespace generators {
 
-        #if defined (THEKOGANS_MAKE_TYPE_Static)
             void Generators::StaticInit () {
                 make::StaticInit ();
             #if defined (TOOLCHAIN_OS_Windows)
@@ -46,8 +45,9 @@ namespace thekogans {
                 Xcode::StaticInit ();
             #endif // defined (TOOLCHAIN_OS_Windows)
             }
-        #endif // defined (THEKOGANS_MAKE_TYPE_Static)
 
         } // namespace generators
     } // namespace make
 } // namespace thekogans
+
+#endif // defined (THEKOGANS_MAKE_TYPE_Static)

@@ -16,40 +16,39 @@
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
 #if defined (THEKOGANS_MAKE_TYPE_Static)
-    #include "thekogans/make/functions/get_directory_name.h"
-    #include "thekogans/make/functions/get_directory.h"
-    #include "thekogans/make/functions/get_extension.h"
-    #include "thekogans/make/functions/get_file_name.h"
-    #include "thekogans/make/functions/get_full_file_name.h"
-    #include "thekogans/make/functions/get_major_version.h"
-    #include "thekogans/make/functions/get_minor_version.h"
-    #include "thekogans/make/functions/get_patch_version.h"
-    #include "thekogans/make/functions/get_project_library.h"
-    #include "thekogans/make/functions/get_project_program.h"
-    #include "thekogans/make/functions/get_project_root.h"
-    #include "thekogans/make/functions/get_project_version.h"
-    #include "thekogans/make/functions/get_toolchain_include_dir.h"
-    #include "thekogans/make/functions/get_toolchain_latest_version.h"
-    #include "thekogans/make/functions/get_toolchain_lib_dir.h"
-    #include "thekogans/make/functions/get_toolchain_library.h"
-    #include "thekogans/make/functions/get_toolchain_program.h"
-    #include "thekogans/make/functions/have_feature.h"
-    #include "thekogans/make/functions/is_defined.h"
-    #include "thekogans/make/functions/is_installed.h"
-    #include "thekogans/make/functions/make_path.h"
-    #include "thekogans/make/functions/path_exists.h"
-    #include "thekogans/make/functions/to_build_system_path.h"
-    #include "thekogans/make/functions/to_project_build_path.h"
-    #include "thekogans/make/functions/to_project_path.h"
-    #include "thekogans/make/functions/to_system_path.h"
-    #include "thekogans/make/functions/Functions.h"
-#endif // defined (THEKOGANS_MAKE_TYPE_Static)
+
+#include "thekogans/make/functions/get_directory_name.h"
+#include "thekogans/make/functions/get_directory.h"
+#include "thekogans/make/functions/get_extension.h"
+#include "thekogans/make/functions/get_file_name.h"
+#include "thekogans/make/functions/get_full_file_name.h"
+#include "thekogans/make/functions/get_major_version.h"
+#include "thekogans/make/functions/get_minor_version.h"
+#include "thekogans/make/functions/get_patch_version.h"
+#include "thekogans/make/functions/get_project_library.h"
+#include "thekogans/make/functions/get_project_program.h"
+#include "thekogans/make/functions/get_project_root.h"
+#include "thekogans/make/functions/get_project_version.h"
+#include "thekogans/make/functions/get_toolchain_include_dir.h"
+#include "thekogans/make/functions/get_toolchain_latest_version.h"
+#include "thekogans/make/functions/get_toolchain_lib_dir.h"
+#include "thekogans/make/functions/get_toolchain_library.h"
+#include "thekogans/make/functions/get_toolchain_program.h"
+#include "thekogans/make/functions/have_feature.h"
+#include "thekogans/make/functions/is_defined.h"
+#include "thekogans/make/functions/is_installed.h"
+#include "thekogans/make/functions/make_path.h"
+#include "thekogans/make/functions/path_exists.h"
+#include "thekogans/make/functions/to_build_system_path.h"
+#include "thekogans/make/functions/to_project_build_path.h"
+#include "thekogans/make/functions/to_project_path.h"
+#include "thekogans/make/functions/to_system_path.h"
+#include "thekogans/make/functions/Functions.h"
 
 namespace thekogans {
     namespace make {
         namespace functions {
 
-        #if defined (THEKOGANS_MAKE_TYPE_Static)
             void Functions::StaticInit () {
                 get_directory_name::StaticInit ();
                 get_directory::StaticInit ();
@@ -78,8 +77,9 @@ namespace thekogans {
                 to_project_path::StaticInit ();
                 to_system_path::StaticInit ();
             }
-        #endif // defined (THEKOGANS_MAKE_TYPE_Static)
 
         } // namespace functions
     } // namespace make
 } // namespace thekogans
+
+#endif // defined (THEKOGANS_MAKE_TYPE_Static)

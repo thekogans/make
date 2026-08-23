@@ -16,58 +16,59 @@
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
 #if defined (THEKOGANS_MAKE_TYPE_Static)
-    #include "thekogans/util/Environment.h"
-    #include "thekogans/make/actions/add_source_project.h"
-    #include "thekogans/make/actions/add_source_toolchain.h"
-    #include "thekogans/make/actions/build_project.h"
-    #include "thekogans/make/actions/check_dependencies.h"
-    #include "thekogans/make/actions/cleanup_source_project.h"
-    #include "thekogans/make/actions/cleanup_source_toolchain.h"
-    #include "thekogans/make/actions/cleanup_source.h"
-    #include "thekogans/make/actions/cleanup_toolchain.h"
-    #include "thekogans/make/actions/copy_dependencies.h"
-    #include "thekogans/make/actions/copy_plugin.h"
-    #include "thekogans/make/actions/create_build_system.h"
-    #include "thekogans/make/actions/create_source.h"
-    #include "thekogans/make/actions/delete_build_system.h"
-    #include "thekogans/make/actions/delete_source_project.h"
-    #include "thekogans/make/actions/delete_source_toolchain.h"
-    #include "thekogans/make/actions/delete_toolchain_source.h"
-    #include "thekogans/make/actions/destroy_source.h"
-    #include "thekogans/make/actions/get_build_config.h"
-    #include "thekogans/make/actions/get_build_type.h"
-    #include "thekogans/make/actions/get_naming_convention.h"
-    #include "thekogans/make/actions/get_project_dependency_version.h"
-    #include "thekogans/make/actions/get_project_type.h"
-    #include "thekogans/make/actions/get_project_version.h"
-    #include "thekogans/make/actions/get_schema_version.h"
-    #include "thekogans/make/actions/get_source_project_latest_version.h"
-    #include "thekogans/make/actions/get_source_project_sha2_256.h"
-    #include "thekogans/make/actions/get_source_project_versions.h"
-    #include "thekogans/make/actions/get_source_toolchain_file.h"
-    #include "thekogans/make/actions/get_source_toolchain_latest_version.h"
-    #include "thekogans/make/actions/get_source_toolchain_sha2_256.h"
-    #include "thekogans/make/actions/get_source_toolchain_versions.h"
-    #include "thekogans/make/actions/get_source_url.h"
-    #include "thekogans/make/actions/get_toolchain_dependency_version.h"
-    #include "thekogans/make/actions/get_toolchain_source_project_latest_version.h"
-    #include "thekogans/make/actions/get_toolchain_source_project_sha2_256.h"
-    #include "thekogans/make/actions/get_toolchain_source_project_versions.h"
-    #include "thekogans/make/actions/get_toolchain_source_toolchain_file.h"
-    #include "thekogans/make/actions/get_toolchain_source_toolchain_latest_version.h"
-    #include "thekogans/make/actions/get_toolchain_source_toolchain_sha2_256.h"
-    #include "thekogans/make/actions/get_toolchain_source_toolchain_versions.h"
-    #include "thekogans/make/actions/get_toolchain_source_url.h"
-    #include "thekogans/make/actions/get_toolchain_versions.h"
-    #include "thekogans/make/actions/install_library.h"
-    #include "thekogans/make/actions/install_plugin_hosts.h"
-    #include "thekogans/make/actions/install_plugin.h"
-    #include "thekogans/make/actions/install_program.h"
-    #include "thekogans/make/actions/list_dependencies.h"
-    #include "thekogans/make/actions/list_toolchain_sources.h"
-    #include "thekogans/make/actions/uninstall_library.h"
-    #include "thekogans/make/actions/uninstall_plugin.h"
-    #include "thekogans/make/actions/uninstall_program.h"
+
+#include "thekogans/util/Environment.h"
+#include "thekogans/make/actions/add_source_project.h"
+#include "thekogans/make/actions/add_source_toolchain.h"
+#include "thekogans/make/actions/build_project.h"
+#include "thekogans/make/actions/check_dependencies.h"
+#include "thekogans/make/actions/cleanup_source_project.h"
+#include "thekogans/make/actions/cleanup_source_toolchain.h"
+#include "thekogans/make/actions/cleanup_source.h"
+#include "thekogans/make/actions/cleanup_toolchain.h"
+#include "thekogans/make/actions/copy_dependencies.h"
+#include "thekogans/make/actions/copy_plugin.h"
+#include "thekogans/make/actions/create_build_system.h"
+#include "thekogans/make/actions/create_source.h"
+#include "thekogans/make/actions/delete_build_system.h"
+#include "thekogans/make/actions/delete_source_project.h"
+#include "thekogans/make/actions/delete_source_toolchain.h"
+#include "thekogans/make/actions/delete_toolchain_source.h"
+#include "thekogans/make/actions/destroy_source.h"
+#include "thekogans/make/actions/get_build_config.h"
+#include "thekogans/make/actions/get_build_type.h"
+#include "thekogans/make/actions/get_naming_convention.h"
+#include "thekogans/make/actions/get_project_dependency_version.h"
+#include "thekogans/make/actions/get_project_type.h"
+#include "thekogans/make/actions/get_project_version.h"
+#include "thekogans/make/actions/get_schema_version.h"
+#include "thekogans/make/actions/get_source_project_latest_version.h"
+#include "thekogans/make/actions/get_source_project_sha2_256.h"
+#include "thekogans/make/actions/get_source_project_versions.h"
+#include "thekogans/make/actions/get_source_toolchain_file.h"
+#include "thekogans/make/actions/get_source_toolchain_latest_version.h"
+#include "thekogans/make/actions/get_source_toolchain_sha2_256.h"
+#include "thekogans/make/actions/get_source_toolchain_versions.h"
+#include "thekogans/make/actions/get_source_url.h"
+#include "thekogans/make/actions/get_toolchain_dependency_version.h"
+#include "thekogans/make/actions/get_toolchain_source_project_latest_version.h"
+#include "thekogans/make/actions/get_toolchain_source_project_sha2_256.h"
+#include "thekogans/make/actions/get_toolchain_source_project_versions.h"
+#include "thekogans/make/actions/get_toolchain_source_toolchain_file.h"
+#include "thekogans/make/actions/get_toolchain_source_toolchain_latest_version.h"
+#include "thekogans/make/actions/get_toolchain_source_toolchain_sha2_256.h"
+#include "thekogans/make/actions/get_toolchain_source_toolchain_versions.h"
+#include "thekogans/make/actions/get_toolchain_source_url.h"
+#include "thekogans/make/actions/get_toolchain_versions.h"
+#include "thekogans/make/actions/install_library.h"
+#include "thekogans/make/actions/install_plugin_hosts.h"
+#include "thekogans/make/actions/install_plugin.h"
+#include "thekogans/make/actions/install_program.h"
+#include "thekogans/make/actions/list_dependencies.h"
+#include "thekogans/make/actions/list_toolchain_sources.h"
+#include "thekogans/make/actions/uninstall_library.h"
+#include "thekogans/make/actions/uninstall_plugin.h"
+#include "thekogans/make/actions/uninstall_program.h"
 #if defined (THEKOGANS_MAKE_HAVE_CURL)
     #include "thekogans/make/actions/add_toolchain_source.h"
     #include "thekogans/make/actions/update_toolchain_sources.h"
@@ -77,14 +78,12 @@
     #include "thekogans/make/actions/update_cl_dependencies.h"
     #include "thekogans/make/actions/update_windows_dependencies.h"
 #endif // defined (TOOLCHAIN_OS_Windows)
-    #include "thekogans/make/actions/Actions.h"
-#endif // defined (THEKOGANS_MAKE_TYPE_Static)
+#include "thekogans/make/actions/Actions.h"
 
 namespace thekogans {
     namespace make {
         namespace actions {
 
-        #if defined (THEKOGANS_MAKE_TYPE_Static)
             void Actions::StaticInit () {
                 add_source_project::StaticInit ();
                 add_source_toolchain::StaticInit ();
@@ -147,8 +146,9 @@ namespace thekogans {
                 update_windows_dependencies::StaticInit ();
             #endif // defined (TOOLCHAIN_OS_Windows)
             }
-        #endif // defined (THEKOGANS_MAKE_TYPE_Static)
 
         } // namespace actions
     } // namespace make
 } // namespace thekogans
+
+#endif // defined (THEKOGANS_MAKE_TYPE_Static)

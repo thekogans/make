@@ -30,11 +30,11 @@
 #include "thekogans/make/Options.h"
 #include "thekogans/make/Action.h"
 #include "thekogans/make/Version.h"
-#if defined (THEKOGANS_UTIL_TYPE_Static)
-#include "thekogans/make/actions/Actions.h"
-#include "thekogans/make/generators/Generators.h"
-#include "thekogans/make/functions/Functions.h"
-#endif // defined (THEKOGANS_UTIL_TYPE_Static)
+#if defined (THEKOGANS_MAKE_TYPE_Static)
+    #include "thekogans/make/actions/Actions.h"
+    #include "thekogans/make/generators/Generators.h"
+    #include "thekogans/make/functions/Functions.h"
+#endif // defined (THEKOGANS_MAKE_TYPE_Static)
 
 using namespace thekogans;
 

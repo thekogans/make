@@ -28,7 +28,8 @@
     </if>
     <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
       <toolchain organization = "thekogans"
-                 name = "curllib"/>
+                 name = "curllib"
+                 type = "Shared"/>
     </if>
   </dependencies>
   <cpp_preprocessor_definitions>
