@@ -94,7 +94,8 @@ cpp_headers :=\
   $(project_root)/include/$(organization)/$(project)/Action.h\
   $(project_root)/include/$(organization)/$(project)/Options.h\
   $(project_root)/include/$(organization)/$(project)/Version.h
-  # <!-- actions -->
+# actions
+cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/actions/Actions.h\
   $(project_root)/include/$(organization)/$(project)/actions/add_source_project.h\
   $(project_root)/include/$(organization)/$(project)/actions/add_source_toolchain.h\
