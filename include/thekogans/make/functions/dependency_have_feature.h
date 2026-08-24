@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#if !defined (__thekogans_make_functions_get_toolchain_include_dir_h)
-#define __thekogans_make_functions_get_toolchain_include_dir_h
+#if !defined (__thekogans_make_functions_dependency_have_feature_h)
+#define __thekogans_make_functions_dependency_have_feature_h
 
 #include "thekogans/make/core/Function.h"
 
@@ -24,11 +24,11 @@ namespace thekogans {
     namespace make {
         namespace functions {
 
-            struct get_toolchain_include_dir : public core::Function {
-                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (get_toolchain_include_dir)
+            struct dependency_have_feature : public core::Function {
+                THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (dependency_have_feature)
 
                 virtual core::Value Exec (
-                    const core::thekogans_make & /*thekogans_make*/,
+                    const core::thekogans_make &thekogans_make,
                     const Parameters &parameters) const override;
             };
 
@@ -36,4 +36,4 @@ namespace thekogans {
     } // namespace make
 } // namespace thekogans
 
-#endif // !defined (__thekogans_make_functions_get_toolchain_include_dir_h)
+#endif // !defined (__thekogans_make_functions_dependency_have_feature_h)

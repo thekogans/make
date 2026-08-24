@@ -36,9 +36,7 @@ namespace thekogans {
                         return core::Value (util::Path ((*it).second).Exists ());
                     }
                 }
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "path_exists: missing parameter [%s]",
-                    "-p | --path");
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("path_exists: missing parameter [-p | --path]");
             }
 
         } // namespace functions

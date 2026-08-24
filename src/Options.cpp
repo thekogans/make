@@ -97,6 +97,9 @@ namespace thekogans {
                 case 'z':
                     target = value;
                     break;
+                case 'r':
+                    description = value;
+                    break;
             }
         }
 

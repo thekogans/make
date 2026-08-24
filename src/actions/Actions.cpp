@@ -69,10 +69,10 @@
 #include "thekogans/make/actions/uninstall_library.h"
 #include "thekogans/make/actions/uninstall_plugin.h"
 #include "thekogans/make/actions/uninstall_program.h"
-#if defined (THEKOGANS_MAKE_HAVE_CURL)
+#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
     #include "thekogans/make/actions/add_toolchain_source.h"
     #include "thekogans/make/actions/update_toolchain_sources.h"
-#endif // defined (THEKOGANS_MAKE_HAVE_CURL)
+#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
 #if defined (TOOLCHAIN_OS_Windows)
     #include "thekogans/make/actions/list_cygwin_mount_table.h"
     #include "thekogans/make/actions/update_cl_dependencies.h"
@@ -136,10 +136,10 @@ namespace thekogans {
                 uninstall_library::StaticInit ();
                 uninstall_plugin::StaticInit ();
                 uninstall_program::StaticInit ();
-            #if defined (THEKOGANS_MAKE_HAVE_CURL)
+            #if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
                 add_toolchain_source::StaticInit ();
                 update_toolchain_sources::StaticInit ();
-            #endif // defined (THEKOGANS_MAKE_HAVE_CURL)
+            #endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
             #if defined (TOOLCHAIN_OS_Windows)
                 list_cygwin_mount_table::StaticInit ();
                 update_cl_dependencies::StaticInit ();

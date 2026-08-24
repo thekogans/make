@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#if defined (THEKOGANS_MAKE_HAVE_CURL)
+#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
 
 #include "thekogans/make/core/Sources.h"
 #include "thekogans/make/Options.h"
@@ -45,4 +45,4 @@ namespace thekogans {
     } // namespace make
 } // namespace thekogans
 
-#endif // defined (THEKOGANS_MAKE_HAVE_CURL)
+#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)

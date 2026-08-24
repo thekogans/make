@@ -28,9 +28,9 @@
 #include "thekogans/make/core/thekogans_make.h"
 #include "thekogans/make/core/Project.h"
 #include "thekogans/make/core/Utils.h"
-#if defined (THEKOGANS_MAKE_HAVE_CURL)
+#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
     #include "thekogans/make/core/Sources.h"
-#endif // defined (THEKOGANS_MAKE_HAVE_CURL)
+#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
 #include "thekogans/make/generators/make.h"
 
 namespace thekogans {
@@ -312,12 +312,12 @@ namespace thekogans {
                 if (force ||
                         updatedDependency ||
                         !makefileFilePathExists ||
-                    #if defined (THEKOGANS_MAKE_HAVE_CURL)
+                    #if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
                         makefileFilePathLastModifiedDate <
                         util::Directory::Entry (
                             ToSystemPath (
                                 core::MakePath (core::_TOOLCHAIN_ROOT, SOURCES_XML))).lastModifiedDate ||
-                    #endif // defined (THEKOGANS_MAKE_HAVE_CURL)
+                    #endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
                         makefileFilePathLastModifiedDate <
                         util::Directory::Entry (thekogans_makeFilePath).lastModifiedDate) {
                     std::cout << "Generating " <<
@@ -411,9 +411,11 @@ namespace thekogans {
                                     }
                                 }
                                 else if (variable == "linker_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                             it = thekogans_make.linker_flags.begin (),
-                                             end = thekogans_make.linker_flags.end (); it != end; ++it) {
+                                    std::set<std::string> linker_flags;
+                                    thekogans_make.GetLinkerFlags (linker_flags);
+                                    for (std::set<std::string>::const_iterator
+                                             it = linker_flags.begin (),
+                                             end = linker_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                     // ld needs to be able to locate the dependency libraries.
@@ -429,9 +431,11 @@ namespace thekogans {
                                     }
                                 }
                                 else if (variable == "librarian_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.librarian_flags.begin (),
-                                            end = thekogans_make.librarian_flags.end (); it != end; ++it) {
+                                    std::set<std::string> librarian_flags;
+                                    thekogans_make.GetLibrarianFlags (librarian_flags);
+                                    for (std::set<std::string>::const_iterator
+                                            it = librarian_flags.begin (),
+                                            end = librarian_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
@@ -445,16 +449,11 @@ namespace thekogans {
                                     }
                                 }
                                 else if (variable == "common_preprocessor_definitions") {
-                                    std::list<std::string> preprocessor_definitions;
-                                    thekogans_make.GetCommonPreprocessorDefinitions (preprocessor_definitions);
+                                    std::list<std::string> common_preprocessor_definitions;
+                                    thekogans_make.GetCommonPreprocessorDefinitions (common_preprocessor_definitions);
                                     for (std::list<std::string>::const_iterator
-                                            it = preprocessor_definitions.begin (),
-                                            end = preprocessor_definitions.end (); it != end; ++it) {
-                                        makefileFile << "\\\n  " << *it;
-                                    }
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.preprocessor_definitions.begin (),
-                                            end = thekogans_make.preprocessor_definitions.end (); it != end; ++it) {
+                                            it = common_preprocessor_definitions.begin (),
+                                            end = common_preprocessor_definitions.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
@@ -468,16 +467,20 @@ namespace thekogans {
                                     }
                                 }
                                 else if (variable == "masm_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.masm_flags.begin (),
-                                            end = thekogans_make.masm_flags.end (); it != end; ++it) {
+                                    std::set<std::string> masm_flags;
+                                    thekogans_make.GetMasmFlags (masm_flags);
+                                    for (std::set<std::string>::const_iterator
+                                            it = masm_flags.begin (),
+                                            end = masm_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
                                 else if (variable == "masm_preprocessor_definitions") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.masm_preprocessor_definitions.begin (),
-                                            end = thekogans_make.masm_preprocessor_definitions.end (); it != end; ++it) {
+                                    std::set<std::string> masm_preprocessor_definitions;
+                                    thekogans_make.GetMasmPreprocessorDefinitions (masm_preprocessor_definitions);
+                                    for (std::set<std::string>::const_iterator
+                                            it = masm_preprocessor_definitions.begin (),
+                                            end = masm_preprocessor_definitions.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
@@ -503,17 +506,21 @@ namespace thekogans {
                                         customBuildList);
                                 }
                                 else if (variable == "nasm_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.nasm_flags.begin (),
-                                            end = thekogans_make.nasm_flags.end (); it != end; ++it) {
+                                    std::set<std::string> nasm_flags;
+                                    thekogans_make.GetNasmFlags (nasm_flags);
+                                    for (std::set<std::string>::const_iterator
+                                            it = nasm_flags.begin (),
+                                            end = nasm_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
                                 else if (variable == "nasm_preprocessor_definitions") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.nasm_preprocessor_definitions.begin (),
-                                            end = thekogans_make.nasm_preprocessor_definitions.end (); it != end; ++it) {
-                                            makefileFile << "\\\n  " << *it;
+                                    std::set<std::string> nasm_preprocessor_definitions;
+                                    thekogans_make.GetNasmPreprocessorDefinitions (nasm_preprocessor_definitions);
+                                    for (std::set<std::string>::const_iterator
+                                            it = nasm_preprocessor_definitions.begin (),
+                                            end = nasm_preprocessor_definitions.end (); it != end; ++it) {
+                                        makefileFile << "\\\n  " << *it;
                                     }
                                 }
                                 else if (variable == "nasm_headers") {
@@ -538,16 +545,20 @@ namespace thekogans {
                                         customBuildList);
                                 }
                                 else if (variable == "c_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.c_flags.begin (),
-                                            end = thekogans_make.c_flags.end (); it != end; ++it) {
+                                    std::set<std::string> c_flags;
+                                    thekogans_make.GetCFlags (c_flags);
+                                    for (std::set<std::string>::const_iterator
+                                            it = c_flags.begin (),
+                                            end = c_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
                                 else if (variable == "c_preprocessor_definitions") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.c_preprocessor_definitions.begin (),
-                                            end = thekogans_make.c_preprocessor_definitions.end (); it != end; ++it) {
+                                    std::set<std::string> c_preprocessor_definitions;
+                                    thekogans_make.GetCPreprocessorDefinitions (c_preprocessor_definitions);
+                                    for (std::set<std::string>::const_iterator
+                                            it = c_preprocessor_definitions.begin (),
+                                            end = c_preprocessor_definitions.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
@@ -573,16 +584,20 @@ namespace thekogans {
                                         customBuildList);
                                 }
                                 else if (variable == "cpp_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.cpp_flags.begin (),
-                                            end = thekogans_make.cpp_flags.end (); it != end; ++it) {
+                                    std::set<std::string> cpp_flags;
+                                    thekogans_make.GetCPPFlags (cpp_flags);
+                                    for (std::set<std::string>::const_iterator
+                                            it = cpp_flags.begin (),
+                                            end = cpp_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
                                 else if (variable == "cpp_preprocessor_definitions") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.cpp_preprocessor_definitions.begin (),
-                                            end = thekogans_make.cpp_preprocessor_definitions.end (); it != end; ++it) {
+                                    std::set<std::string> cpp_preprocessor_definitions;
+                                    thekogans_make.GetCPPPreprocessorDefinitions (cpp_preprocessor_definitions);
+                                    for (std::set<std::string>::const_iterator
+                                            it = cpp_preprocessor_definitions.begin (),
+                                            end = cpp_preprocessor_definitions.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
@@ -608,16 +623,20 @@ namespace thekogans {
                                         customBuildList);
                                 }
                                 else if (variable == "objective_c_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.objective_c_flags.begin (),
-                                            end = thekogans_make.objective_c_flags.end (); it != end; ++it) {
+                                    std::set<std::string> objective_c_flags;
+                                    thekogans_make.GetObjectiveCFlags (objective_c_flags);
+                                    for (std::set<std::string>::const_iterator
+                                            it = objective_c_flags.begin (),
+                                            end = objective_c_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
                                 else if (variable == "objective_c_preprocessor_definitions") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.objective_c_preprocessor_definitions.begin (),
-                                            end = thekogans_make.objective_c_preprocessor_definitions.end (); it != end; ++it) {
+                                    std::set<std::string> objective_c_preprocessor_definitions;
+                                    thekogans_make.GetObjectiveCPreprocessorDefinitions (objective_c_preprocessor_definitions);
+                                    for (std::set<std::string>::const_iterator
+                                            it = objective_c_preprocessor_definitions.begin (),
+                                            end = objective_c_preprocessor_definitions.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
@@ -643,16 +662,20 @@ namespace thekogans {
                                         customBuildList);
                                 }
                                 else if (variable == "objective_cpp_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.objective_cpp_flags.begin (),
-                                            end = thekogans_make.objective_cpp_flags.end (); it != end; ++it) {
+                                    std::set<std::string> objective_cpp_flags;
+                                    thekogans_make.GetObjectiveCPPFlags (objective_cpp_flags);
+                                    for (std::set<std::string>::const_iterator
+                                            it = objective_cpp_flags.begin (),
+                                            end = objective_cpp_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
                                 else if (variable == "objective_cpp_preprocessor_definitions") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.objective_cpp_preprocessor_definitions.begin (),
-                                            end = thekogans_make.objective_cpp_preprocessor_definitions.end (); it != end; ++it) {
+                                    std::set<std::string> objective_cpp_preprocessor_definitions;
+                                    thekogans_make.GetObjectiveCPPPreprocessorDefinitions (objective_cpp_preprocessor_definitions);
+                                    for (std::set<std::string>::const_iterator
+                                            it = objective_cpp_preprocessor_definitions.begin (),
+                                            end = objective_cpp_preprocessor_definitions.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
@@ -685,16 +708,20 @@ namespace thekogans {
                                         customBuildList);
                                 }
                                 else if (variable == "rc_flags") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.rc_flags.begin (),
-                                            end = thekogans_make.rc_flags.end (); it != end; ++it) {
+                                    std::set<std::string> rc_flags;
+                                    thekogans_make.GetRCFlags (rc_flags);
+                                    for (std::set<std::string>::const_iterator
+                                            it = rc_flags.begin (),
+                                            end = rc_flags.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }
                                 else if (variable == "rc_preprocessor_definitions") {
-                                    for (std::list<std::string>::const_iterator
-                                            it = thekogans_make.rc_preprocessor_definitions.begin (),
-                                            end = thekogans_make.rc_preprocessor_definitions.end (); it != end; ++it) {
+                                    std::set<std::string> rc_preprocessor_definitions;
+                                    thekogans_make.GetRCPreprocessorDefinitions (rc_preprocessor_definitions);
+                                    for (std::set<std::string>::const_iterator
+                                            it = rc_preprocessor_definitions.begin (),
+                                            end = rc_preprocessor_definitions.end (); it != end; ++it) {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                 }

@@ -52,6 +52,7 @@ namespace thekogans {
             bool hide_commands;
             bool parallel_build;
             std::string target;
+            std::string description;
             std::string path;
 
             Options () :

@@ -2,8 +2,8 @@
                 project = "make"
                 project_type = "program"
                 major_version = "0"
-                minor_version = "34"
-                patch_version = "3"
+                minor_version = "35"
+                patch_version = "0"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
   <features>
@@ -15,7 +15,6 @@
         <feature>THEKOGANS_MAKE_HAVE_XCODE_EDITOR</feature>
       </when>
     </choose>
-    <feature>THEKOGANS_MAKE_HAVE_CURL</feature>
   </features>
   <dependencies>
     <dependency organization = "thekogans"
@@ -26,7 +25,7 @@
       <toolchain organization = "thekogans"
                  name = "XcodeEditor"/>
     </if>
-    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
+    <if condition = "$(dependency_have_feature -o:thekogans -n:make_core -f:THEKOGANS_MAKE_CORE_HAVE_CURL)">
       <toolchain organization = "thekogans"
                  name = "curllib"
                  type = "Shared"/>
@@ -94,7 +93,7 @@
     <cpp_header>$(organization)/$(project_directory)/actions/uninstall_library.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/actions/uninstall_plugin.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/actions/uninstall_program.h</cpp_header>
-    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
+    <if condition = "$(dependency_have_feature -o:thekogans -n:make_core -f:THEKOGANS_MAKE_CORE_HAVE_CURL)">
       <cpp_header>$(organization)/$(project_directory)/actions/add_toolchain_source.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/actions/update_toolchain_sources.h</cpp_header>
     </if>
@@ -115,6 +114,7 @@
     </if>
     <!-- functions -->
     <cpp_header>$(organization)/$(project_directory)/functions/Functions.h</cpp_header>
+    <cpp_header>$(organization)/$(project_directory)/functions/dependency_have_feature.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/get_directory.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/get_directory_name.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/get_extension.h</cpp_header>
@@ -200,7 +200,7 @@
     <cpp_source>actions/get_toolchain_source_toolchain_versions.cpp</cpp_source>
     <cpp_source>actions/get_toolchain_source_url.cpp</cpp_source>
     <cpp_source>actions/get_toolchain_versions.cpp</cpp_source>
-    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_CURL)">
+    <if condition = "$(dependency_have_feature -o:thekogans -n:make_core -f:THEKOGANS_MAKE_CORE_HAVE_CURL)">
       <cpp_source>actions/add_toolchain_source.cpp</cpp_source>
       <cpp_source>actions/update_toolchain_sources.cpp</cpp_source>
     </if>
@@ -221,6 +221,7 @@
     </if>
     <!-- functions -->
     <cpp_source>functions/Functions.cpp</cpp_source>
+    <cpp_source>functions/dependency_have_feature.cpp</cpp_source>
     <cpp_source>functions/get_directory.cpp</cpp_source>
     <cpp_source>functions/get_directory_name.cpp</cpp_source>
     <cpp_source>functions/get_extension.cpp</cpp_source>

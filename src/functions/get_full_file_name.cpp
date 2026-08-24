@@ -36,9 +36,7 @@ namespace thekogans {
                         return core::Value (util::Path (ToSystemPath ((*it).second)).GetFullFileName ());
                     }
                 }
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "get_full_file_name: missing parameter [%s]",
-                    "-p | --path");
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("get_full_file_name: missing parameter [-p | --path]");
             }
 
         } // namespace functions

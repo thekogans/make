@@ -18,9 +18,9 @@
 #include <string>
 #include <list>
 #include <iostream>
-#if defined (THEKOGANS_MAKE_HAVE_CURL)
+#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
     #include <curl/curl.h>
-#endif // defined (THEKOGANS_MAKE_HAVE_CURL)
+#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
 #include "thekogans/util/LoggerMgr.h"
 #include "thekogans/util/ConsoleLogger.h"
 #include "thekogans/util/Exception.h"
@@ -47,15 +47,15 @@ int main (
     make::generators::Generators::StaticInit ();
     make::functions::Functions::StaticInit ();
 #endif // defined (THEKOGANS_MAKE_TYPE_Static)
-#if defined (THEKOGANS_MAKE_HAVE_CURL)
+#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
     curl_global_init (CURL_GLOBAL_ALL);
-#endif // defined (THEKOGANS_MAKE_HAVE_CURL)
+#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
     THEKOGANS_UTIL_LOG_INIT (
         util::LoggerMgr::Info,
         util::LoggerMgr::NoDecorations);
     THEKOGANS_UTIL_LOG_ADD_LOGGER (util::Logger::SharedPtr (new util::ConsoleLogger ()));
     THEKOGANS_UTIL_IMPLEMENT_LOG_FLUSHER;
-    make::Options::Instance ()->Parse (argc, argv, "hvagopbefsctdyumwxz");
+    make::Options::Instance ()->Parse (argc, argv, "hvagopbefsctdyumwxzr");
     int result = 0;
     if (make::Options::Instance ()->help) {
         if (!make::Options::Instance ()->action.empty ()) {

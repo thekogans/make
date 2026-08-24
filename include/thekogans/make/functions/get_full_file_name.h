@@ -36,4 +36,4 @@ namespace thekogans {
     } // namespace make
 } // namespace thekogans
 
-#endif // __thekogans_make_functions_get_full_file_name_h
+#endif // !defined (__thekogans_make_functions_get_full_file_name_h)

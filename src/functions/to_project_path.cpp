@@ -41,9 +41,7 @@ namespace thekogans {
                                 (*it).second));
                     }
                 }
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "to_project_path: missing parameter [%s]",
-                    "-p | --path");
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("to_project_path: missing parameter [-p | --path]");
             }
 
         } // namespace functions

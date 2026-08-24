@@ -179,6 +179,7 @@ endif
 # functions
 cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/functions/Functions.h\
+  $(project_root)/include/$(organization)/$(project)/functions/dependency_have_feature.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_directory.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_directory_name.h\
   $(project_root)/include/$(organization)/$(project)/functions/get_extension.h\
@@ -317,6 +318,7 @@ endif
 # functions
 cpp_sources +=\
   $(project_root)/src/functions/Functions.cpp\
+  $(project_root)/src/functions/dependency_have_feature.cpp\
   $(project_root)/src/functions/get_directory.cpp\
   $(project_root)/src/functions/get_directory_name.cpp\
   $(project_root)/src/functions/get_extension.cpp\

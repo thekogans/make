@@ -27,10 +27,12 @@ namespace thekogans {
 
             void add_source_toolchain::PrintHelp (std::ostream &stream) const {
                 stream <<
-                    "-a:" << Type () << " -o:organization -p:project -v:version [-f:file] -s:SHA2_256\n\n"
+                    "-a:" << Type () << " -o:organization -p:project [-r:description] "
+                    "-v:version [-f:file] -s:SHA2_256\n\n"
                     "a - Add a toolchain entry in $SOURCES_ROOT/$organization/Source.xml.\n"
                     "o - Organization name.\n"
                     "p - Project name.\n"
+                    "r - Project description.\n"
                     "v - Project version.\n"
                     "f - Project tarball file name.\n"
                     "s - Project SHA2-256 hash.\n";
@@ -40,6 +42,7 @@ namespace thekogans {
                 core::Source source (Options::Instance ()->organization);
                 source.AddToolchain (
                     Options::Instance ()->project,
+                    Options::Instance ()->description,
                     Options::Instance ()->version,
                     Options::Instance ()->file,
                     Options::Instance ()->SHA2_256);

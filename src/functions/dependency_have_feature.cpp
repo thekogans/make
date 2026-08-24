@@ -17,29 +17,37 @@
 
 #include "thekogans/util/Exception.h"
 #include "thekogans/make/core/thekogans_make.h"
-#include "thekogans/make/core/Utils.h"
-#include "thekogans/make/functions/is_defined.h"
+#include "thekogans/make/core/Value.h"
+#include "thekogans/make/functions/dependency_have_feature.h"
 
 namespace thekogans {
     namespace make {
         namespace functions {
 
-            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (is_defined, Function::TYPE)
+            THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (dependency_have_feature, Function::TYPE)
 
-            core::Value is_defined::Exec (
+            core::Value dependency_have_feature::Exec (
                     const core::thekogans_make &thekogans_make,
                     const Parameters &parameters) const {
+                std::string organization;
+                std::string name;
+                std::string feature;
                 for (Parameters::const_iterator
                         it = parameters.begin (),
                         end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "s" || (*it).first == "symbol") {
-                        return core::Value (
-                            thekogans_make.LookupSymbol ((*it).second).type !=
-                            core::Value::TYPE_Unknown);
+                    if ((*it).first == "o" || (*it).first == "organization") {
+                        organization = (*it).second;
+                    }
+                    else if ((*it).first == "n" || (*it).first == "name") {
+                        name = (*it).second;
+                    }
+                    else if ((*it).first == "f" || (*it).first == "feature") {
+                        feature = (*it).second;
                     }
                 }
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "is_defined: missing parameter [-s | --symbol]");
+                const core::thekogans_make::Dependency *dependency =
+                    thekogans_make.GetDependency (organization, name);
+                return core::Value (dependency != nullptr && dependency->HaveFeature (feature));
             }
 
         } // namespace functions

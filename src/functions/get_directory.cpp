@@ -36,9 +36,7 @@ namespace thekogans {
                         return core::Value (util::Path (ToSystemPath ((*it).second)).GetDirectory ());
                     }
                 }
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "get_directory: missing parameter [%s]",
-                    "-p | --path");
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("get_directory: missing parameter [-p | --path]");
             }
 
         } // namespace functions

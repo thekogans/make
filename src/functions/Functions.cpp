@@ -17,6 +17,7 @@
 
 #if defined (THEKOGANS_MAKE_TYPE_Static)
 
+#include "thekogans/make/functions/dependency_have_feature.h"
 #include "thekogans/make/functions/get_directory_name.h"
 #include "thekogans/make/functions/get_directory.h"
 #include "thekogans/make/functions/get_extension.h"
@@ -50,6 +51,7 @@ namespace thekogans {
         namespace functions {
 
             void Functions::StaticInit () {
+                dependency_have_feature::StaticInit ();
                 get_directory_name::StaticInit ();
                 get_directory::StaticInit ();
                 get_extension::StaticInit ();

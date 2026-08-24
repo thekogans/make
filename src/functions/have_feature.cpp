@@ -38,9 +38,7 @@ namespace thekogans {
                             thekogans_make.features.end ());
                     }
                 }
-                THEKOGANS_UTIL_THROW_STRING_EXCEPTION (
-                    "have_feature: missing parameter [%s]",
-                    "-f | --feature");
+                THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("have_feature: missing parameter [-f | --feature]");
             }
 
         } // namespace functions
