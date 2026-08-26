@@ -200,6 +200,7 @@ cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/functions/have_feature.h\
   $(project_root)/include/$(organization)/$(project)/functions/is_defined.h\
   $(project_root)/include/$(organization)/$(project)/functions/is_installed.h\
+  $(project_root)/include/$(organization)/$(project)/functions/is_package_installed.h\
   $(project_root)/include/$(organization)/$(project)/functions/make_path.h\
   $(project_root)/include/$(organization)/$(project)/functions/path_exists.h\
   $(project_root)/include/$(organization)/$(project)/functions/to_build_system_path.h\
@@ -339,6 +340,7 @@ cpp_sources +=\
   $(project_root)/src/functions/have_feature.cpp\
   $(project_root)/src/functions/is_defined.cpp\
   $(project_root)/src/functions/is_installed.cpp\
+  $(project_root)/src/functions/is_package_installed.cpp\
   $(project_root)/src/functions/make_path.cpp\
   $(project_root)/src/functions/path_exists.cpp\
   $(project_root)/src/functions/to_build_system_path.cpp\

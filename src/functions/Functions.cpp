@@ -38,6 +38,7 @@
 #include "thekogans/make/functions/have_feature.h"
 #include "thekogans/make/functions/is_defined.h"
 #include "thekogans/make/functions/is_installed.h"
+#include "thekogans/make/functions/is_package_installed.h"
 #include "thekogans/make/functions/make_path.h"
 #include "thekogans/make/functions/path_exists.h"
 #include "thekogans/make/functions/to_build_system_path.h"
@@ -72,6 +73,7 @@ namespace thekogans {
                 have_feature::StaticInit ();
                 is_defined::StaticInit ();
                 is_installed::StaticInit ();
+                is_package_installed::StaticInit ();
                 make_path::StaticInit ();
                 path_exists::StaticInit ();
                 to_build_system_path::StaticInit ();

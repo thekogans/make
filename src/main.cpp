@@ -41,15 +41,22 @@ using namespace thekogans;
 int main (
         int argc,
         const char *argv[]) {
+#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
+    struct CURLInit {
+        CURLInit () {
+            curl_global_init (CURL_GLOBAL_ALL);
+        }
+        ~CURLInit () {
+            curl_global_cleanup ();
+        }
+    } curlInit;
+#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
 #if defined (THEKOGANS_MAKE_TYPE_Static)
     util::StaticInit ();
     make::actions::Actions::StaticInit ();
     make::generators::Generators::StaticInit ();
     make::functions::Functions::StaticInit ();
 #endif // defined (THEKOGANS_MAKE_TYPE_Static)
-#if defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
-    curl_global_init (CURL_GLOBAL_ALL);
-#endif // defined (THEKOGANS_MAKE_CORE_HAVE_CURL)
     THEKOGANS_UTIL_LOG_INIT (
         util::LoggerMgr::Info,
         util::LoggerMgr::NoDecorations);
