@@ -43,9 +43,9 @@ namespace thekogans {
                 std::string path =
                     ToSystemPath (core::MakePath (core::_TOOLCHAIN_DIR, core::CONFIG_DIR));
                 if (util::Path (path).Exists ()) {
-                    typedef std::pair<std::string, std::string> Toolchain;
-                    typedef std::set<util::Version, std::greater<util::Version>> Versions;
-                    typedef std::map<Toolchain, Versions> ToolchainVersions;
+                    using Toolchain = std::pair<std::string, std::string>;
+                    using Versions = std::set<util::Version, std::greater<util::Version>>;
+                    using ToolchainVersions = std::map<Toolchain, Versions>;
                     ToolchainVersions toolchainVersions;
                     util::Directory directory (path);
                     util::Directory::Entry entry;

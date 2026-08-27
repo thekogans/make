@@ -3,30 +3,21 @@
                 project_type = "program"
                 major_version = "0"
                 minor_version = "35"
-                patch_version = "2"
+                patch_version = "3"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
   <features>
-    <choose>
-      <when condition = "$(TOOLCHAIN_OS) == 'Windows'">
-        <feature>THEKOGANS_MAKE_USE_SHARED_RUNTIME</feature>
-      </when>
-      <when condition = "$(TOOLCHAIN_OS) == 'OSX'">
-        <feature>THEKOGANS_MAKE_HAVE_XCODE_EDITOR</feature>
-      </when>
-    </choose>
+    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+      <feature>THEKOGANS_MAKE_USE_SHARED_RUNTIME</feature>
+    </if>
   </features>
   <dependencies>
     <dependency organization = "thekogans"
                 name = "util"/>
     <dependency organization = "thekogans"
                 name = "make_core"/>
-    <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_XCODE_EDITOR)">
-      <toolchain organization = "thekogans"
-                 name = "XcodeEditor"/>
-    </if>
     <if condition = "$(dependency_have_feature -o:thekogans -n:make_core -f:THEKOGANS_MAKE_CORE_HAVE_CURL)">
-      <pkg_config package = "libcurl"/>
+      <package name = "libcurl"/>
     </if>
   </dependencies>
   <cpp_preprocessor_definitions>
@@ -249,14 +240,6 @@
     <cpp_source>functions/to_project_path.cpp</cpp_source>
     <cpp_source>functions/to_system_path.cpp</cpp_source>
   </cpp_sources>
-  <if condition = "$(have_feature -f:THEKOGANS_MAKE_HAVE_XCODE_EDITOR)">
-    <objective_cpp_headers prefix = "include">
-      <objective_cpp_header>$(organization)/$(project_directory)/generators/Xcode.h</objective_cpp_header>
-    </objective_cpp_headers>
-    <objective_cpp_sources prefix = "src">
-      <objective_cpp_source>generators/Xcode.mm</objective_cpp_source>
-    </objective_cpp_sources>
-  </if>
   <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
     <subsystem>Console</subsystem>
   </if>

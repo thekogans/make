@@ -36,8 +36,7 @@ include_directories :=\
   $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/include/thekogans/make/core\
   $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include\
   $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty\
-  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty/private\
-  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty/private/zlib
+  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty/private
 
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   link_libraries += Ws2_32.lib Iphlpapi.lib mpr.lib Wtsapi32.lib
@@ -170,11 +169,6 @@ ifeq "$(TOOLCHAIN_OS)" "Windows"
     $(project_root)/include/$(organization)/$(project)/generators/vs2015.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2017.h\
     $(project_root)/include/$(organization)/$(project)/generators/vs2019.h
-else
-  ifeq "$(TOOLCHAIN_OS)" "OSX"
-    cpp_headers +=\
-      $(project_root)/include/$(organization)/$(project)/generators/Xcode.h
-  endif
 endif
 # functions
 cpp_headers +=\
@@ -207,10 +201,6 @@ cpp_headers +=\
   $(project_root)/include/$(organization)/$(project)/functions/to_project_build_path.h\
   $(project_root)/include/$(organization)/$(project)/functions/to_project_path.h\
   $(project_root)/include/$(organization)/$(project)/functions/to_system_path.h
-
-# zlib
-c_sources :=\
-  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/3rdparty/zlib/*.c)
 
 # util
 cpp_sources :=\
@@ -350,8 +340,7 @@ cpp_sources +=\
 
 ifeq "$(TOOLCHAIN_OS)" "OSX"
   objective_cpp_sources :=\
-	$(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/osx/OSXUtils.mm\
-    $(project_root)/src/generators/Xcode.mm
+	$(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/osx/OSXUtils.mm
 endif
 
 include $(TOOLCHAIN_ROOT)/common/resources/make.rules.bottom
