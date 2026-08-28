@@ -25,8 +25,6 @@
     #include "thekogans/make/generators/vs2017.h"
     #include "thekogans/make/generators/vs2019.h"
     #include "thekogans/make/generators/vsBase.h"
-#elif defined (TOOLCHAIN_OS_OSX)
-    #include "thekogans/make/generators/Xcode.h"
 #endif // defined (TOOLCHAIN_OS_Windows)
 #include "thekogans/make/generators/Generators.h"
 
@@ -41,8 +39,6 @@ namespace thekogans {
                 vs2015::StaticInit ();
                 vs2017::StaticInit ();
                 vs2019::StaticInit ();
-            #elif defined (TOOLCHAIN_OS_OSX)
-                Xcode::StaticInit ();
             #endif // defined (TOOLCHAIN_OS_Windows)
             }
 
