@@ -60,7 +60,8 @@ check_errors $?
 cp -v "$project_root/Makefile" "$makefile_root/"
 check_errors $?
 
-gnu_make="$(get_toolchain_program -o:gnu -p:make)"
+#gnu_make="$(get_toolchain_program -o:gnu -p:make)"
+gnu_make="$TOOLCHAIN_MAKE"
 make_options=
 if [ "$hide_commands" == "yes" ]; then
     make_options+="--quiet"

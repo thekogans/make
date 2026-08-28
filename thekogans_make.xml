@@ -17,6 +17,7 @@
     <dependency organization = "thekogans"
                 name = "make_core"/>
     <if condition = "$(dependency_have_feature -o:thekogans -n:make_core -f:THEKOGANS_MAKE_CORE_HAVE_CURL)">
+      <!-- If make_core was built with curl, we do curl global init/shutdown. -->
       <package name = "libcurl"/>
     </if>
   </dependencies>
@@ -82,10 +83,12 @@
     <cpp_header>$(organization)/$(project_directory)/actions/uninstall_library.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/actions/uninstall_plugin.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/actions/uninstall_program.h</cpp_header>
+    <!-- Expose extra actions if curl is available. -->
     <if condition = "$(dependency_have_feature -o:thekogans -n:make_core -f:THEKOGANS_MAKE_CORE_HAVE_CURL)">
       <cpp_header>$(organization)/$(project_directory)/actions/add_toolchain_source.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/actions/update_toolchain_sources.h</cpp_header>
     </if>
+    <!-- Windows specific actions. -->
     <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
       <cpp_header>$(organization)/$(project_directory)/actions/list_cygwin_mount_table.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/actions/update_cl_dependencies.h</cpp_header>
@@ -94,6 +97,7 @@
     <!-- generators -->
     <cpp_header>$(organization)/$(project_directory)/generators/Generators.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/generators/make.h</cpp_header>
+    <!-- VisualStudio generators. -->
     <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
       <cpp_header>$(organization)/$(project_directory)/generators/vsBase.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2013.h</cpp_header>
