@@ -66,9 +66,9 @@ make_options=
 if [ "$hide_commands" == "yes" ]; then
     make_options+="--quiet"
 fi
-#if [ "$parallel_build" == "yes" ]; then
-#    make_options+=" --output-sync -j"
-#fi
+if [ "$parallel_build" == "yes" ]; then
+    make_options+=" -j"
+fi
 
 util_version_components=(${util_version//./ })
 make_core_version_components=(${make_core_version//./ })
