@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
-#include "thekogans/make/core/PkgConfig.h"
+#include "thekogans/make/core/Package.h"
 #include "thekogans/make/functions/is_package_installed.h"
 
 namespace thekogans {
@@ -39,7 +39,7 @@ namespace thekogans {
                         version = (*it).second;
                     }
                 }
-                return core::Value (core::PkgConfig::IsInstalled (project, version));
+                return core::Value (core::Package::IsInstalled (project, version));
             }
 
         } // namespace functions
