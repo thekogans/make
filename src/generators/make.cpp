@@ -42,13 +42,11 @@ namespace thekogans {
             namespace {
                 void DumpFileLists (
                         std::fstream &stream,
-                        const std::list<core::thekogans_make::FileList::Ptr> &fileLists,
+                        const std::list<core::thekogans_make::FileList::SharedPtr> &fileLists,
                         const core::thekogans_make &thekogans_make,
-                        std::list<core::thekogans_make::FileList::File::CustomBuild::Ptr> &customBuildList) {
-                    for (std::list<core::thekogans_make::FileList::Ptr>::const_iterator
-                            it = fileLists.begin (),
-                            end = fileLists.end (); it != end; ++it) {
-                        std::string namePrefix = core::MakePath (thekogans_make.project_root, (*it)->prefix);
+                        std::list<core::thekogans_make::FileList::File::CustomBuild::SharedPtr> &customBuildList) {
+                    for (auto fileList : fileLists) {
+                        std::string namePrefix = core::MakePath (thekogans_make.project_root, fileList->prefix);
                         std::string outputPrefix =
                             core::MakePath (
                                 core::MakePath (
@@ -57,26 +55,22 @@ namespace thekogans {
                                         thekogans_make.generator,
                                         thekogans_make.config,
                                         thekogans_make.type)),
-                                (*it)->prefix);
-                        for (std::list<core::thekogans_make::FileList::File::Ptr>::const_iterator
-                                jt = (*it)->files.begin (),
-                                end = (*it)->files.end (); jt != end; ++jt) {
-                            std::string name = core::MakePath (namePrefix, (*jt)->name);
+                                fileList->prefix);
+                        for (auto file : fileList->files) {
+                            std::string name = core::MakePath (namePrefix, file->name);
                             stream << "\\\n  " << name;
-                            if ((*jt)->customBuild.get () != 0) {
-                                core::thekogans_make::FileList::File::CustomBuild::Ptr customBuild (
+                            if (file->customBuild != nullptr) {
+                                core::thekogans_make::FileList::File::CustomBuild::SharedPtr customBuild (
                                     new core::thekogans_make::FileList::File::CustomBuild (
-                                        (*jt)->customBuild->message,
-                                        (*jt)->customBuild->recipe));
-                                for (std::size_t k = 0, count = (*jt)->customBuild->outputs.size (); k < count; ++k) {
-                                    customBuild->outputs.push_back (
-                                        core::MakePath (outputPrefix, (*jt)->customBuild->outputs[k]));
+                                        file->customBuild->message,
+                                        file->customBuild->recipe));
+                                for (auto output : file->customBuild->outputs) {
+                                    customBuild->outputs.push_back (core::MakePath (outputPrefix, output));
                                 }
                                 customBuild->dependencies.push_back (name);
-                                std::string dependencyPrefix = core::MakePath (thekogans_make.project_root, (*it)->prefix);
-                                for (std::size_t k = 0, count = (*jt)->customBuild->dependencies.size (); k < count; ++k) {
-                                    customBuild->dependencies.push_back (
-                                        core::MakePath (dependencyPrefix, (*jt)->customBuild->dependencies[k]));
+                                std::string dependencyPrefix = core::MakePath (thekogans_make.project_root, fileList->prefix);
+                                for (auto dependency : file->customBuild->dependencies) {
+                                    customBuild->dependencies.push_back (core::MakePath (dependencyPrefix, dependency));
                                 }
                                 customBuildList.push_back (std::move (customBuild));
                             }
@@ -211,11 +205,9 @@ namespace thekogans {
                             const core::thekogans_make & /*thekogans_make*/,
                             const Parameters &parameters) const override {
                         std::string path;
-                        for (Parameters::const_iterator
-                                 it = parameters.begin (),
-                                 end = parameters.end (); it != end; ++it) {
-                            if ((*it).first == "p" || (*it).first == "path") {
-                                path = (*it).second;
+                        for (auto parameter : parameters) {
+                            if (parameter.first == "p" || parameter.first == "path") {
+                                path = parameter.second;
                             }
                         }
                         return core::Value (path);
@@ -254,16 +246,14 @@ namespace thekogans {
                 bool updatedDependency = false;
                 if (generateDependencies) {
                     if (thekogans_make.project_type == PROJECT_TYPE_PLUGIN) {
-                        for (std::list<core::thekogans_make::Dependency::Ptr>::const_iterator
-                                it = thekogans_make.plugin_hosts.begin (),
-                                end = thekogans_make.plugin_hosts.end (); it != end; ++it) {
-                            if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
+                        for (auto plugin_host : thekogans_make.plugin_hosts) {
+                            if (plugin_host->GetConfigFile () == THEKOGANS_MAKE_XML) {
                                 make dependency (false);
                                 updatedDependency =
                                     dependency.Generate (
-                                        (*it)->GetProjectRoot (),
-                                        (*it)->GetConfig (),
-                                        (*it)->GetType (),
+                                        plugin_host->GetProjectRoot (),
+                                        plugin_host->GetConfig (),
+                                        plugin_host->GetType (),
                                         generateDependencies,
                                         force) ||
                                     updatedDependency ||
@@ -273,24 +263,22 @@ namespace thekogans {
                                         ToSystemPath (
                                             core::MakePath (
                                                 core::GetBuildRoot (
-                                                    (*it)->GetProjectRoot (),
+                                                    plugin_host->GetProjectRoot (),
                                                     Type (),
-                                                    (*it)->GetConfig (),
-                                                    (*it)->GetType ()),
+                                                    plugin_host->GetConfig (),
+                                                    plugin_host->GetType ()),
                                                 MAKEFILE))).lastModifiedDate;
                             }
                         }
                     }
-                    for (std::list<core::thekogans_make::Dependency::Ptr>::const_iterator
-                            it = thekogans_make.dependencies.begin (),
-                            end = thekogans_make.dependencies.end (); it != end; ++it) {
-                        if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
-                            make dependency (false);
+                    for (auto dependency : thekogans_make.dependencies) {
+                        if (dependency->GetConfigFile () == THEKOGANS_MAKE_XML) {
+                            make dependency_ (false);
                             updatedDependency =
-                                dependency.Generate (
-                                    (*it)->GetProjectRoot (),
-                                    (*it)->GetConfig (),
-                                    (*it)->GetType (),
+                                dependency_.Generate (
+                                    dependency->GetProjectRoot (),
+                                    dependency->GetConfig (),
+                                    dependency->GetType (),
                                     generateDependencies,
                                     force) ||
                                 updatedDependency ||
@@ -300,10 +288,10 @@ namespace thekogans {
                                     ToSystemPath (
                                         core::MakePath (
                                             core::GetBuildRoot (
-                                                (*it)->GetProjectRoot (),
+                                                dependency->GetProjectRoot (),
                                                 Type (),
-                                                (*it)->GetConfig (),
-                                                (*it)->GetType ()), MAKEFILE))).lastModifiedDate;
+                                                dependency->GetConfig (),
+                                                dependency->GetType ()), MAKEFILE))).lastModifiedDate;
                         }
                     }
                 }
@@ -331,7 +319,7 @@ namespace thekogans {
                         makefileFilePath.c_str (),
                         std::fstream::out | std::fstream::trunc);
                     if (makefileFile.is_open ()) {
-                        std::list<core::thekogans_make::FileList::File::CustomBuild::Ptr> customBuildList;
+                        std::list<core::thekogans_make::FileList::File::CustomBuild::SharedPtr> customBuildList;
                         const char *fileTemplate = makefileTemplate;
                         while (*fileTemplate != '\0') {
                             char ch = *fileTemplate++;
@@ -378,17 +366,15 @@ namespace thekogans {
                                     makefileFile << thekogans_make.GetProjectGoal ();
                                 }
                                 else if (variable == "dependencies_goals") {
-                                    for (std::list<core::thekogans_make::Dependency::Ptr>::const_iterator
-                                            it = thekogans_make.dependencies.begin (),
-                                            end = thekogans_make.dependencies.end (); it != end; ++it) {
-                                        if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
+                                    for (auto dependency : thekogans_make.dependencies) {
+                                        if (dependency->GetConfigFile () == THEKOGANS_MAKE_XML) {
                                             makefileFile << "\\\n  " <<
                                                 core::thekogans_make::GetConfig (
-                                                    (*it)->GetProjectRoot (),
-                                                    (*it)->GetConfigFile (),
-                                                    (*it)->GetGenerator (),
-                                                    (*it)->GetConfig (),
-                                                    (*it)->GetType ()).GetProjectGoal ();
+                                                    dependency->GetProjectRoot (),
+                                                    dependency->GetConfigFile (),
+                                                    dependency->GetGenerator (),
+                                                    dependency->GetConfig (),
+                                                    dependency->GetType ()).GetProjectGoal ();
                                         }
                                     }
                                 }
@@ -419,24 +405,21 @@ namespace thekogans {
                                         makefileFile << "\\\n  " << *it;
                                     }
                                     // ld needs to be able to locate the dependency libraries.
-                                    if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM && core::_TOOLCHAIN_OS == "Linux" &&
+                                    if (thekogans_make.project_type == PROJECT_TYPE_PROGRAM &&
+                                            core::_TOOLCHAIN_OS == "Linux" &&
                                             thekogans_make.type == TYPE_SHARED) {
                                         std::set<std::string> sharedLibraries;
                                         thekogans_make.GetSharedLibraries (sharedLibraries);
-                                        for (std::set<std::string>::const_iterator
-                                                it = sharedLibraries.begin (),
-                                                end = sharedLibraries.end (); it != end; ++it) {
-                                            makefileFile << "\\\n  " << "-Wl,-rpath-link," << util::Path (*it).GetDirectory ();
+                                        for (auto sharedLibrary : sharedLibraries) {
+                                            makefileFile << "\\\n  " << "-Wl,-rpath-link," << util::Path (sharedLibrary).GetDirectory ();
                                         }
                                     }
                                 }
                                 else if (variable == "librarian_flags") {
                                     std::set<std::string> librarian_flags;
                                     thekogans_make.GetLibrarianFlags (librarian_flags);
-                                    for (std::set<std::string>::const_iterator
-                                            it = librarian_flags.begin (),
-                                            end = librarian_flags.end (); it != end; ++it) {
-                                        makefileFile << "\\\n  " << *it;
+                                    for (auto librarian_flag : librarian_flags) {
+                                        makefileFile << "\\\n  " << librarian_flag;
                                     }
                                 }
                                 else if (variable == "link_libraries") {
@@ -740,7 +723,7 @@ namespace thekogans {
                                 }
                                 else if (variable == "custom_build_rules") {
                                     std::list<std::string> extra_clean;
-                                    for (std::list<core::thekogans_make::FileList::File::CustomBuild::Ptr>::const_iterator
+                                    for (std::list<core::thekogans_make::FileList::File::CustomBuild::SharedPtr>::const_iterator
                                             it = customBuildList.begin (),
                                             end = customBuildList.end (); it != end; ++it) {
                                         for (std::size_t j = 0, count = (*it)->outputs.size (); j < count; ++j) {
@@ -810,15 +793,13 @@ namespace thekogans {
                         config,
                         type);
                 if (deleteDependencies) {
-                    for (std::list<core::thekogans_make::Dependency::Ptr>::const_iterator
-                            it = thekogans_make.dependencies.begin (),
-                            end = thekogans_make.dependencies.end (); it != end; ++it) {
-                        if ((*it)->GetConfigFile () == THEKOGANS_MAKE_XML) {
-                            make dependency (false);
-                            dependency.Delete (
-                                (*it)->GetProjectRoot (),
-                                (*it)->GetConfig (),
-                                (*it)->GetType (),
+                    for (auto dependency : thekogans_make.dependencies) {
+                        if (dependency->GetConfigFile () == THEKOGANS_MAKE_XML) {
+                            make dependency_ (false);
+                            dependency_.Delete (
+                                dependency->GetProjectRoot (),
+                                dependency->GetConfig (),
+                                dependency->GetType (),
                                 deleteDependencies);
                         }
                     }
