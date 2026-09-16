@@ -32,17 +32,15 @@ namespace thekogans {
                 std::string organization;
                 std::string name;
                 std::string feature;
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "o" || (*it).first == "organization") {
-                        organization = (*it).second;
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "o" || parameter.first == "organization") {
+                        organization = parameter.second;
                     }
-                    else if ((*it).first == "n" || (*it).first == "name") {
-                        name = (*it).second;
+                    else if (parameter.first == "n" || parameter.first == "name") {
+                        name = parameter.second;
                     }
-                    else if ((*it).first == "f" || (*it).first == "feature") {
-                        feature = (*it).second;
+                    else if (parameter.first == "f" || parameter.first == "feature") {
+                        feature = parameter.second;
                     }
                 }
                 const core::thekogans_make::Dependency *dependency =

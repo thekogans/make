@@ -29,11 +29,9 @@ namespace thekogans {
             core::Value get_file_name::Exec (
                     const core::thekogans_make & /*thekogans_make*/,
                     const Parameters &parameters) const {
-                for (Parameters::const_iterator
-                         it = parameters.begin (),
-                         end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "p" || (*it).first == "path") {
-                        return core::Value (util::Path (ToSystemPath ((*it).second)).GetFileName ());
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "p" || parameter.first == "path") {
+                        return core::Value (util::Path (ToSystemPath (parameter.second)).GetFileName ());
                     }
                 }
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("get_file_name: missing parameter [-p | --path]");

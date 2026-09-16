@@ -29,11 +29,9 @@ namespace thekogans {
             core::Value get_extension::Exec (
                     const core::thekogans_make & /*thekogans_make*/,
                     const Parameters &parameters) const {
-                for (Parameters::const_iterator
-                         it = parameters.begin (),
-                         end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "p" || (*it).first == "path") {
-                        return core::Value (util::Path ((*it).second).GetExtension ());
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "p" || parameter.first == "path") {
+                        return core::Value (util::Path (parameter.second).GetExtension ());
                     }
                 }
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("get_extension: missing parameter [-p | --path]");

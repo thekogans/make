@@ -30,14 +30,12 @@ namespace thekogans {
                     const Parameters &parameters) const {
                 std::string organization;
                 std::string project;
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "o" || (*it).first == "organization") {
-                        organization = (*it).second;
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "o" || parameter.first == "organization") {
+                        organization = parameter.second;
                     }
-                    else if ((*it).first == "p" || (*it).first == "project") {
-                        project = (*it).second;
+                    else if (parameter.first == "p" || parameter.first == "project") {
+                        project = parameter.second;
                     }
                 }
                 std::string version;

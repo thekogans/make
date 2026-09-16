@@ -35,9 +35,9 @@ namespace thekogans {
             }
 
             void get_project_type::Execute () {
-                std::cout << core::thekogans_make::GetProjectType (
+                std::cout << core::thekogans_make::GetConfig (
                     std::string (),
-                    Options::Instance ()->path);
+                    Options::Instance ()->path).project_type;
                 std::cout.flush ();
             }
 

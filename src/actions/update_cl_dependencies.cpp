@@ -51,13 +51,14 @@ namespace thekogans {
                     const std::string windowsSdkDir =
                         core::CygwinMountTable::Instance ()->ToCygwinPath (
                             util::GetEnvironmentVariable ("WindowsSdkDir"));
-                    std::set<std::string> dependencies;
+                    std::unordered_set<std::string> dependencies;
                     {
                         std::fstream file (Options::Instance ()->path.c_str (), std::fstream::in);
                         if (file.is_open ()) {
                             for (std::string line; std::getline (file, line);) {
                                 if (strncmp (line.c_str (), "Note: including file:", 21) == 0) {
                                     std::string dependencyPath =
+                                        // FIXME: This is rediculously fragile.
                                         core::CygwinMountTable::Instance ()->ToCygwinPath (
                                             util::TrimSpaces (line.substr (21).c_str ()));
                                     if (!dependencyPath.empty () &&
@@ -89,23 +90,19 @@ namespace thekogans {
             }
 
             void update_cl_dependencies::WriteDependencies (
-                const std::string &dependent,
-                const std::string &dependency,
-                const std::set<std::string> &dependencies,
-                const std::string &path) {
+                    const std::string &dependent,
+                    const std::string &dependency,
+                    const std::unordered_set<std::string> &dependencies,
+                    const std::string &path) {
                 std::fstream file (path.c_str (), std::fstream::out | std::fstream::trunc);
                 if (file.is_open ()) {
-                    file << dependent.c_str () << ": \\\n " << dependency;
-                    for (std::set<std::string>::const_iterator
-                             it = dependencies.begin (),
-                             end = dependencies.end (); it != end; ++it) {
-                        file << " \\\n " << *it;
+                    file << dependent << ": \\\n " << dependency;
+                    for (const auto &dependency : dependencies) {
+                        file << " \\\n " << dependency;
                     }
                     file << "\n";
-                    for (std::set<std::string>::const_iterator
-                             it = dependencies.begin (),
-                             end = dependencies.end (); it != end; ++it) {
-                        file << *it << ":\n";
+                    for (const auto &dependency : dependencies) {
+                        file << dependency << ":\n";
                     }
                 }
                 else {

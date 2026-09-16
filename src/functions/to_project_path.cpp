@@ -29,16 +29,14 @@ namespace thekogans {
             core::Value to_project_path::Exec (
                     const core::thekogans_make &thekogans_make,
                     const Parameters &parameters) const {
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "p" || (*it).first == "path") {
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "p" || parameter.first == "path") {
                         core::Value project_root =
                             thekogans_make.LookupSymbol (core::thekogans_make::VAR_PROJECT_ROOT);
                         return core::Value (
                             core::MakePath (
                                 project_root.ToString (),
-                                (*it).second));
+                                parameter.second));
                     }
                 }
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("to_project_path: missing parameter [-p | --path]");

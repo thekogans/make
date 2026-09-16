@@ -29,11 +29,9 @@ namespace thekogans {
             core::Value path_exists::Exec (
                     const core::thekogans_make & /*thekogans_make*/,
                     const Parameters &parameters) const {
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "p" || (*it).first == "path") {
-                        return core::Value (util::Path ((*it).second).Exists ());
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "p" || parameter.first == "path") {
+                        return core::Value (util::Path (parameter.second).Exists ());
                     }
                 }
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION ("path_exists: missing parameter [-p | --path]");

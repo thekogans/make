@@ -29,12 +29,10 @@ namespace thekogans {
             core::Value is_defined::Exec (
                     const core::thekogans_make &thekogans_make,
                     const Parameters &parameters) const {
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "s" || (*it).first == "symbol") {
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "s" || parameter.first == "symbol") {
                         return core::Value (
-                            thekogans_make.LookupSymbol ((*it).second).type !=
+                            thekogans_make.LookupSymbol (parameter.second).type !=
                             core::Value::TYPE_Unknown);
                     }
                 }

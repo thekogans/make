@@ -28,7 +28,7 @@ namespace thekogans {
                 THEKOGANS_UTIL_DECLARE_DYNAMIC_CREATABLE (is_package_installed)
 
                 virtual core::Value Exec (
-                    const core::thekogans_make & /*thekogans_make*/,
+                    const core::thekogans_make &thekogans_make,
                     const Parameters &parameters) const override;
             };
 

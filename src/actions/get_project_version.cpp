@@ -34,9 +34,9 @@ namespace thekogans {
             }
 
             void get_project_version::Execute () {
-                std::cout << core::thekogans_make::GetVersion (
+                std::cout << core::thekogans_make::GetConfig (
                     std::string (),
-                    Options::Instance ()->path);
+                    Options::Instance ()->path).GetVersion ();
                 std::cout.flush ();
             }
 

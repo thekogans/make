@@ -36,29 +36,27 @@ namespace thekogans {
                 std::string example;
                 std::string config = CONFIG_RELEASE;
                 std::string type = TYPE_STATIC;
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "o" || (*it).first == "organization") {
-                        organization = (*it).second;
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "o" || parameter.first == "organization") {
+                        organization = parameter.second;
                     }
-                    else if ((*it).first == "p" || (*it).first == "project") {
-                        project = (*it).second;
+                    else if (parameter.first == "p" || parameter.first == "project") {
+                        project = parameter.second;
                     }
-                    else if ((*it).first == "b" || (*it).first == "branch") {
-                        branch = (*it).second;
+                    else if (parameter.first == "b" || parameter.first == "branch") {
+                        branch = parameter.second;
                     }
-                    else if ((*it).first == "v" || (*it).first == "version") {
-                        version = (*it).second;
+                    else if (parameter.first == "v" || parameter.first == "version") {
+                        version = parameter.second;
                     }
-                    else if ((*it).first == "e" || (*it).first == "example") {
-                        example = (*it).second;
+                    else if (parameter.first == "e" || parameter.first == "example") {
+                        example = parameter.second;
                     }
-                    else if ((*it).first == "c" || (*it).first == "config") {
-                        config = (*it).second;
+                    else if (parameter.first == "c" || parameter.first == "config") {
+                        config = parameter.second;
                     }
-                    else if ((*it).first == "t" || (*it).first == "type") {
-                        type = (*it).second;
+                    else if (parameter.first == "t" || parameter.first == "type") {
+                        type = parameter.second;
                     }
                 }
                 if (core::Project::Find (organization, project, branch, version, example)) {

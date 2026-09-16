@@ -22,6 +22,8 @@
 
 #if defined (TOOLCHAIN_OS_Windows)
 
+#include <string>
+#include <unordered_set>
 #include "thekogans/make/Action.h"
 
 namespace thekogans {
@@ -42,7 +44,7 @@ namespace thekogans {
                 void WriteDependencies (
                     const std::string &dependent,
                     const std::string &dependency,
-                    const std::set<std::string> &dependencies,
+                    const std::unordered_set<std::string> &dependencies,
                     const std::string &path);
             };
 

@@ -32,7 +32,7 @@ namespace thekogans {
 
             struct vsBase : public core::Generator {
             protected:
-                typedef std::pair<std::string, std::string> FileAndFilter;
+                using FileAndFilter =  std::pair<std::string, std::string>;
                 std::list<FileAndFilter> masm_headers;
                 std::list<FileAndFilter> masm_sources;
                 std::list<FileAndFilter> nasm_headers;

@@ -29,12 +29,10 @@ namespace thekogans {
             core::Value have_feature::Exec (
                     const core::thekogans_make &thekogans_make,
                     const Parameters &parameters) const {
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "f" || (*it).first == "feature") {
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "f" || parameter.first == "feature") {
                         return core::Value (
-                            thekogans_make.features.find ((*it).second) !=
+                            thekogans_make.features.find (parameter.second) !=
                             thekogans_make.features.end ());
                     }
                 }

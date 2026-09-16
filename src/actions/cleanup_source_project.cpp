@@ -46,20 +46,16 @@ namespace thekogans {
                  else {
                      source.GetProjectNames (projects);
                  }
-                 for (std::set<std::string>::const_iterator
-                          it = projects.begin (),
-                          end = projects.end (); it != end; ++it) {
+                 for (const auto &project : projects) {
                      std::set<std::string> branches;
                      if (!Options::Instance ()->branch.empty ()) {
                          branches.insert (Options::Instance ()->branch);
                      }
                      else {
-                         source.GetProjectBranches (*it, branches);
+                         source.GetProjectBranches (project, branches);
                      }
-                     for (std::set<std::string>::const_iterator
-                              jt = branches.begin (),
-                              end = branches.end (); jt != end; ++jt) {
-                         source.CleanupProject (*it, *jt);
+                     for (const auto &branch : branches) {
+                         source.CleanupProject (project, branch);
                      }
                  }
                  source.Save ();

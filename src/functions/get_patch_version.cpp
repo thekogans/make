@@ -28,11 +28,9 @@ namespace thekogans {
                     const core::thekogans_make & /*thekogans_make*/,
                     const Parameters &parameters) const {
                 std::string version;
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "v" || (*it).first == "version") {
-                        version = (*it).second;
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "v" || parameter.first == "version") {
+                        version = parameter.second;
                     }
                 }
                 return core::Value (util::ui32Tostring (util::Version (version).patchVersion));

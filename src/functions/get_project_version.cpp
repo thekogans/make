@@ -32,9 +32,9 @@ namespace thekogans {
                 return
                     core::Value (
                         core::Value::TYPE_Version,
-                        core::thekogans_make::GetVersion (
+                        core::thekogans_make::GetConfig (
                             get_project_root ().Exec (thekogans_make, parameters).ToString (),
-                            THEKOGANS_MAKE_XML));
+                            THEKOGANS_MAKE_XML).GetVersion ());
             }
 
         } // namespace functions

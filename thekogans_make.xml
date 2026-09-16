@@ -2,8 +2,8 @@
                 project = "make"
                 project_type = "program"
                 major_version = "0"
-                minor_version = "35"
-                patch_version = "5"
+                minor_version = "36"
+                patch_version = "0"
                 guid = "ba374c4e67d012de421bb96cd87e9b9c"
                 schema_version = "2">
   <features>
@@ -26,7 +26,8 @@
       <cpp_preprocessor_definition>_CRT_SECURE_NO_WARNINGS</cpp_preprocessor_definition>
     </if>
   </cpp_preprocessor_definitions>
-  <cpp_headers prefix = "include">
+  <cpp_headers prefix = "include"
+               private = "yes">
     <cpp_header>$(organization)/$(project_directory)/Options.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/Version.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/Action.h</cpp_header>
@@ -98,13 +99,13 @@
     <cpp_header>$(organization)/$(project_directory)/generators/Generators.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/generators/make.h</cpp_header>
     <!-- VisualStudio generators. -->
-    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+    <!-- <if condition = "$(TOOLCHAIN_OS) == 'Windows'"> -->
       <cpp_header>$(organization)/$(project_directory)/generators/vsBase.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2013.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2015.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2017.h</cpp_header>
       <cpp_header>$(organization)/$(project_directory)/generators/vs2019.h</cpp_header>
-    </if>
+    <!-- </if> -->
     <!-- functions -->
     <cpp_header>$(organization)/$(project_directory)/functions/Functions.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/dependency_have_feature.h</cpp_header>
@@ -136,7 +137,8 @@
     <cpp_header>$(organization)/$(project_directory)/functions/to_project_path.h</cpp_header>
     <cpp_header>$(organization)/$(project_directory)/functions/to_system_path.h</cpp_header>
   </cpp_headers>
-  <cpp_sources prefix = "src">
+  <cpp_sources prefix = "src"
+               private = "yes">
     <cpp_source>Action.cpp</cpp_source>
     <cpp_source>Options.cpp</cpp_source>
     <cpp_source>Version.cpp</cpp_source>
@@ -206,13 +208,13 @@
     <!-- generators -->
     <cpp_source>generators/Generators.cpp</cpp_source>
     <cpp_source>generators/make.cpp</cpp_source>
-    <if condition = "$(TOOLCHAIN_OS) == 'Windows'">
+    <!-- <if condition = "$(TOOLCHAIN_OS) == 'Windows'"> -->
       <cpp_source>generators/vsBase.cpp</cpp_source>
       <cpp_source>generators/vs2013.cpp</cpp_source>
       <cpp_source>generators/vs2015.cpp</cpp_source>
       <cpp_source>generators/vs2017.cpp</cpp_source>
       <cpp_source>generators/vs2019.cpp</cpp_source>
-    </if>
+    <!-- </if> -->
     <!-- functions -->
     <cpp_source>functions/Functions.cpp</cpp_source>
     <cpp_source>functions/dependency_have_feature.cpp</cpp_source>

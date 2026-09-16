@@ -44,10 +44,8 @@ namespace thekogans {
                 else {
                     source.GetToolchainVersions (Options::Instance ()->project, versions);
                 }
-                for (std::set<std::string>::const_iterator
-                         it = versions.begin (),
-                         end = versions.end (); it != end; ++it) {
-                    source.DeleteToolchain (Options::Instance ()->project, *it);
+                for (const auto &version : versions) {
+                    source.DeleteToolchain (Options::Instance ()->project, version);
                 }
                 source.Save ();
             }

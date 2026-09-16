@@ -39,17 +39,15 @@ namespace thekogans {
 
             void cleanup_source_toolchain::Execute  () {
                 core::Source source (Options::Instance ()->organization);
-                std::set<std::string> toolchain;
+                std::set<std::string> toolchains;
                 if (!Options::Instance ()->project.empty ()) {
-                    toolchain.insert (Options::Instance ()->project);
+                    toolchains.insert (Options::Instance ()->project);
                 }
                 else {
-                    source.GetToolchainNames (toolchain);
+                    source.GetToolchainNames (toolchains);
                 }
-                for (std::set<std::string>::const_iterator
-                         it = toolchain.begin (),
-                         end = toolchain.end (); it != end; ++it) {
-                    source.CleanupToolchain (*it);
+                for (const auto &toolchain : toolchains) {
+                    source.CleanupToolchain (toolchain);
                 }
                 source.Save ();
             }

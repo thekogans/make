@@ -78,17 +78,13 @@ namespace thekogans {
                             }
                         }
                     }
-                    for (ToolchainVersions::const_iterator
-                             it = toolchainVersions.begin (),
-                             end = toolchainVersions.end (); it != end; ++it) {
-                        for (Versions::const_iterator
-                                 jt = it->second.begin (),
-                                 end = it->second.end (); jt != end; ++jt) {
+                    for (const auto &[toolchain, versions] : toolchainVersions) {
+                        for (const auto &version : versions) {
                             std::cout << core::GetFileName (
-                                it->first.first,
-                                it->first.second,
+                                toolchain.first,
+                                toolchain.second,
                                 std::string (),
-                                jt->ToString (),
+                                version.ToString (),
                                 core::XML_EXT) << std::endl;
                         }
                     }

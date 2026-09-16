@@ -42,35 +42,27 @@ namespace thekogans {
                 else {
                     core::Source::GetSources (sources);
                 }
-                for (std::set<std::string>::const_iterator
-                         it = sources.begin (),
-                         end = sources.end (); it != end; ++it) {
-                    core::Source source (*it);
+                for (const auto &source : sources) {
+                    core::Source source_ (source);
                     {
                         std::set<std::string> projects;
-                        source.GetProjectNames (projects);
-                        for (std::set<std::string>::const_iterator
-                                 jt = projects.begin (),
-                                 end = projects.end (); jt != end; ++jt) {
+                        source_.GetProjectNames (projects);
+                        for (const auto &project : projects) {
                             std::set<std::string> branches;
-                            source.GetProjectBranches (*jt, branches);
-                            for (std::set<std::string>::const_iterator
-                                     kt = branches.begin (),
-                                     end = branches.end (); kt != end; ++kt) {
-                                source.CleanupProject (*jt, *kt);
+                            source_.GetProjectBranches (project, branches);
+                            for (const auto &branch : branches) {
+                                source_.CleanupProject (project, branch);
                             }
                         }
                     }
                     {
-                        std::set<std::string> toolchain;
-                        source.GetToolchainNames (toolchain);
-                        for (std::set<std::string>::const_iterator
-                                 jt = toolchain.begin (),
-                                 end = toolchain.end (); jt != end; ++jt) {
-                            source.CleanupToolchain (*jt);
+                        std::set<std::string> toolchains;
+                        source_.GetToolchainNames (toolchains);
+                        for (const auto &toolchain : toolchains) {
+                            source_.CleanupToolchain (toolchain);
                         }
                     }
-                    source.Save ();
+                    source_.Save ();
                 }
             }
 

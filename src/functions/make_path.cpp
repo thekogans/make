@@ -31,14 +31,12 @@ namespace thekogans {
                     const Parameters &parameters) const {
                 std::string path1;
                 std::string path2;
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "p1" || (*it).first == "path1") {
-                        path1 = (*it).second;
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "p1" || parameter.first == "path1") {
+                        path1 = parameter.second;
                     }
-                    else if ((*it).first == "p2" || (*it).first == "path2") {
-                        path2 = (*it).second;
+                    else if (parameter.first == "p2" || parameter.first == "path2") {
+                        path2 = parameter.second;
                     }
                 }
                 return core::Value (core::MakePath (path1, path2));

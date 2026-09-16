@@ -16,6 +16,7 @@
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
 #include "thekogans/make/core/Package.h"
+#include "thekogans/make/core/PackageResolver.h"
 #include "thekogans/make/functions/is_package_installed.h"
 
 namespace thekogans {
@@ -25,21 +26,17 @@ namespace thekogans {
             THEKOGANS_UTIL_IMPLEMENT_DYNAMIC_CREATABLE (is_package_installed, Function::TYPE)
 
             core::Value is_package_installed::Exec (
-                    const core::thekogans_make & /*thekogans_make*/,
+                    const core::thekogans_make &thekogans_make,
                     const Parameters &parameters) const {
-                std::string project;
-                std::string version;
-                for (Parameters::const_iterator
-                        it = parameters.begin (),
-                        end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "p" || (*it).first == "project") {
-                        project = (*it).second;
-                    }
-                    else if ((*it).first == "v" || (*it).first == "version") {
-                        version = (*it).second;
+                core::Package::Constraint requirement;
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "n" || parameter.first == "name") {
+                        requirement = core::Package::Constraint::Parse (parameter.second);
                     }
                 }
-                return core::Value (core::Package::IsInstalled (project, version));
+                return core::Value (
+                    core::PackageResolver::Instance ()->Resolve (
+                        requirement, thekogans_make.type == TYPE_STATIC) != nullptr);
             }
 
         } // namespace functions

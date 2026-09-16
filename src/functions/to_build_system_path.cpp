@@ -28,11 +28,9 @@ namespace thekogans {
             core::Value to_build_system_path::Exec (
                     const core::thekogans_make & /*thekogans_make*/,
                     const Parameters &parameters) const {
-                for (Parameters::const_iterator
-                         it = parameters.begin (),
-                         end = parameters.end (); it != end; ++it) {
-                    if ((*it).first == "p" || (*it).first == "path") {
-                        return core::Value (ToSystemPath ((*it).second));
+                for (const auto &parameter : parameters) {
+                    if (parameter.first == "p" || parameter.first == "path") {
+                        return core::Value (ToSystemPath (parameter.second));
                     }
                 }
                 THEKOGANS_UTIL_THROW_STRING_EXCEPTION (

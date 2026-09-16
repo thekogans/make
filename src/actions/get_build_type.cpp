@@ -34,9 +34,9 @@ namespace thekogans {
             }
 
             void get_build_type::Execute () {
-                std::cout << core::thekogans_make::GetBuildType (
+                std::cout << core::thekogans_make::GetConfig (
                     std::string (),
-                    Options::Instance ()->path);
+                    Options::Instance ()->path).build_type;
                 std::cout.flush ();
             }
 

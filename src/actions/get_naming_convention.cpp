@@ -35,9 +35,9 @@ namespace thekogans {
             }
 
             void get_naming_convention::Execute () {
-                std::cout << core::thekogans_make::GetNamingConvention (
+                std::cout << core::thekogans_make::GetConfig (
                     std::string (),
-                    Options::Instance ()->path);
+                    Options::Instance ()->path).naming_convention;
                 std::cout.flush ();
             }
 

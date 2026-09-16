@@ -31,21 +31,21 @@ namespace thekogans {
                 vs2015 (bool rootProject = true) :
                     vsBase (rootProject) {}
 
-                virtual std::string slnGetFormatVersion () const {
+                virtual std::string slnGetFormatVersion () const override {
                     return "12.00";
                 }
-                virtual std::string slnGetVisualStudio () const {
+                virtual std::string slnGetVisualStudio () const override {
                     return "14";
                 }
 
-                virtual std::string vcxprojGetToolsVersion () const {
+                virtual std::string vcxprojGetToolsVersion () const override {
                     return "14.0";
                 }
-                virtual std::string vcxprojGetPlatformToolset () const {
+                virtual std::string vcxprojGetPlatformToolset () const override {
                     return "v140";
                 }
 
-                virtual std::string vcxprojfiltersGetToolsVersion () const {
+                virtual std::string vcxprojfiltersGetToolsVersion () const override {
                     return "4.0";
                 }
             };

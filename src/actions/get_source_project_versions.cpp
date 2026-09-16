@@ -48,10 +48,8 @@ namespace thekogans {
                     Options::Instance ()->project,
                     Options::Instance ()->branch,
                     versions);
-                for (std::set<std::string>::const_iterator
-                         it = versions.begin (),
-                         end = versions.end (); it != end; ++it) {
-                    std::cout << *it << std::endl;
+                for (const auto &version : versions) {
+                    std::cout << version << std::endl;
                 }
                 std::cout.flush ();
             }
