@@ -27,16 +27,20 @@ naming_convention := $(TOOLCHAIN_NAMING_CONVENTION)
 
 include $(TOOLCHAIN_ROOT)/common/resources/make.rules.top
 
-util_version := $(util_major_version).$(util_minor_version).$(util_patch_version)
-make_core_version := $(make_core_major_version).$(make_core_minor_version).$(make_core_patch_version)
+ifneq "$(util_major_version)" ""
+  util_version := -$(util_major_version).$(util_minor_version).$(util_patch_version)
+endif
+ifneq "$(make_core_major_version)" ""
+  make_core_version := -$(make_core_major_version).$(make_core_minor_version).$(make_core_patch_version)
+endif
 
 include_directories :=\
   $(project_root)/include\
-  $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/include\
-  $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/include/thekogans/make/core\
-  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include\
-  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty\
-  $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/include/3rdparty/private
+  $(DEVELOPMENT_ROOT)/thekogans/make/core$(make_core_version)/include\
+  $(DEVELOPMENT_ROOT)/thekogans/make/core$(make_core_version)/include/thekogans/make/core\
+  $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/include\
+  $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/include/3rdparty\
+  $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/include/3rdparty/private
 
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   link_libraries += Ws2_32.lib Iphlpapi.lib mpr.lib Wtsapi32.lib
@@ -204,26 +208,26 @@ cpp_headers +=\
 
 # util
 cpp_sources :=\
-  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/*.cpp)\
-  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/3rdparty/boost/atomic/*.cpp)\
-  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/3rdparty/pugixml/pugixml.cpp)
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/src/*.cpp)\
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/src/3rdparty/boost/atomic/*.cpp)\
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/src/3rdparty/pugixml/pugixml.cpp)
 ifeq "$(TOOLCHAIN_OS)" "Windows"
   cpp_sources +=\
-    $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/windows/*.cpp)
+    $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/src/os/windows/*.cpp)
 else
   ifeq "$(TOOLCHAIN_OS)" "Linux"
     cpp_sources +=\
-      $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/linux/*.cpp)
+      $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/src/os/linux/*.cpp)
   else
     ifeq "$(TOOLCHAIN_OS)" "OSX"
       cpp_sources +=\
-        $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/osx/*.cpp)
+        $(wildcard $(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/src/os/osx/*.cpp)
     endif
   endif
 endif
 # make_core
 cpp_sources +=\
-  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/make/core-$(make_core_version)/src/*.cpp)
+  $(wildcard $(DEVELOPMENT_ROOT)/thekogans/make/core$(make_core_version)/src/*.cpp)
 # make
 cpp_sources +=\
   $(project_root)/src/Action.cpp\
@@ -340,7 +344,7 @@ cpp_sources +=\
 
 ifeq "$(TOOLCHAIN_OS)" "OSX"
   objective_cpp_sources :=\
-	$(DEVELOPMENT_ROOT)/thekogans/util-$(util_version)/src/os/osx/OSXUtils.mm
+	$(DEVELOPMENT_ROOT)/thekogans/util$(util_version)/src/os/osx/OSXUtils.mm
 endif
 
 include $(TOOLCHAIN_ROOT)/common/resources/make.rules.bottom

@@ -46,7 +46,11 @@ for i in "$@"; do
     esac
 done
 
-project_root="$DEVELOPMENT_ROOT/$organization/$project-$make_version"
+if [ "$make_version" != "" ]; then
+    project_root="$DEVELOPMENT_ROOT/$organization/$project-$make_version"
+else
+    project_root="$DEVELOPMENT_ROOT/$organization/$project"
+fi
 
 if [ ! -e "$project_root/Makefile" ]; then
     echo "$project_root/Makefile Not found."
