@@ -1132,7 +1132,7 @@ namespace thekogans {
                                 vcxprojFile << GetRuntimeLibrary (thekogans_make.config, thekogans_make.type);
                             }
                             else if (variable == "link_libraries") {
-                                std::vector<std::string> link_libraries;
+                                std::set<std::string> link_libraries;
                                 thekogans_make.GetLinkLibraries (link_libraries);
                                 for (const auto &link_library : link_libraries) {
                                     vcxprojFile << ToSystemPath (link_library) << ';';

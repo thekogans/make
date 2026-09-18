@@ -425,7 +425,7 @@ namespace thekogans {
                                     }
                                 }
                                 else if (variable == "link_libraries") {
-                                    std::vector<std::string> link_libraries;
+                                    std::set<std::string> link_libraries;
                                     thekogans_make.GetLinkLibraries (link_libraries);
                                     for (const auto &link_library : link_libraries) {
                                         makefileFile << "\\\n  " << link_library;
