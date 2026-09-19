@@ -212,7 +212,7 @@ namespace thekogans {
                 };
 
                 bool FindProjectRoot (
-                        const std::list<ProjectRootAndGUID> &projectdependencies,
+                        const std::vector<ProjectRootAndGUID> &projectdependencies,
                         const std::string &project_root) {
                     for (const auto &projectdependency : projectdependencies) {
                         if (projectdependency.project_root == project_root) {
@@ -224,7 +224,7 @@ namespace thekogans {
 
                 void GetProjectDependencies (
                         const core::thekogans_make &thekogans_make,
-                        std::list<ProjectRootAndGUID> &projectDependencies,
+                        std::vector<ProjectRootAndGUID> &projectDependencies,
                         bool recursive = true) {
                     for (auto dependency : thekogans_make.dependencies) {
                         if (dependency->GetConfigFile () == THEKOGANS_MAKE_XML &&
@@ -645,7 +645,7 @@ namespace thekogans {
                     ToSystemPath (slnFilePath).c_str (),
                     std::fstream::out | std::fstream::binary | std::fstream::trunc);
                 if (slnFile.is_open ()) {
-                    std::list<ProjectRootAndGUID> projectDependencies;
+                    std::vector<ProjectRootAndGUID> projectDependencies;
                     GetProjectDependencies (thekogans_make, projectDependencies);
                     const char *fileTemplate = slnTemplate;
                     while (*fileTemplate != '\0') {
@@ -689,7 +689,7 @@ namespace thekogans {
                                                     dependency.organization,
                                                     dependency.project) + VCXPROJ_EXT)).c_str (),
                                         dependency.guid.ToHexString (true).c_str ());
-                                    std::list<ProjectRootAndGUID> dependencyDependencies;
+                                    std::vector<ProjectRootAndGUID> dependencyDependencies;
                                     GetProjectDependencies (dependency, dependencyDependencies, false);
                                     if (!dependencyDependencies.empty ()) {
                                         slnFile << SLN_PROJECT_SECTION;
@@ -720,7 +720,7 @@ namespace thekogans {
                                                 thekogans_make.organization,
                                                 thekogans_make.project) + VCXPROJ_EXT)).c_str (),
                                     thekogans_make.guid.ToHexString (true).c_str ());
-                                std::list<ProjectRootAndGUID> projectDependencies;
+                                std::vector<ProjectRootAndGUID> projectDependencies;
                                 GetProjectDependencies (thekogans_make, projectDependencies, false);
                                 if (!projectDependencies.empty ()) {
                                     slnFile << SLN_PROJECT_SECTION;
@@ -1194,68 +1194,54 @@ namespace thekogans {
                                 }
                             }
                             else if (variable == "c_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = c_headers.begin (),
-                                        end = c_headers.end (); it != end; ++it) {
+                                for (const auto &c_header : c_headers) {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str ());
+                                        CreateRelativePath (c_header.first).c_str ());
                                 }
                             }
                             else if (variable == "c_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = c_sources.begin (),
-                                        end = c_sources.end (); it != end; ++it) {
+                                for (const auto &c_source : c_sources) {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        util::Path ((*it).first).GetDirectory (true).c_str ());
+                                        CreateRelativePath (c_source.first).c_str (),
+                                        util::Path (c_source.first).GetDirectory (true).c_str ());
                                 }
                             }
                             else if (variable == "cpp_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = cpp_headers.begin (),
-                                        end = cpp_headers.end (); it != end; ++it) {
+                                for (const auto &cpp_header : cpp_headers) {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str ());
+                                        CreateRelativePath (cpp_header.first).c_str ());
                                 }
                             }
                             else if (variable == "cpp_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = cpp_sources.begin (),
-                                        end = cpp_sources.end (); it != end; ++it) {
+                                for (const auto &cpp_source : cpp_sources) {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        util::Path ((*it).first).GetDirectory (true).c_str ());
+                                        CreateRelativePath (cpp_source.first).c_str (),
+                                        util::Path (cpp_source.first).GetDirectory (true).c_str ());
                                 }
                             }
                             else if (variable == "rc_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = rc_sources.begin (),
-                                        end = rc_sources.end (); it != end; ++it) {
+                                for (const auto &rc_source : rc_sources) {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_RC_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
+                                        CreateRelativePath (rc_source.first).c_str (),
                                         GetRCPreprocessorDefinitions (thekogans_make).c_str (),
                                         GetRCIncludeDirectories (thekogans_make).c_str ());
                                 }
                             }
                             else if (variable == "resources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = resources.begin (),
-                                        end = resources.end (); it != end; ++it) {
+                                for (const auto &resource : resources) {
                                     vcxprojFile << util::FormatString (
                                         VCXPROJ_RESOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str ());
+                                        CreateRelativePath (resource.first).c_str ());
                                 }
                             }
                             else if (variable == "custom_build_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = custom_build_sources.begin (),
-                                        end = custom_build_sources.end (); it != end; ++it) {
-                                    vcxprojFile << (*it).first;
+                                for (const auto &custom_build_source : custom_build_sources) {
+                                    vcxprojFile << custom_build_source.first;
                                 }
                             }
                             else {
@@ -1351,152 +1337,120 @@ namespace thekogans {
                                 vcxprojfiltersFile << vcxprojfiltersGetToolsVersion ();
                             }
                             else if (variable == "filters") {
-                                for (std::set<std::string>::const_iterator
-                                        it = header_filters.begin (),
-                                        end = header_filters.end (); it != end; ++it) {
+                                for (const auto &header_filter : header_filters) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
+                                        header_filter.c_str (),
                                         util::GUID::FromRandom ().ToHexString (true).c_str ());
                                 }
-                                for (std::set<std::string>::const_iterator
-                                        it = source_filters.begin (),
-                                        end = source_filters.end (); it != end; ++it) {
+                                for (const auto &source_filter : source_filters) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
+                                        source_filter.c_str (),
                                         util::GUID::FromRandom ().ToHexString (true).c_str ());
                                 }
-                                for (std::set<std::string>::const_iterator
-                                        it = rc_source_filters.begin (),
-                                        end = rc_source_filters.end (); it != end; ++it) {
+                                for (const auto &rc_source_filter : rc_source_filters) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
+                                        rc_source_filter.c_str (),
                                         util::GUID::FromRandom ().ToHexString (true).c_str ());
                                 }
-                                for (std::set<std::string>::const_iterator
-                                        it = resource_filters.begin (),
-                                        end = resource_filters.end (); it != end; ++it) {
+                                for (const auto &resource_filter : resource_filters) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
+                                        resource_filter.c_str (),
                                         util::GUID::FromRandom ().ToHexString (true).c_str ());
                                 }
-                                for (std::set<std::string>::const_iterator
-                                        it = custom_build_filters.begin (),
-                                        end = custom_build_filters.end (); it != end; ++it) {
+                                for (const auto &custom_build_filter : custom_build_filters) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_FILTER_TEMPLATE,
-                                        (*it).c_str (),
+                                        custom_build_filter.c_str (),
                                         util::GUID::FromRandom ().ToHexString (true).c_str ());
                                 }
                             }
                             else if (variable == "masm_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = masm_headers.begin (),
-                                        end = masm_headers.end (); it != end; ++it) {
+                                for (const auto &masm_header : masm_headers) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (masm_header.first).c_str (),
+                                        masm_header.second.c_str ());
                                 }
                             }
                             else if (variable == "masm_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = masm_sources.begin (),
-                                        end = masm_sources.end (); it != end; ++it) {
+                                for (const auto &masm_source : masm_sources) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_CUSTOM_BUILD_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (masm_source.first).c_str (),
+                                        masm_source.second.c_str ());
                                 }
                             }
                             else if (variable == "nasm_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = nasm_headers.begin (),
-                                        end = nasm_headers.end (); it != end; ++it) {
+                                for (const auto &nasm_header : nasm_headers) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (nasm_header.first).c_str (),
+                                        nasm_header.second.c_str ());
                                 }
                             }
                             else if (variable == "nasm_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = nasm_sources.begin (),
-                                        end = nasm_sources.end (); it != end; ++it) {
+                                for (const auto &nasm_source : nasm_sources) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_CUSTOM_BUILD_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (nasm_source.first).c_str (),
+                                        nasm_source.second.c_str ());
                                 }
                             }
                             else if (variable == "c_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = c_headers.begin (),
-                                        end = c_headers.end (); it != end; ++it) {
+                                for (const auto &c_header :c_headers) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (c_header.first).c_str (),
+                                        c_header.second.c_str ());
                                 }
                             }
                             else if (variable == "c_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = c_sources.begin (),
-                                        end = c_sources.end (); it != end; ++it) {
+                                for (const auto &c_source : c_sources) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (c_source.first).c_str (),
+                                        c_source.second.c_str ());
                                 }
                             }
                             else if (variable == "cpp_headers") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = cpp_headers.begin (),
-                                        end = cpp_headers.end (); it != end; ++it) {
+                                for (const auto &cpp_header : cpp_headers) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_HEADER_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (cpp_header.first).c_str (),
+                                        cpp_header.second.c_str ());
                                 }
                             }
                             else if (variable == "cpp_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = cpp_sources.begin (),
-                                        end = cpp_sources.end (); it != end; ++it) {
+                                for (const auto &cpp_source : cpp_sources) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (cpp_source.first).c_str (),
+                                        cpp_source.second.c_str ());
                                 }
                             }
                             else if (variable == "rc_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = rc_sources.begin (),
-                                        end = rc_sources.end (); it != end; ++it) {
+                                for (const auto &rc_source : rc_sources) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_RC_SOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (rc_source.first).c_str (),
+                                        rc_source.second.c_str ());
                                 }
                             }
                             else if (variable == "resources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = resources.begin (),
-                                        end = resources.end (); it != end; ++it) {
+                                for (const auto &resource : resources) {
                                     vcxprojfiltersFile << util::FormatString (
                                         VCXPROJ_FILTERS_RESOURCE_TEMPLATE,
-                                        CreateRelativePath ((*it).first).c_str (),
-                                        (*it).second.c_str ());
+                                        CreateRelativePath (resource.first).c_str (),
+                                        resource.second.c_str ());
                                 }
                             }
                             else if (variable == "custom_build_sources") {
-                                for (std::list<FileAndFilter>::const_iterator
-                                        it = custom_build_sources.begin (),
-                                        end = custom_build_sources.end (); it != end; ++it) {
-                                    vcxprojfiltersFile << (*it).second;
+                                for (const auto &custom_build_source : custom_build_sources) {
+                                    vcxprojfiltersFile << custom_build_source.second;
                                 }
                             }
                             else {
@@ -1553,8 +1507,8 @@ namespace thekogans {
                             std::fstream::out | std::fstream::binary | std::fstream::trunc);
                         std::vector<std::string> recipeLines;
                         GetLines (recipe, recipeLines);
-                        for (std::size_t i = 0, count = recipeLines.size (); i < count; ++i) {
-                            recipeFile << recipeLines[i] << "\n";
+                        for (const auto &recipeLine : recipeLines) {
+                            recipeFile << recipeLine << "\n";
                         }
                         return util::FormatString (
                             "\"%s\" \"%s\"",

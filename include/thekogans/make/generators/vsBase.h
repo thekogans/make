@@ -19,7 +19,7 @@
 #define __thekogans_make_vsBase_h
 
 #include <string>
-#include <list>
+#include <vector>
 #include <set>
 #include "thekogans/util/Types.h"
 #include "thekogans/util/GUID.h"
@@ -33,17 +33,17 @@ namespace thekogans {
             struct vsBase : public core::Generator {
             protected:
                 using FileAndFilter =  std::pair<std::string, std::string>;
-                std::list<FileAndFilter> masm_headers;
-                std::list<FileAndFilter> masm_sources;
-                std::list<FileAndFilter> nasm_headers;
-                std::list<FileAndFilter> nasm_sources;
-                std::list<FileAndFilter> c_headers;
-                std::list<FileAndFilter> c_sources;
-                std::list<FileAndFilter> cpp_headers;
-                std::list<FileAndFilter> cpp_sources;
-                std::list<FileAndFilter> rc_sources;
-                std::list<FileAndFilter> resources;
-                std::list<FileAndFilter> custom_build_sources;
+                std::vector<FileAndFilter> masm_headers;
+                std::vector<FileAndFilter> masm_sources;
+                std::vector<FileAndFilter> nasm_headers;
+                std::vector<FileAndFilter> nasm_sources;
+                std::vector<FileAndFilter> c_headers;
+                std::vector<FileAndFilter> c_sources;
+                std::vector<FileAndFilter> cpp_headers;
+                std::vector<FileAndFilter> cpp_sources;
+                std::vector<FileAndFilter> rc_sources;
+                std::vector<FileAndFilter> resources;
+                std::vector<FileAndFilter> custom_build_sources;
                 std::set<std::string> header_filters;
                 std::set<std::string> source_filters;
                 std::set<std::string> rc_source_filters;

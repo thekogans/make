@@ -16,6 +16,7 @@
 // along with thekogans_make. If not, see <http://www.gnu.org/licenses/>.
 
 #include <set>
+#include <vector>
 #include <iostream>
 #include <fstream>
 #include <locale>
@@ -44,7 +45,7 @@ namespace thekogans {
                         std::fstream &stream,
                         const std::vector<core::thekogans_make::FileList::SharedPtr> &fileLists,
                         const core::thekogans_make &thekogans_make,
-                        std::list<core::thekogans_make::FileList::File::CustomBuild::SharedPtr> &customBuildList) {
+                        std::vector<core::thekogans_make::FileList::File::CustomBuild::SharedPtr> &customBuildList) {
                     for (auto fileList : fileLists) {
                         std::string namePrefix = core::MakePath (thekogans_make.project_root, fileList->prefix);
                         std::string outputPrefix =
@@ -64,12 +65,12 @@ namespace thekogans {
                                     new core::thekogans_make::FileList::File::CustomBuild (
                                         file->customBuild->message,
                                         file->customBuild->recipe));
-                                for (auto output : file->customBuild->outputs) {
+                                for (const auto &output : file->customBuild->outputs) {
                                     customBuild->outputs.push_back (core::MakePath (outputPrefix, output));
                                 }
                                 customBuild->dependencies.push_back (name);
                                 std::string dependencyPrefix = core::MakePath (thekogans_make.project_root, fileList->prefix);
-                                for (auto dependency : file->customBuild->dependencies) {
+                                for (const auto &dependency : file->customBuild->dependencies) {
                                     customBuild->dependencies.push_back (core::MakePath (dependencyPrefix, dependency));
                                 }
                                 customBuildList.push_back (std::move (customBuild));
@@ -320,7 +321,7 @@ namespace thekogans {
                         makefileFilePath.c_str (),
                         std::fstream::out | std::fstream::trunc);
                     if (makefileFile.is_open ()) {
-                        std::list<core::thekogans_make::FileList::File::CustomBuild::SharedPtr> customBuildList;
+                        std::vector<core::thekogans_make::FileList::File::CustomBuild::SharedPtr> customBuildList;
                         const char *fileTemplate = makefileTemplate;
                         while (*fileTemplate != '\0') {
                             char ch = *fileTemplate++;
@@ -690,7 +691,7 @@ namespace thekogans {
                                     makefileFile << thekogans_make.def_file;
                                 }
                                 else if (variable == "custom_build_rules") {
-                                    std::list<std::string> extra_clean;
+                                    std::vector<std::string> extra_clean;
                                     for (auto customBuild : customBuildList) {
                                         for (const auto &output : customBuild->outputs) {
                                             makefileFile << output << " ";
