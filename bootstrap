@@ -25,9 +25,9 @@ project=make
 project_type=program
 config=Release
 type=Static
-util_version=
-make_core_version=
-make_version=
+util_version=0.0.0
+make_core_version=0.0.0
+make_version=0.0.0
 hide_commands=yes
 parallel_build=yes
 
